@@ -1,0 +1,16 @@
+extends = [ 'foo' ]
+plugins = [
+  "foo",
+  42,
+  "bar" 
+]
+
+[[overrides]]
+files = []
+extends = [
+  "foo",
+  42,
+  "bar",
+  42, 
+]
+unknown = 42

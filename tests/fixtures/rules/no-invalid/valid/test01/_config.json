@@ -1,0 +1,12 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["eslintrc-input.json"],
+                    "schema": "https://json.schemastore.org/eslintrc"
+                }
+            ]
+        }
+    ]
+}

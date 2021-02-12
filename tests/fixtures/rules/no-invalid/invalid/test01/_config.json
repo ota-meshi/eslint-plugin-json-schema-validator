@@ -1,0 +1,17 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": [
+                        "eslintrc-input.json",
+                        "eslintrc-yaml-input.yaml",
+                        "eslintrc-sparse-array-input.json5",
+                        "eslintrc-toml-input.toml"
+                    ],
+                    "schema": "https://json.schemastore.org/eslintrc"
+                }
+            ]
+        }
+    ]
+}

@@ -102,3 +102,11 @@ dist
 
 # TernJS port file
 .tern-port
+
+# TS
+/typings/eslint/lib
+/lib
+
+# docs
+/docs/assets
+/docs/**/*.html
