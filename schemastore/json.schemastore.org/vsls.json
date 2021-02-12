@@ -1,0 +1,1 @@
+{"$schema":"http://json-schema.org/draft-04/schema#","title":"JSON schema for Visual Studio Live Share config files","type":"object","properties":{"excludeFiles":{"type":"array","items":{"type":"string"}},"gitignore":{"type":"string","default":"hide","enum":["none","hide","exclude"]},"hideFiles":{"type":"array","items":{"type":"string"}}}}

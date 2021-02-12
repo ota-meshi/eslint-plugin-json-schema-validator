@@ -1,0 +1,1 @@
+{"title":"JSON schema for Visual Studio component configuration files","$schema":"http://json-schema.org/draft-04/schema#","type":"object","required":["components"],"properties":{"version":{"type":"string","pattern":"^(\\d+\\.)?(\\d+\\.)?(\\d+\\.)?(\\d+)$"},"components":{"type":"array","items":{"type":"string","minLength":1}}}}

@@ -1,0 +1,4 @@
+{
+    "extends": [],
+    "plugins": ["foo", "bar"]
+}

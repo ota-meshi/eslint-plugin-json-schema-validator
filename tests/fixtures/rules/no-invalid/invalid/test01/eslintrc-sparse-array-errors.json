@@ -1,0 +1,58 @@
+[
+    {
+        "message": "\"extends[0]\" should be string.",
+        "line": 3,
+        "column": 17,
+        "endLine": 3,
+        "endColumn": 17
+    },
+    {
+        "message": "\"plugins[1]\" should be string.",
+        "line": 4,
+        "column": 24,
+        "endLine": 4,
+        "endColumn": 25
+    },
+    {
+        "message": "\"plugins[2]\" should be string.",
+        "line": 4,
+        "column": 26,
+        "endLine": 4,
+        "endColumn": 27
+    },
+    {
+        "message": "\"overrides[0].files\" should be string.",
+        "line": 7,
+        "column": 13,
+        "endLine": 7,
+        "endColumn": 20
+    },
+    {
+        "message": "\"overrides[0].files\" should NOT have fewer than 1 items.",
+        "line": 7,
+        "column": 13,
+        "endLine": 7,
+        "endColumn": 20
+    },
+    {
+        "message": "\"overrides[0].files\" should match exactly one schema in oneOf.",
+        "line": 7,
+        "column": 13,
+        "endLine": 7,
+        "endColumn": 20
+    },
+    {
+        "message": "\"overrides[0].extends[1]\" should be string.",
+        "line": 8,
+        "column": 32,
+        "endLine": 8,
+        "endColumn": 33
+    },
+    {
+        "message": "Unexpected property \"overrides[0].unknown\"",
+        "line": 9,
+        "column": 13,
+        "endLine": 9,
+        "endColumn": 22
+    }
+]
