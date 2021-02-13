@@ -40,7 +40,9 @@ const GET_JSON_NODES: Record<
                 }
             }
         }
-        throw new Error("Unexpected state")
+        throw new Error(
+            `${"Unexpected state: ["}${[path, ...paths].join(", ")}]`,
+        )
     },
     JSONArrayExpression(node: JSON.JSONArrayExpression, paths: string[]) {
         const path = String(paths.shift())
@@ -76,7 +78,9 @@ const GET_JSON_NODES: Record<
                 value: null,
             }
         }
-        throw new Error("Unexpected state")
+        throw new Error(
+            `${"Unexpected state: ["}${[path, ...paths].join(", ")}]`,
+        )
     },
 }
 /**

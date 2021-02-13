@@ -1,0 +1,39 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.json", "**/*.yaml", "**/*.toml"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "a.b.c": { "type": "number" },
+                            "": {
+                                "type": "object",
+                                "properties": {
+                                    "": { "type": "number" }
+                                }
+                            },
+                            "\"": {
+                                "type": "object",
+                                "properties": {
+                                    "'": { "type": "number" }
+                                }
+                            },
+                            "escapes": {
+                                "type": "object",
+                                "properties": {
+                                    "\n": { "type": "number" },
+                                    "\r": { "type": "number" },
+                                    "\f": { "type": "number" },
+                                    "\t": { "type": "number" },
+                                    "[]": { "type": "number" }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

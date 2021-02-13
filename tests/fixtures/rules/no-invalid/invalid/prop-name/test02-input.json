@@ -1,0 +1,9 @@
+{
+    "escapes": {
+        "\n": { "type": "number" },
+        "\r": { "type": "number" },
+        "\f": { "type": "number" },
+        "\t": { "type": "number" },
+        "[]": { "type": "number" }
+    }
+}

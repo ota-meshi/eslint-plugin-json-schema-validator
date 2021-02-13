@@ -29,7 +29,9 @@ const GET_TOML_NODES: Record<
             const element = node.elements[index]
             return { value: element }
         }
-        throw new Error("Unexpected state")
+        throw new Error(
+            `${"Unexpected state: ["}${[path, ...paths].join(", ")}]`,
+        )
     },
     TOMLInlineTable(node: TOML.TOMLInlineTable, paths: string[]) {
         for (const body of node.body) {
@@ -50,7 +52,7 @@ const GET_TOML_NODES: Record<
                 return { key: () => body.key.range, value: body.value }
             }
         }
-        throw new Error("Unexpected state")
+        throw new Error(`${"Unexpected state: ["}${paths.join(", ")}]`)
     },
 }
 
@@ -92,7 +94,7 @@ export function getTOMLNodeFromPath(
             }
         }
     }
-    throw new Error("Unexpected state")
+    throw new Error(`${"Unexpected state: ["}${paths.join(", ")}]`)
 }
 
 /**
