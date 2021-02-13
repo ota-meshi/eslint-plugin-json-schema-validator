@@ -17,6 +17,8 @@ import {
     getYAMLNodeFromPath,
     getTOMLNodeFromPath,
 } from "../utils/ast"
+import { urlToSchemastoreFilePath } from "../utils/schema"
+import type { RuleContext } from "../types"
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
 type Schema = object
@@ -181,19 +183,11 @@ function matchFile(filename: string, fileMatch: string[]) {
  */
 function loadSchema(schemaPath: string, getCwd: () => string) {
     if (schemaPath.startsWith("http://") || schemaPath.startsWith("https://")) {
-        let jsonPath: string
-        if (/^https?:\/\/json\.schemastore\.org\//u.test(schemaPath)) {
-            jsonPath = schemaPath.replace(
-                /^https?:\/\/json\.schemastore\.org\//u,
-                "",
-            )
-        } else {
+        const jsonPath = urlToSchemastoreFilePath(schemaPath)
+        if (!jsonPath) {
             return null
         }
-        if (jsonPath.endsWith(".json")) {
-            jsonPath = jsonPath.slice(0, -5)
-        }
-        return require(`../../schemastore/json.schemastore.org/${jsonPath}.json`)
+        return require(`../../schemastore/${jsonPath}`)
     }
     return require(path.resolve(getCwd(), schemaPath))
 }
@@ -207,18 +201,15 @@ function parseOption(
             name?: string
             description?: string
             fileMatch: string[]
-            schema?: Schema | string
+            schema: Schema | string
         }[]
         useSchemastoreCatalog?: boolean
     },
-    filename: string,
-    getCwd: () => string,
+    context: RuleContext,
 ): Validator | null {
+    const filename: string = context.getFilename()
     const validators: Validator[] = []
     for (const schemaData of option.schemas || []) {
-        if (!schemaData.schema) {
-            // error
-        }
         if (!matchFile(filename, schemaData.fileMatch)) {
             continue
         }
@@ -227,7 +218,15 @@ function parseOption(
                 ? loadSchema(schemaData.schema, getCwd)
                 : schemaData.schema
         if (!schema) {
-            // error
+            context.report({
+                loc: { line: 1, column: 0 },
+                message: `Specified schema could not be resolved.${
+                    typeof schemaData.schema === "string"
+                        ? ` Path: "${schemaData.schema}"`
+                        : ""
+                }`,
+            })
+            continue
         }
         validators.push(schemaToValidator(schema))
     }
@@ -244,15 +243,12 @@ function parseOption(
             if (!schemaData.fileMatch) {
                 continue
             }
-            if (!/^https?:\/\/json\.schemastore\.org\//u.test(schemaData.url)) {
-                continue
-            }
             if (!matchFile(filename, schemaData.fileMatch)) {
                 continue
             }
             const schema = loadSchema(schemaData.url, getCwd)
             if (!schema) {
-                // error
+                continue
             }
             const validator = schemaToValidator(schema)
             validators.push(validator)
@@ -267,6 +263,16 @@ function parseOption(
             errors.push(...validator(data))
         }
         return errors
+    }
+
+    /**
+     * Get cwd
+     */
+    function getCwd() {
+        if (context.getCwd) {
+            return context.getCwd()
+        }
+        return path.resolve("")
     }
 }
 
@@ -297,7 +303,7 @@ export default createRule("no-invalid", {
                                 schema: { type: ["object", "string"] },
                             },
                             additionalProperties: true, // It also accepts unrelated properties.
-                            required: ["fileMatch"],
+                            required: ["fileMatch", "schema"],
                         },
                     },
                     useSchemastoreCatalog: { type: "boolean" },
@@ -317,25 +323,11 @@ export default createRule("no-invalid", {
             return {}
         }
 
-        const validator = parseOption(
-            context.options[0] || {},
-            context.getFilename(),
-            getCwd,
-        )
+        const validator = parseOption(context.options[0] || {}, context)
 
         if (!validator) {
             // ignore
             return {}
-        }
-
-        /**
-         * Get cwd
-         */
-        function getCwd() {
-            if (context.getCwd) {
-                return context.getCwd()
-            }
-            return path.resolve("")
         }
 
         const sourceCode = context.getSourceCode()
