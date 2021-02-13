@@ -1,0 +1,28 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.toml"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "a": { "type": "number" },
+                            "b": {
+                                "type": "object",
+                                "properties": {
+                                    "a": {
+                                        "type": "object",
+                                        "properties": {
+                                            "a": { "type": "number" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

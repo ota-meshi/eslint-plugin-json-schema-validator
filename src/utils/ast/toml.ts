@@ -39,7 +39,7 @@ const GET_TOML_NODES: Record<
             const m = getMatchType(paths, keys)
             if (m === MatchType.match) {
                 paths.length = 0 // consume all
-                return { key: () => body.key.range, value: body.value }
+                return { value: body.key }
             }
             if (m === MatchType.subMatch) {
                 paths.length = 0 // consume all
@@ -107,7 +107,7 @@ function getTOMLNodeFromPathForKeyValue(
     const keys = getStaticTOMLValue(node.key)
     const m = getMatchType(paths, keys)
     if (m === MatchType.match) {
-        return { value: node.value }
+        return { value: node.key }
     }
     if (m === MatchType.subMatch) {
         return { value: node.key }

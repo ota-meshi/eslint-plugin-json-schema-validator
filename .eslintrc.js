@@ -28,6 +28,8 @@ module.exports = {
         "no-lonely-if": "off",
         "new-cap": "off",
         "no-shadow": "off",
+
+        "yml/flow-mapping-curly-spacing": "off",
     },
     overrides: [
         {

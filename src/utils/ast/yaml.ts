@@ -52,12 +52,6 @@ const GET_YAML_NODES: Record<
     YAMLMapping(node: YAML.YAMLMapping, paths: string[]) {
         const path = String(paths.shift())
         for (const pair of node.pairs) {
-            if (pair.key) {
-                if (getStaticYAMLValue(pair.key) === path) {
-                    const range = pair.key.range
-                    return { key: () => range, value: pair.value }
-                }
-            }
             const key = String(pair.key ? getStaticYAMLValue(pair.key) : null)
 
             if (key === path) {

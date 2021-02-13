@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"a\" should be number.",
+        "line": 2,
+        "column": 1,
+        "endLine": 2,
+        "endColumn": 6
+    },
+    {
+        "message": "\"b.a\" should be object.",
+        "line": 4,
+        "column": 7,
+        "endLine": 4,
+        "endColumn": 8
+    }
+]

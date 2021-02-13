@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"a.a.null\" should be number.",
+        "line": 4,
+        "column": 9,
+        "endLine": 4,
+        "endColumn": 10
+    }
+]
