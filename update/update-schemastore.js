@@ -27,6 +27,7 @@ function makeDirs(dir) {
  * Fetch and save store
  */
 function fetchAndSave(url, isSchema) {
+    // eslint-disable-next-line no-console -- tool
     console.log(`GET: ${url}`)
 
     const fileName =
@@ -73,6 +74,7 @@ module.exports = async function main() {
         if (ALLOWED_LIST.some((allow) => schemaData.url.startsWith(allow))) {
             await fetchAndSave(schemaData.url, true)
         } else {
+            // eslint-disable-next-line no-console -- tool
             console.warn(`Ignore: ${schemaData.url}`)
         }
     }
