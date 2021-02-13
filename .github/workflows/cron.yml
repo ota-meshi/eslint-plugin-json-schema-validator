@@ -1,7 +1,9 @@
 name: CRON
 on:
-  schedule:
-  - cron: '0 0 * * *'
+  push:
+    branches: [main]
+  # schedule:
+  # - cron: '0 */1 * * *'
 
 jobs:
   update-schemastore:
@@ -11,7 +13,25 @@ jobs:
     - uses: actions/setup-node@v2
     - name: Install Packages
       run: npm install
+    - name: Build
+      run: npm run build
     - name: Update SchemaStore
-      run: npm run update:schemastore
+      uses: ./.github/actions/update-schemastore
+      id: updateSchemastore
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: test and build
+      run: |
+        npm run build
+        npm run test
+      if: success() && steps.updateSchemastore.outputs.updated == 1
+    - name: check can npm-publish
+      run: npx can-npm-publish
+      if: success() && steps.updateSchemastore.outputs.updated == 1
+    - name: Release
+      run: |
+        npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      if: success() && steps.updateSchemastore.outputs.updated == 1

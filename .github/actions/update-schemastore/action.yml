@@ -1,0 +1,8 @@
+name: Update SchemaStore
+description: Update SchemaStore
+outputs:
+  updated:
+    description: 1 if there is an update
+runs:
+  using: node12
+  main: index.js
