@@ -23,57 +23,104 @@ type Schema = object
 type Validator = (data: unknown) => ValidateError[]
 type ValidateError = { message: string; path: string[] }
 
-const ajv = new Ajv({ schemaId: "auto", allErrors: true })
+const ajv = new Ajv({
+    schemaId: "auto",
+    allErrors: true,
+    verbose: true,
+})
 ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
 ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"))
 
+/** Escape data path */
+function escapeQuotes(str: string) {
+    return str
+        .replace(/'|\\/g, "\\$&")
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r")
+        .replace(/\f/g, "\\f")
+        .replace(/\t/g, "\\t")
+}
+
+/* eslint-disable complexity -- X( */
 /**
  * Parse data path
  */
-function parseDataPath(error: ErrorObject): string[] {
+function parseDataPath(
+    /* eslint-enable complexity -- X( */
+    error: ErrorObject,
+): string[] {
     const dataPath = error.dataPath.startsWith(".")
         ? error.dataPath.slice(1)
         : error.dataPath
+    // console.log(dataPath)
     const paths: string[] = []
     let index = 0
     while (index < dataPath.length) {
         const c = dataPath[index]
         if (c === "[") {
             index++
-            const startIndex = index
-            let endIndex = dataPath.length
-            for (; index < dataPath.length; index++) {
-                if (dataPath[index] === "]") {
-                    endIndex = index
-                    index++
-                    break
+            let prop = ""
+            if (dataPath[index] === "'") {
+                index++
+                for (; index < dataPath.length; index++) {
+                    const c = dataPath[index]
+                    if (c === "\\") {
+                        index++
+                        const k = dataPath[index]
+                        prop +=
+                            k === "n"
+                                ? "\n"
+                                : k === "r"
+                                ? "\r"
+                                : k === "f"
+                                ? "\f"
+                                : k === "t"
+                                ? "\t"
+                                : k
+                        continue
+                    }
+                    if (c === "'") {
+                        index++
+                        index++
+                        break
+                    }
+                    prop += c
+                }
+            } else {
+                for (; index < dataPath.length; index++) {
+                    const c = dataPath[index]
+                    if (c === "]") {
+                        index++
+                        break
+                    }
+                    prop += c
                 }
             }
-            paths.push(dataPath.slice(startIndex, endIndex))
+            paths.push(prop)
         } else if (c === ".") {
             index++
         } else {
-            const startIndex = index
-            let endIndex = dataPath.length
+            let prop = ""
             for (; index < dataPath.length; index++) {
-                if (dataPath[index] === ".") {
-                    endIndex = index
+                const c = dataPath[index]
+                if (c === ".") {
                     index++
                     break
                 }
-                if (dataPath[index] === "[") {
-                    endIndex = index
+                if (c === "[") {
                     break
                 }
+                prop += c
             }
-            paths.push(dataPath.slice(startIndex, endIndex))
+            paths.push(prop)
         }
     }
     if (error.keyword === "additionalProperties") {
-        paths.push(
-            (error.params as AdditionalPropertiesParams).additionalProperty,
-        )
+        const additionalProperty = (error.params as AdditionalPropertiesParams)
+            .additionalProperty
+        paths.push(additionalProperty)
     }
+    // console.log(paths)
     return paths
 }
 
@@ -86,13 +133,16 @@ function getErrorMessage(error: ErrorObject): string {
         : error.dataPath
 
     if (error.keyword === "additionalProperties") {
-        const additionalProperty = (error.params as AdditionalPropertiesParams)
+        const property = (error.params as AdditionalPropertiesParams)
             .additionalProperty
-        return `Unexpected property "${
-            dataPath.length
-                ? `${dataPath}.${additionalProperty}`
-                : additionalProperty
-        }"`
+        const escaped = escapeQuotes(property)
+        let errorPath = dataPath
+        if (property === escaped) {
+            errorPath = errorPath ? `${errorPath}.${property}` : property
+        } else {
+            errorPath += `['${escaped}']`
+        }
+        return `Unexpected property "${errorPath}"`
     }
     return `"${dataPath}" ${error.message}.`
 }
@@ -132,9 +182,9 @@ function matchFile(filename: string, fileMatch: string[]) {
 function loadSchema(schemaPath: string, getCwd: () => string) {
     if (schemaPath.startsWith("http://") || schemaPath.startsWith("https://")) {
         let jsonPath: string
-        if (schemaPath.startsWith("https://json.schemastore.org/")) {
+        if (/^https?:\/\/json\.schemastore\.org\//u.test(schemaPath)) {
             jsonPath = schemaPath.replace(
-                /^https:\/\/json\.schemastore\.org\//u,
+                /^https?:\/\/json\.schemastore\.org\//u,
                 "",
             )
         } else {
@@ -194,7 +244,7 @@ function parseOption(
             if (!schemaData.fileMatch) {
                 continue
             }
-            if (!schemaData.url.startsWith("https://json.schemastore.org/")) {
+            if (!/^https?:\/\/json\.schemastore\.org\//u.test(schemaData.url)) {
                 continue
             }
             if (!matchFile(filename, schemaData.fileMatch)) {

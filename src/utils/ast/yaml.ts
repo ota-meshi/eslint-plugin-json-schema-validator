@@ -34,7 +34,9 @@ const GET_YAML_NODES: Record<
             }
             return { value: node.body[index] }
         }
-        throw new Error("Unexpected state")
+        throw new Error(
+            `${"Unexpected state: ["}${[path, ...paths].join(", ")}]`,
+        )
     },
     YAMLDocument(node: YAML.YAMLDocument, _paths: string[]) {
         if (node.content) {
@@ -70,7 +72,9 @@ const GET_YAML_NODES: Record<
                 }
             }
         }
-        throw new Error("Unexpected state")
+        throw new Error(
+            `${"Unexpected state: ["}${[path, ...paths].join(", ")}]`,
+        )
     },
     YAMLSequence(node: YAML.YAMLSequence, paths: string[]) {
         const path = String(paths.shift())
@@ -106,17 +110,19 @@ const GET_YAML_NODES: Record<
                 value: null,
             }
         }
-        throw new Error("Unexpected state")
+        throw new Error(
+            `${"Unexpected state: ["}${[path, ...paths].join(", ")}]`,
+        )
     },
     YAMLAlias(node: YAML.YAMLAlias, paths: string[]) {
         paths.length = 0 // consume all
         return { value: node }
     },
-    YAMLWithMeta(node: YAML.YAMLWithMeta, _paths: string[]) {
+    YAMLWithMeta(node: YAML.YAMLWithMeta, paths: string[]) {
         if (node.value) {
             return { value: node.value }
         }
-        throw new Error("Unexpected state")
+        throw new Error(`${"Unexpected state: ["}${paths.join(", ")}]`)
     },
 }
 
