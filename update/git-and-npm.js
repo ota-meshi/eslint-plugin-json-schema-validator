@@ -8,8 +8,10 @@ module.exports = { git, npm }
 function git(...args) {
     return new Promise((resolve) => {
         let stdout = ""
-        const cmd = spawn("git", args, { stdio: "inherit" })
+        const cmd = spawn("git", args)
         cmd.stdout.on("data", (data) => {
+            // eslint-disable-next-line no-console -- tool
+            console.log(`${data}`)
             stdout += data
         })
         cmd.on("exit", (code) => {
@@ -22,8 +24,10 @@ function git(...args) {
 function npm(...args) {
     return new Promise((resolve) => {
         let stdout = ""
-        const cmd = spawn("npm", args, { stdio: "inherit" })
+        const cmd = spawn("npm", args)
         cmd.stdout.on("data", (data) => {
+            // eslint-disable-next-line no-console -- tool
+            console.log(`${data}`)
             stdout += data
         })
         cmd.on("exit", (code) => {
