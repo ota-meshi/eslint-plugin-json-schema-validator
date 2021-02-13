@@ -3,11 +3,10 @@
 const https = require("https")
 const fs = require("fs")
 const path = require("path")
+const { urlToSchemastoreFilePath } = require("../lib/utils/schema")
 
 const SCHEMASTORE_ROOT = path.resolve(__dirname, "../schemastore")
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json"
-
-const ALLOWED_LIST = ["https://json.schemastore.org/"]
 
 /**
  * Make directories
@@ -71,7 +70,7 @@ module.exports = async function main() {
     const catalogText = await fetchAndSave(CATALOG_URL)
 
     for (const schemaData of JSON.parse(catalogText).schemas) {
-        if (ALLOWED_LIST.some((allow) => schemaData.url.startsWith(allow))) {
+        if (urlToSchemastoreFilePath(schemaData.url)) {
             await fetchAndSave(schemaData.url, true)
         } else {
             // eslint-disable-next-line no-console -- tool

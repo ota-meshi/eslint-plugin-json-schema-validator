@@ -11,6 +11,8 @@ jobs:
     - uses: actions/setup-node@v2
     - name: Install Packages
       run: npm install
+    - name: Build
+      run: npm run build
     - name: Update SchemaStore
       run: npm run update:schemastore
       env:
