@@ -26,8 +26,8 @@
         "docs:build": "npm run build:ts && vuepress build docs --no-cache",
         "preversion": "npm test && npm run update && git add .",
         "version": "npm run eslint-fix && git add .",
-        "update:schemastore": "node update",
-        "update:schemastore-only": "node update/update-schemastore-only"
+        "update:schemastore": "ts-node tools/update-schemastore",
+        "update:schemastore-only": "ts-node tools/update-schemastore/only"
     },
     "repository": {
         "type": "git",

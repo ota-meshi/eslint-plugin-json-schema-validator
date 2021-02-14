@@ -1,9 +1,8 @@
-"use strict"
+import updateSchemaStore from "./update-schemastore"
+import checkDiff from "./check-diff"
+import { git, npm } from "./git-and-npm"
 
-const updateSchemaStore = require("./update-schemastore")
-const checkDiff = require("./check-diff")
-const { git, npm } = require("./git-and-npm")
-
+// eslint-disable-next-line @typescript-eslint/no-floating-promises -- entry point
 main()
 
 /** Main */
@@ -33,6 +32,7 @@ async function main() {
     await git(
         "push",
         `https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/ota-meshi/eslint-plugin-json-schema-validator.git`,
+        "origin",
         "--tags",
     )
 }

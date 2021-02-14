@@ -1,17 +1,15 @@
-"use strict"
+import https from "https"
+import fs from "fs"
+import path from "path"
+import { urlToSchemastoreFilePath } from "../../src/utils/schema"
 
-const https = require("https")
-const fs = require("fs")
-const path = require("path")
-const { urlToSchemastoreFilePath } = require("../lib/utils/schema")
-
-const SCHEMASTORE_ROOT = path.resolve(__dirname, "../schemastore")
+const SCHEMASTORE_ROOT = path.resolve(__dirname, "../../schemastore")
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json"
 
 /**
  * Make directories
  */
-function makeDirs(dir) {
+function makeDirs(dir: string) {
     const dirs = [dir]
     while (!fs.existsSync(dirs[0])) {
         dirs.unshift(path.dirname(dirs[0]))
@@ -25,7 +23,7 @@ function makeDirs(dir) {
 /**
  * Fetch and save store
  */
-function fetchAndSave(url, isSchema) {
+function fetchAndSave(url: string, isSchema: boolean): Promise<string> {
     // eslint-disable-next-line no-console -- tool
     console.log(`GET: ${url}`)
 
@@ -42,7 +40,7 @@ function fetchAndSave(url, isSchema) {
                     result += chunk
                 })
                 res.on("end", () => {
-                    let text = isSchema ? reduceSchema(result) : result
+                    const text = isSchema ? reduceSchema(result) : result
                     fs.writeFileSync(fileName, text, "utf8")
                     setTimeout(() => resolve(text), 1000)
                 })
@@ -56,7 +54,7 @@ function fetchAndSave(url, isSchema) {
 /**
  * Reduce JSON Schema
  */
-function reduceSchema(text) {
+function reduceSchema(text: string) {
     return JSON.stringify(JSON.parse(text), (key, value) => {
         if (key === "description" && typeof value === "string") {
             return undefined
@@ -66,8 +64,8 @@ function reduceSchema(text) {
 }
 
 /** Main */
-module.exports = async function main() {
-    const catalogText = await fetchAndSave(CATALOG_URL)
+export default async function main(): Promise<void> {
+    const catalogText = await fetchAndSave(CATALOG_URL, false)
 
     for (const schemaData of JSON.parse(catalogText).schemas) {
         if (urlToSchemastoreFilePath(schemaData.url)) {
