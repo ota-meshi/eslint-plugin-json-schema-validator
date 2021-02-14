@@ -38,7 +38,7 @@ See [Available Rules](./rules/README.md).
 
 See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
 
-The JSON schema copied from [SchemaStore] included in this plug-in release is licensed under [Apache License 2.0](https://github.com/SchemaStore/schemastore/blob/master/LICENSE.md).
+The JSON Schema included in this plugin release is copy from projects such as [SchemaStore]. Check [here](./schemastore/README.md) for licenses and details.
 
 [SchemaStore]: https://github.com/SchemaStore/schemastore
 [JSON]: https://json.org/
