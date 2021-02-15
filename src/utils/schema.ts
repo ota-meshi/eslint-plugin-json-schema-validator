@@ -2,6 +2,8 @@ import path from "path"
 import fs from "fs"
 import type { RuleContext } from "../types"
 import { syncGet } from "./http-client"
+import debugBuilder from "debug"
+const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
 type Schema = object
@@ -70,10 +72,16 @@ function loadSchemaFromURL(
         return require(jsonFilePath)
     }
 
+    const options = context.settings?.["json-schema-validator"]?.http
+
+    const httpRequestOptions = options?.requestOptions ?? {}
+    const httpGetModulePath = options?.getModulePath
+
     let json: string
     try {
-        json = syncGet(schemaUrl)
+        json = syncGet(schemaUrl, httpRequestOptions, httpGetModulePath)
     } catch (e) {
+        debug(e.message)
         // context.report({
         //     loc: { line: 1, column: 0 },
         //     message: `Could not be resolved: "${schemaPath}"`,

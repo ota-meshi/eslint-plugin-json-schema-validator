@@ -51,9 +51,17 @@ export interface PartialRuleMetaData {
     type: "problem" | "suggestion" | "layout"
 }
 
+export type JsonSchemaValidatorSettings = {
+    http?: {
+        requestOptions?: any
+        getModulePath?: string
+    }
+}
+
 export interface RuleContext {
     id: string
     options: any[]
+    settings: { "json-schema-validator"?: JsonSchemaValidatorSettings }
     parserPath: string
     parserServices: {
         isJSON?: true
