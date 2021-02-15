@@ -38,7 +38,7 @@ See [Available Rules](./rules/README.md).
 
 See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
 
-The JSON Schema included in this plugin release is copy from projects such as [SchemaStore]. Check [here](./schemastore/README.md) for licenses and details.
+The JSON Schema included in this plugin release is copy from [SchemaStore]. Check [here](./schemastore/README.md) for licenses and details.
 
 [SchemaStore]: https://github.com/SchemaStore/schemastore
 [JSON]: https://json.org/
