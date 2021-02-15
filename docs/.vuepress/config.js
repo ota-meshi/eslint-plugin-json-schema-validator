@@ -22,6 +22,10 @@ module.exports = {
             resolve: {
                 alias: {
                     module: require.resolve("./shim/module"),
+                    // eslint-disable-next-line camelcase -- ignore
+                    child_process: require.resolve("./shim/empty"),
+                    http: require.resolve("./shim/empty"),
+                    https: require.resolve("./shim/empty"),
                     eslint: path.resolve(__dirname, "./shim/eslint"),
                 },
             },

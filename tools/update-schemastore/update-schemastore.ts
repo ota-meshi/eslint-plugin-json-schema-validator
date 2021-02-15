@@ -1,6 +1,6 @@
-import https from "https"
 import fs from "fs"
 import path from "path"
+import { get } from "../../src/utils/http-client"
 import { urlToSchemastoreFilePath } from "../../src/utils/schema"
 
 const SCHEMASTORE_ROOT = path.resolve(__dirname, "../../schemastore")
@@ -23,7 +23,7 @@ function makeDirs(dir: string) {
 /**
  * Fetch and save store
  */
-function fetchAndSave(url: string, isSchema: boolean): Promise<string> {
+async function fetchAndSave(url: string, isSchema: boolean): Promise<string> {
     // eslint-disable-next-line no-console -- tool
     console.log(`GET: ${url}`)
 
@@ -32,23 +32,11 @@ function fetchAndSave(url: string, isSchema: boolean): Promise<string> {
         (url.endsWith(".json") ? "" : ".json")
 
     makeDirs(path.dirname(fileName))
-    return new Promise((resolve, reject) => {
-        let result = ""
-        https
-            .get(url, (res) => {
-                res.on("data", (chunk) => {
-                    result += chunk
-                })
-                res.on("end", () => {
-                    const text = isSchema ? reduceSchema(result) : result
-                    fs.writeFileSync(fileName, text, "utf8")
-                    setTimeout(() => resolve(text), 1000)
-                })
-            })
-            .on("error", (e) => {
-                reject(e)
-            })
-    })
+    const result = await get(url)
+    const text = isSchema ? reduceSchema(result) : result
+    fs.writeFileSync(fileName, text, "utf8")
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 1000))
+    return text
 }
 
 /**

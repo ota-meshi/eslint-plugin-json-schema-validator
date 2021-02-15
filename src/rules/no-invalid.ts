@@ -17,7 +17,7 @@ import {
     getYAMLNodeFromPath,
     getTOMLNodeFromPath,
 } from "../utils/ast"
-import { urlToSchemastoreFilePath } from "../utils/schema"
+import { loadSchema } from "../utils/schema"
 import type { RuleContext } from "../types"
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
@@ -29,6 +29,10 @@ const ajv = new Ajv({
     schemaId: "auto",
     allErrors: true,
     verbose: true,
+    validateSchema: false,
+    missingRefs: "ignore",
+    extendRefs: "ignore",
+    logger: false,
 })
 ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
 ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"))
@@ -179,20 +183,6 @@ function matchFile(filename: string, fileMatch: string[]) {
 }
 
 /**
- * Load schema data
- */
-function loadSchema(schemaPath: string, getCwd: () => string) {
-    if (schemaPath.startsWith("http://") || schemaPath.startsWith("https://")) {
-        const jsonPath = urlToSchemastoreFilePath(schemaPath)
-        if (!jsonPath) {
-            return null
-        }
-        return require(`../../schemastore/${jsonPath}`)
-    }
-    return require(path.resolve(getCwd(), schemaPath))
-}
-
-/**
  * Parse option
  */
 function parseOption(
@@ -215,7 +205,7 @@ function parseOption(
         }
         const schema =
             typeof schemaData.schema === "string"
-                ? loadSchema(schemaData.schema, getCwd)
+                ? loadSchema(schemaData.schema, context)
                 : schemaData.schema
         if (!schema) {
             context.report({
@@ -246,7 +236,7 @@ function parseOption(
             if (!matchFile(filename, schemaData.fileMatch)) {
                 continue
             }
-            const schema = loadSchema(schemaData.url, getCwd)
+            const schema = loadSchema(schemaData.url, context)
             if (!schema) {
                 continue
             }
@@ -263,16 +253,6 @@ function parseOption(
             errors.push(...validator(data))
         }
         return errors
-    }
-
-    /**
-     * Get cwd
-     */
-    function getCwd() {
-        if (context.getCwd) {
-            return context.getCwd()
-        }
-        return path.resolve("")
     }
 }
 
