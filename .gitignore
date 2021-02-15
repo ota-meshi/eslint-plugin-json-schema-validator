@@ -110,3 +110,6 @@ dist
 # docs
 /docs/assets
 /docs/**/*.html
+
+# cache
+/.cached_schemastore
