@@ -17,6 +17,7 @@ export default function get(
         request.get(url, { ...options, proxy }, (error, _response, body) => {
             if (error) {
                 reject(error)
+                return
             }
             resolve(body)
         })

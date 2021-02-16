@@ -117,9 +117,10 @@ const request = require("request")
  */
 module.exports = function get(url, options) {
     return new Promise((resolve, reject) => {
-        request.get(url, options, (error, _response, body) => {
+        request.get(url, options, (error, _res, body) => {
             if (error) {
                 reject(error)
+                return
             }
             resolve(body)
         })
