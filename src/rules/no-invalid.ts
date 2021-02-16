@@ -194,19 +194,34 @@ function matchFile(filename: string, fileMatch: string[]) {
  * Parse option
  */
 function parseOption(
-    option: {
-        schemas?: {
-            name?: string
-            description?: string
-            fileMatch: string[]
-            schema: Schema | string
-        }[]
-        useSchemastoreCatalog?: boolean
-    },
+    option:
+        | {
+              schemas?: {
+                  name?: string
+                  description?: string
+                  fileMatch: string[]
+                  schema: Schema | string
+              }[]
+              useSchemastoreCatalog?: boolean
+          }
+        | string,
     context: RuleContext,
 ): Validator | null {
     const filename: string = context.getFilename()
+    if (typeof option === "string") {
+        return parseOption(
+            {
+                schemas: [
+                    { fileMatch: [path.basename(filename)], schema: option },
+                ],
+                useSchemastoreCatalog: false,
+            },
+            context,
+        )
+    }
+
     const validators: Validator[] = []
+
     for (const schemaData of option.schemas || []) {
         if (!matchFile(filename, schemaData.fileMatch)) {
             continue
@@ -274,29 +289,34 @@ export default createRule("no-invalid", {
         fixable: undefined,
         schema: [
             {
-                type: "object",
-                properties: {
-                    schemas: {
-                        type: "array",
-                        items: {
-                            type: "object",
-                            properties: {
-                                name: { type: "string" },
-                                description: { type: "string" },
-                                fileMatch: {
-                                    type: "array",
-                                    items: { type: "string" },
-                                    minItems: 1,
+                oneOf: [
+                    { type: "string" },
+                    {
+                        type: "object",
+                        properties: {
+                            schemas: {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        name: { type: "string" },
+                                        description: { type: "string" },
+                                        fileMatch: {
+                                            type: "array",
+                                            items: { type: "string" },
+                                            minItems: 1,
+                                        },
+                                        schema: { type: ["object", "string"] },
+                                    },
+                                    additionalProperties: true, // It also accepts unrelated properties.
+                                    required: ["fileMatch", "schema"],
                                 },
-                                schema: { type: ["object", "string"] },
                             },
-                            additionalProperties: true, // It also accepts unrelated properties.
-                            required: ["fileMatch", "schema"],
+                            useSchemastoreCatalog: { type: "boolean" },
                         },
+                        additionalProperties: false,
                     },
-                    useSchemastoreCatalog: { type: "boolean" },
-                },
-                additionalProperties: false,
+                ],
             },
         ],
         messages: {},
