@@ -17,5 +17,6 @@ module.exports = {
         eqeqeq: "off",
         "prefer-template": "off",
         yoda: "off",
+        "require-jsdoc": "off",
     },
 }

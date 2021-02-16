@@ -414,11 +414,11 @@ const VISITORS = {
             if (data == null) {
                 return null
             }
-            expressions.push(data)
+            expressions.push(data.data)
         }
         let data = node.quasis[0].value.cooked
         for (let i = 0; i < expressions.length; ++i) {
-            data += expressions[i].data
+            data += expressions[i]
             data += node.quasis[i + 1].value.cooked
         }
         return { data, children: EMPTY_MAP }
@@ -440,7 +440,7 @@ const VISITORS = {
             if (data == null) {
                 return null
             }
-            expressions.push(data)
+            expressions.push(data.data)
         }
 
         const strings = node.quasi.quasis.map((q) => q.value.cooked)

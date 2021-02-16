@@ -1,0 +1,24 @@
+{
+    "object": {
+        "a": "aaa42",
+        "c": "a\\nb\\nc42",
+        "e": "a\\nb\\nc42"
+    },
+    "paths": {
+        "key": "{\n    a: `aaa${v}`,\n    b: t`a\\nb\\nc${v}`,\n    c: String.raw`a\\nb\\nc${v}`,\n    d: u`a\\nb\\nc${v}`,\n    e: u.raw`a\\nb\\nc${v}`,\n    f: String.raw`a\\nb\\nc${unknown}`,\n}",
+        "children": {
+            "a": {
+                "key": "a",
+                "children": {}
+            },
+            "c": {
+                "key": "c",
+                "children": {}
+            },
+            "e": {
+                "key": "e",
+                "children": {}
+            }
+        }
+    }
+}
