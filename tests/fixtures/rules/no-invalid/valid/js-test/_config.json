@@ -1,0 +1,23 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.js"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "str": { "type": "string" },
+                            "num": { "type": "number" },
+                            "int": { "type": "number", "minimum": 0 },
+                            "bool": { "type": "boolean" },
+                            "bool2": { "type": "boolean" },
+                            "bool3": { "type": "boolean" },
+                            "bool4": { "type": "boolean" }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

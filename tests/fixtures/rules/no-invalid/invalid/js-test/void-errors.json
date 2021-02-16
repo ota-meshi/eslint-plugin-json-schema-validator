@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"requiredFoo\" should have required property 'foo'.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 16
+    }
+]

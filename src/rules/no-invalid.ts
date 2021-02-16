@@ -25,7 +25,7 @@ import type { NodeData } from "../utils/ast/common"
 import type {
     ESLintAssignmentExpression,
     ESLintExportDefaultDeclaration,
-    ESLintObjectExpression,
+    ESLintExpression,
 } from "vue-eslint-parser/ast"
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
@@ -339,16 +339,21 @@ export default createRule("no-invalid", {
         /**
          * Validate JS Object
          */
-        function validateJSExport(node: ESLintObjectExpression) {
+        function validateJSExport(node: ESLintExpression) {
             if (existsExports) {
                 return
             }
-            const { object, pathData } = analyzeJsAST(node, context)
+            existsExports = true
 
-            validateData(object, (error) => {
-                let target: PathData | undefined = pathData
+            const data = analyzeJsAST(node, context)
+            if (data == null) {
+                return
+            }
+
+            validateData(data.object, (error) => {
+                let target: PathData | undefined = data.pathData
                 for (const p of error.path) {
-                    target = target?.children[p]
+                    target = target?.children.get(p)
                 }
                 const key = target?.key
                 const range = typeof key === "function" ? key(sourceCode) : key
@@ -360,7 +365,6 @@ export default createRule("no-invalid", {
                     end: sourceCode.getLocFromIndex(range[1]),
                 }
             })
-            existsExports = true
         }
 
         return {
@@ -389,23 +393,27 @@ export default createRule("no-invalid", {
                 }
             },
             ExportDefaultDeclaration(node: ESLintExportDefaultDeclaration) {
-                if (node.declaration.type === "ObjectExpression") {
-                    validateJSExport(node.declaration)
+                if (
+                    node.declaration.type === "FunctionDeclaration" ||
+                    node.declaration.type === "ClassDeclaration" ||
+                    node.declaration.type === "VariableDeclaration"
+                ) {
+                    return
                 }
+                validateJSExport(node.declaration)
             },
             AssignmentExpression(node: ESLintAssignmentExpression) {
                 if (
-                    node.right.type === "ObjectExpression" &&
                     // exports = {}
-                    ((node.left.type === "Identifier" &&
+                    (node.left.type === "Identifier" &&
                         node.left.name === "exports") ||
-                        // module.exports = {}
-                        (node.left.type === "MemberExpression" &&
-                            node.left.object.type === "Identifier" &&
-                            node.left.object.name === "module" &&
-                            node.left.computed === false &&
-                            node.left.property.type === "Identifier" &&
-                            node.left.property.name === "exports"))
+                    // module.exports = {}
+                    (node.left.type === "MemberExpression" &&
+                        node.left.object.type === "Identifier" &&
+                        node.left.object.name === "module" &&
+                        node.left.computed === false &&
+                        node.left.property.type === "Identifier" &&
+                        node.left.property.name === "exports")
                 ) {
                     validateJSExport(node.right)
                 }

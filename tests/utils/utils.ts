@@ -186,6 +186,10 @@ function writeFixtures(
                 [ruleName]: ["error", ...(config.options || [])],
             },
             parser: getParserName(inputFile),
+            parserOptions: {
+                ecmaVersion: 2020,
+                sourceType: "module",
+            },
         },
         config.filename,
     )

@@ -23,24 +23,19 @@ import type { RuleContext, SourceCode } from "../../../types"
 import { findInitNode, getStaticValue } from "./utils"
 import { getStaticPropertyName } from "./utils"
 
+const EMPTY_MAP = Object.freeze(new Map())
 export type PathData = {
     key:
         | [number, number]
         | null
         | ((sourceCode: SourceCode) => [number, number] | null)
     data: unknown
-    children: {
-        [key: string]: PathData | undefined
-        [key: number]: PathData | undefined
-    }
+    children: Readonly<Map<string, PathData | undefined>>
 }
 
 type SubPathData = {
     data: unknown
-    children: {
-        [key: string]: PathData | undefined
-        [key: number]: PathData | undefined
-    }
+    children: Readonly<Map<string, PathData | undefined>>
 }
 type AnalyzedJsAST = {
     object: unknown
@@ -51,10 +46,13 @@ type AnalyzedJsAST = {
  * Analyze JavaScript AST
  */
 export function analyzeJsAST(
-    node: ESLintObjectExpression,
+    node: ESLintExpression,
     context: RuleContext,
-): AnalyzedJsAST {
-    const data = getPathData(node, context)!
+): AnalyzedJsAST | null {
+    const data = getPathData(node, context)
+    if (data == null) {
+        return null
+    }
     const pathData: PathData = {
         key: node.range,
         ...data,
@@ -67,13 +65,77 @@ export function analyzeJsAST(
     return result
 }
 
+type UnaryOperator = "-" | "+" | "!" | "~" | "typeof" | "void" | "delete"
+type BinaryOperator =
+    | "=="
+    | "!="
+    | "==="
+    | "!=="
+    | "<"
+    | "<="
+    | ">"
+    | ">="
+    | "<<"
+    | ">>"
+    | ">>>"
+    | "+"
+    | "-"
+    | "*"
+    | "/"
+    | "%"
+    | "|"
+    | "^"
+    | "&"
+    | "in"
+    | "instanceof"
+    | "**"
+const CALC_UNARY: Record<UnaryOperator, null | ((v: any) => unknown)> = {
+    "+": (v) => Number(v),
+    "-": (v) => -v,
+    "!": (v) => !v,
+    "~": (v) => ~v,
+    typeof: (v) => typeof v,
+    void: () => undefined,
+    delete: null,
+}
+const CALC_BINARY: Record<
+    BinaryOperator,
+    null | ((v1: any, v2: any) => unknown)
+> = {
+    // eslint-disable-next-line eqeqeq -- ignore
+    "==": (v1, v2) => v1 == v2,
+    // eslint-disable-next-line eqeqeq -- ignore
+    "!=": (v1, v2) => v1 != v2,
+    "===": (v1, v2) => v1 === v2,
+    "!==": (v1, v2) => v1 !== v2,
+    "<": (v1, v2) => v1 < v2,
+    "<=": (v1, v2) => v1 <= v2,
+    ">": (v1, v2) => v1 > v2,
+    ">=": (v1, v2) => v1 >= v2,
+    "<<": (v1, v2) => v1 << v2,
+    ">>": (v1, v2) => v1 >> v2,
+    ">>>": (v1, v2) => v1 >>> v2,
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- ignore
+    "+": (v1, v2) => v1 + v2,
+    "-": (v1, v2) => v1 - v2,
+    "*": (v1, v2) => v1 * v2,
+    "/": (v1, v2) => v1 / v2,
+    "%": (v1, v2) => v1 % v2,
+    "|": (v1, v2) => v1 | v2,
+    "^": (v1, v2) => v1 ^ v2,
+    "&": (v1, v2) => v1 & v2,
+    in: (v1, v2) => v1 in v2,
+    instanceof: (v1, v2) => v1 instanceof v2,
+    "**": (v1, v2) => v1 ** v2,
+}
+
 const VISITORS = {
     ObjectExpression(
         node: ESLintObjectExpression,
         context: RuleContext,
     ): SubPathData {
         const data: Record<string, any> = {}
-        const children: SubPathData["children"] = {}
+        const children: SubPathData["children"] = new Map()
         for (const prop of node.properties) {
             if (prop.type === "Property") {
                 const keyName = getStaticPropertyName(prop, context)
@@ -84,11 +146,19 @@ const VISITORS = {
                     )
                     if (propData) {
                         data[keyName] = propData.data
-                        children[keyName] = {
+                        children.set(keyName, {
                             key: prop.key.range,
                             ...propData,
-                        }
+                        })
                     }
+                }
+            } else if (prop.type === "SpreadElement") {
+                const propData = getPathData(prop.argument, context)
+                if (propData) {
+                    propData.children.forEach((val, key) => {
+                        data[key] = (propData.data as any)[key]
+                        children.set(key, val)
+                    })
                 }
             }
         }
@@ -103,7 +173,7 @@ const VISITORS = {
         context: RuleContext,
     ): SubPathData {
         const data: any[] = []
-        const children: SubPathData["children"] = {}
+        const children: SubPathData["children"] = new Map()
         for (let index = 0; index < node.elements.length; index++) {
             const element = node.elements[index]
             if (element) {
@@ -111,15 +181,15 @@ const VISITORS = {
                     const propData = getPathData(element, context)
                     if (propData) {
                         data[index] = propData.data
-                        children[index] = {
+                        children.set(String(index), {
                             key: element.range,
                             ...propData,
-                        }
+                        })
                     }
                 }
             } else {
                 data[index] = undefined
-                children[index] = {
+                children.set(String(index), {
                     key: (sourceCode) => {
                         const before = node.elements
                             .slice(0, index)
@@ -142,8 +212,8 @@ const VISITORS = {
                         ]
                     },
                     data: undefined as any,
-                    children: {},
-                }
+                    children: EMPTY_MAP,
+                })
             }
         }
 
@@ -162,7 +232,7 @@ const VISITORS = {
             if (evalData != null) {
                 return {
                     data: evalData.value,
-                    children: {},
+                    children: EMPTY_MAP,
                 }
             }
 
@@ -173,7 +243,7 @@ const VISITORS = {
     Literal(node: ESLintLiteral, _context: RuleContext): SubPathData | null {
         return {
             data: node.value,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
     UnaryExpression(
@@ -184,31 +254,17 @@ const VISITORS = {
         if (argData == null) {
             return null
         }
-        let data: unknown
-        if (node.operator === "-") {
-            data = -(argData.data as any)
-        } else if (node.operator === "+") {
-            data = Number(argData.data as any)
-        } else if (node.operator === "!") {
-            data = !(argData.data as any)
-        } else if (node.operator === "~") {
-            data = ~(argData.data as any)
-        } else if (node.operator === "typeof") {
-            data = typeof argData.data
-        } else if (node.operator === "void") {
-            data = undefined
-        } else if (node.operator === "delete") {
-            return null
-        } else {
+        const calc = CALC_UNARY[node.operator]
+        if (!calc) {
             return null
         }
+        const data: unknown = calc(argData.data)
 
         return {
             data,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
-    // eslint-disable-next-line complexity -- X(
     BinaryExpression(
         node: ESLintBinaryExpression,
         context: RuleContext,
@@ -221,61 +277,15 @@ const VISITORS = {
         if (rightData == null) {
             return null
         }
-        let data: unknown
-        if (node.operator === "==") {
-            // eslint-disable-next-line eqeqeq -- ignore
-            data = leftData.data == rightData.data
-        } else if (node.operator === "!=") {
-            // eslint-disable-next-line eqeqeq -- ignore
-            data = leftData.data != rightData.data
-        } else if (node.operator === "===") {
-            data = leftData.data === rightData.data
-        } else if (node.operator === "!==") {
-            data = leftData.data !== rightData.data
-        } else if (node.operator === "<") {
-            data = (leftData.data as any) < (rightData.data as any)
-        } else if (node.operator === "<=") {
-            data = (leftData.data as any) <= (rightData.data as any)
-        } else if (node.operator === ">") {
-            data = (leftData.data as any) > (rightData.data as any)
-        } else if (node.operator === ">=") {
-            data = (leftData.data as any) >= (rightData.data as any)
-        } else if (node.operator === "<<") {
-            data = (leftData.data as any) << (rightData.data as any)
-        } else if (node.operator === ">>") {
-            data = (leftData.data as any) >> (rightData.data as any)
-        } else if (node.operator === ">>>") {
-            data = (leftData.data as any) >>> (rightData.data as any)
-        } else if (node.operator === "+") {
-            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- ignore
-            data = (leftData.data as any) + (rightData.data as any)
-        } else if (node.operator === "-") {
-            data = (leftData.data as any) - (rightData.data as any)
-        } else if (node.operator === "*") {
-            data = (leftData.data as any) * (rightData.data as any)
-        } else if (node.operator === "/") {
-            data = (leftData.data as any) / (rightData.data as any)
-        } else if (node.operator === "%") {
-            data = (leftData.data as any) % (rightData.data as any)
-        } else if (node.operator === "|") {
-            data = (leftData.data as any) | (rightData.data as any)
-        } else if (node.operator === "^") {
-            data = (leftData.data as any) ^ (rightData.data as any)
-        } else if (node.operator === "&") {
-            data = (leftData.data as any) & (rightData.data as any)
-        } else if (node.operator === "in") {
-            data = (leftData.data as any) in (rightData.data as any)
-        } else if (node.operator === "instanceof") {
-            data = (leftData.data as any) instanceof (rightData.data as any)
-        } else if (node.operator === "**") {
-            data = (leftData.data as any) ** (rightData.data as any)
-        } else {
+        const calc = CALC_BINARY[node.operator]
+        if (!calc) {
             return null
         }
+        const data: unknown = calc(leftData.data, rightData.data)
 
         return {
             data,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
     LogicalExpression(
@@ -286,26 +296,27 @@ const VISITORS = {
         if (leftData == null) {
             return null
         }
+        const operator: "||" | "&&" | "??" = node.operator
+        if (operator === "||") {
+            if (leftData.data) {
+                return leftData
+            }
+        } else if (operator === "&&") {
+            if (!leftData.data) {
+                return leftData
+            }
+        } else if (operator === "??") {
+            if (leftData.data != null) {
+                return leftData
+            }
+        } else {
+            return null
+        }
         const rightData = getPathData(node.right, context)
         if (rightData == null) {
             return null
         }
-        const operator: "||" | "&&" | "??" = node.operator
-        let data: unknown
-        if (operator === "||") {
-            data = leftData.data || rightData.data
-        } else if (operator === "&&") {
-            data = leftData.data && rightData.data
-        } else if (operator === "??") {
-            data = leftData.data ?? rightData.data
-        } else {
-            return null
-        }
-
-        return {
-            data,
-            children: {},
-        }
+        return rightData
     },
     UpdateExpression(
         node: ESLintUpdateExpression,
@@ -326,7 +337,7 @@ const VISITORS = {
 
         return {
             data,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
     AssignmentExpression(
@@ -357,14 +368,14 @@ const VISITORS = {
             return null
         }
 
-        const define = objectData.children[propName]
+        const define = objectData.children.get(propName)
         if (define) {
             return define
         }
         if (objectData.data != null) {
             return {
                 data: (objectData.data as any)[propName],
-                children: {},
+                children: EMPTY_MAP,
             }
         }
 
@@ -393,7 +404,7 @@ const VISITORS = {
         }
         return {
             data: evalData.value,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
     NewExpression(
@@ -406,7 +417,7 @@ const VISITORS = {
         }
         return {
             data: evalData.value,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
     SequenceExpression(
@@ -433,7 +444,7 @@ const VISITORS = {
             data += expressions[i].data
             data += node.quasis[i + 1].value.cooked
         }
-        return { data, children: {} }
+        return { data, children: EMPTY_MAP }
     },
     TaggedTemplateExpression(
         node: ESLintTaggedTemplateExpression,
@@ -462,7 +473,7 @@ const VISITORS = {
 
         return {
             data,
-            children: {},
+            children: EMPTY_MAP,
         }
     },
     ThisExpression() {

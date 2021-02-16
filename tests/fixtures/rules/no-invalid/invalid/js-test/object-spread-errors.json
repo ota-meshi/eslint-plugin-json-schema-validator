@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"num\" should be number.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 8
+    },
+    {
+        "message": "\"str\" should be string.",
+        "line": 7,
+        "column": 5,
+        "endLine": 7,
+        "endColumn": 8
+    }
+]

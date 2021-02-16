@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"num\" should be number.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 8
+    }
+]

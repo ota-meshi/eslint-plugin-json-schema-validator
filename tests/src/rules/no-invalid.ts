@@ -6,6 +6,7 @@ const tester = new RuleTester({
     parser: require.resolve("jsonc-eslint-parser"),
     parserOptions: {
         ecmaVersion: 2020,
+        sourceType: "module",
     },
 })
 

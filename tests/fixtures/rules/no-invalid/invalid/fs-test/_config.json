@@ -1,0 +1,12 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.json"],
+                    "schema": "tests/fixtures/rules/no-invalid/invalid/fs-test/schema.json"
+                }
+            ]
+        }
+    ]
+}

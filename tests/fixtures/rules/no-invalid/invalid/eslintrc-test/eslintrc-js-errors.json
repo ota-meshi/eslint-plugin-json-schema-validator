@@ -12,5 +12,12 @@
         "column": 22,
         "endLine": 6,
         "endColumn": 26
+    },
+    {
+        "message": "\"plugins[2]\" should be string.",
+        "line": 6,
+        "column": 27,
+        "endLine": 6,
+        "endColumn": 28
     }
 ]
