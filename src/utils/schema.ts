@@ -37,17 +37,7 @@ export function loadSchema(
         return require(`../../schemastore/${jsonPath}`)
     }
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-    return require(path.resolve(getCwd(), schemaPath))
-
-    /**
-     * Get cwd
-     */
-    function getCwd() {
-        if (context.getCwd) {
-            return context.getCwd()
-        }
-        return path.resolve("")
-    }
+    return require(path.resolve(getCwd(context), schemaPath))
 }
 
 /**
@@ -75,7 +65,7 @@ function loadSchemaFromURL(
     const options = context.settings?.["json-schema-validator"]?.http
 
     const httpRequestOptions = options?.requestOptions ?? {}
-    const httpGetModulePath = options?.getModulePath
+    const httpGetModulePath = resolvePath(options?.getModulePath, context)
 
     let json: string
     try {
@@ -128,4 +118,27 @@ function schemaStringify(schema: Schema) {
         }
         return value
     })
+}
+
+/**
+ * Resolve module path
+ */
+function resolvePath(modulePath: string | void, context: RuleContext) {
+    if (!modulePath) {
+        return undefined
+    }
+    if (modulePath.startsWith(".")) {
+        return path.join(getCwd(context), modulePath)
+    }
+    return modulePath
+}
+
+/**
+ * Get cwd
+ */
+function getCwd(context: RuleContext) {
+    if (context.getCwd) {
+        return context.getCwd()
+    }
+    return path.resolve("")
 }
