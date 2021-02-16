@@ -16,5 +16,6 @@ module.exports = {
         "no-void": "off",
         eqeqeq: "off",
         "prefer-template": "off",
+        yoda: "off",
     },
 }

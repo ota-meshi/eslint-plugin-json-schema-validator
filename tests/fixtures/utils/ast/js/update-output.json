@@ -1,0 +1,7 @@
+{
+    "object": {},
+    "paths": {
+        "key": "{\n    \"one++\": one++,\n    \"++one\": ++one,\n    \"one--\": one--,\n    \"--one\": --one,\n\n    \"obj.foo++\": obj.foo++,\n    \"++obj.foo\": ++obj.foo,\n    \"obj.foo--\": obj.foo--,\n    \"--obj.foo\": --obj.foo,\n}",
+        "children": {}
+    }
+}

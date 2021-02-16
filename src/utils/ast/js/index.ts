@@ -17,7 +17,6 @@ import type {
     ESLintTaggedTemplateExpression,
     ESLintTemplateLiteral,
     ESLintUnaryExpression,
-    ESLintUpdateExpression,
 } from "vue-eslint-parser/ast"
 import type { RuleContext, SourceCode } from "../../../types"
 import { findInitNode, getStaticValue } from "./utils"
@@ -37,7 +36,7 @@ type SubPathData = {
     data: unknown
     children: Readonly<Map<string, PathData | undefined>>
 }
-type AnalyzedJsAST = {
+export type AnalyzedJsAST = {
     object: unknown
     pathData: PathData
 }
@@ -318,28 +317,6 @@ const VISITORS = {
         }
         return rightData
     },
-    UpdateExpression(
-        node: ESLintUpdateExpression,
-        context: RuleContext,
-    ): SubPathData | null {
-        const argData = getPathData(node.argument, context)
-        if (argData == null) {
-            return null
-        }
-        let data: unknown
-        if (node.operator === "--") {
-            data = Number(argData.data) - (node.prefix ? 1 : 0)
-        } else if (node.operator === "++") {
-            data = Number(argData.data) + (node.prefix ? 1 : 0)
-        } else {
-            return null
-        }
-
-        return {
-            data,
-            children: EMPTY_MAP,
-        }
-    },
     AssignmentExpression(
         node: ESLintAssignmentExpression,
         context: RuleContext,
@@ -475,6 +452,9 @@ const VISITORS = {
             data,
             children: EMPTY_MAP,
         }
+    },
+    UpdateExpression() {
+        return null
     },
     ThisExpression() {
         return null

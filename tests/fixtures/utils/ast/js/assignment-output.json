@@ -1,0 +1,14 @@
+{
+    "object": {
+        "c": 42
+    },
+    "paths": {
+        "key": "{\n    c: (b = a),\n    e: (d = b),\n}",
+        "children": {
+            "c": {
+                "key": "c",
+                "children": {}
+            }
+        }
+    }
+}

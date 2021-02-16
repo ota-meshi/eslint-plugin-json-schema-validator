@@ -1,0 +1,30 @@
+[
+    {
+        "message": "\"str\" should be string.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 8
+    },
+    {
+        "message": "\"str2\" should be string.",
+        "line": 4,
+        "column": 5,
+        "endLine": 4,
+        "endColumn": 9
+    },
+    {
+        "message": "\"str3\" should be string.",
+        "line": 5,
+        "column": 5,
+        "endLine": 5,
+        "endColumn": 9
+    },
+    {
+        "message": "\"num\" should be number.",
+        "line": 6,
+        "column": 5,
+        "endLine": 6,
+        "endColumn": 8
+    }
+]
