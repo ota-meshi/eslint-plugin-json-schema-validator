@@ -10,7 +10,9 @@
                 ? 'toml-eslint-parser'
                 : language === 'html'
                 ? 'vue-eslint-parser'
-                : 'jsonc-eslint-parser'
+                : language === 'json'
+                ? 'jsonc-eslint-parser'
+                : 'espree'
         "
         :code="value"
         :rules="rules"
@@ -56,6 +58,9 @@ export default {
             }
             if (fileName.endsWith(".vue")) {
                 return "html"
+            }
+            if (fileName.endsWith(".js")) {
+                return "javascript"
             }
             return "json"
         },

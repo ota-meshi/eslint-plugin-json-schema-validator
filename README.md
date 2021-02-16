@@ -15,7 +15,7 @@
 
 ## :name_badge: Features
 
-This ESLint plugin validates [JSON], [JSONC], [JSON5], [YAML] and [TOML] with JSON Schema.
+This ESLint plugin validates [JSON], [JSONC], [JSON5], [YAML], [TOML] and JavaScript with JSON Schema.
 
 <!--DOCS_IGNORE_START-->
 
