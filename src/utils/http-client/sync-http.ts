@@ -5,11 +5,20 @@ import path from "path"
 /**
  * Synchronously GET Method
  */
-export function syncGet(url: string, options?: RequestOptions): string {
+export function syncGet(
+    url: string,
+    options?: RequestOptions,
+    httpModulePath?: string,
+): string {
     const httpScriptPath = require.resolve("./cli")
     const execPath = process.execPath
-    const argument = JSON.stringify(options || {})
-    const cliArgs = [httpScriptPath, url, argument]
+    const optionsJSON = JSON.stringify(options ?? {})
+    const cliArgs = [
+        httpScriptPath,
+        url,
+        optionsJSON,
+        JSON.stringify({ httpModulePath }),
+    ]
     if (path.extname(httpScriptPath) === ".ts") {
         cliArgs.unshift("--require", "ts-node/register/transpile-only")
     }

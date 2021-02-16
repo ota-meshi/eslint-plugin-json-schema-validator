@@ -2,6 +2,8 @@ import path from "path"
 import fs from "fs"
 import type { RuleContext } from "../types"
 import { syncGet } from "./http-client"
+import debugBuilder from "debug"
+const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
 type Schema = object
@@ -35,17 +37,7 @@ export function loadSchema(
         return require(`../../schemastore/${jsonPath}`)
     }
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-    return require(path.resolve(getCwd(), schemaPath))
-
-    /**
-     * Get cwd
-     */
-    function getCwd() {
-        if (context.getCwd) {
-            return context.getCwd()
-        }
-        return path.resolve("")
-    }
+    return require(path.resolve(getCwd(context), schemaPath))
 }
 
 /**
@@ -70,10 +62,16 @@ function loadSchemaFromURL(
         return require(jsonFilePath)
     }
 
+    const options = context.settings?.["json-schema-validator"]?.http
+
+    const httpRequestOptions = options?.requestOptions ?? {}
+    const httpGetModulePath = resolvePath(options?.getModulePath, context)
+
     let json: string
     try {
-        json = syncGet(schemaUrl)
+        json = syncGet(schemaUrl, httpRequestOptions, httpGetModulePath)
     } catch (e) {
+        debug(e.message)
         // context.report({
         //     loc: { line: 1, column: 0 },
         //     message: `Could not be resolved: "${schemaPath}"`,
@@ -120,4 +118,27 @@ function schemaStringify(schema: Schema) {
         }
         return value
     })
+}
+
+/**
+ * Resolve module path
+ */
+function resolvePath(modulePath: string | void, context: RuleContext) {
+    if (!modulePath) {
+        return undefined
+    }
+    if (modulePath.startsWith(".")) {
+        return path.join(getCwd(context), modulePath)
+    }
+    return modulePath
+}
+
+/**
+ * Get cwd
+ */
+function getCwd(context: RuleContext) {
+    if (context.getCwd) {
+        return context.getCwd()
+    }
+    return path.resolve("")
 }

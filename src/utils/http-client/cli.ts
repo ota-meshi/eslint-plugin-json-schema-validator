@@ -9,10 +9,11 @@ main()
  */
 async function main() {
     try {
-        const args = process.argv.slice(-2)
+        const args = process.argv.slice(-3)
         const url: string = args[0]
         const options: RequestOptions = JSON.parse(args[1])
-        const result = await get(url, options)
+        const { httpModulePath } = JSON.parse(args[2])
+        const result = await get(url, options, httpModulePath)
         // eslint-disable-next-line no-console -- CLI
         console.log(result)
     } catch (e) {

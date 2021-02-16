@@ -67,6 +67,12 @@ fs.writeFileSync(
             )![0],
         )
         .replace(
+            /<!--ADVANCED_USAGE_GUIDE_START-->[\s\S]*<!--ADVANCED_USAGE_GUIDE_END-->/u,
+            /<!--ADVANCED_USAGE_GUIDE_START-->[\s\S]*<!--ADVANCED_USAGE_GUIDE_END-->/u.exec(
+                newReadme,
+            )![0],
+        )
+        .replace(
             /\(https:\/\/ota-meshi.github.io\/eslint-plugin-json-schema-validator(.*?)\)/gu,
             (_s, c: string) => `(..${c.endsWith("/") ? `${c}README.md` : c})`,
         ),
