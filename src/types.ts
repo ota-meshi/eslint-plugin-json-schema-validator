@@ -6,6 +6,7 @@ import type { AST as YAML } from "yaml-eslint-parser"
 import type { AST as TOML } from "toml-eslint-parser"
 import type { AST as ES } from "eslint"
 import type { Comment as ESTreeComment } from "estree"
+import type { ESLintNode } from "vue-eslint-parser/ast"
 export interface RuleListener {
     [key: string]: ((node: never) => void) | undefined
 }
@@ -80,7 +81,7 @@ export interface RuleContext {
 export declare namespace SourceCode {
     export function splitLines(text: string): string[]
 }
-export type Node = JSON.JSONNode | YAML.YAMLNode | TOML.TOMLNode
+export type Node = ESLintNode | JSON.JSONNode | YAML.YAMLNode | TOML.TOMLNode
 export type Token = ES.Token | YAML.Token | TOML.Token | Comment
 export type Comment = ESTreeComment | YAML.Comment | TOML.Comment
 export type NodeOrToken = Node | Token

@@ -88,7 +88,7 @@ export function loadTestCases(
     const invalid = listupInput(invalidFixtureRoot).map((inputFile) => {
         const config = getConfig(ruleName, inputFile)
         const errorFile = inputFile.replace(
-            /input\.(?:json5?|ya?ml|toml|vue)$/u,
+            /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
             "errors.json",
         )
         let errors
@@ -139,6 +139,7 @@ function* itrListupInput(rootDir: string): IterableIterator<string> {
         }
         const abs = path.join(rootDir, filename)
         if (
+            filename.endsWith("input.js") ||
             filename.endsWith("input.json") ||
             filename.endsWith("input.json5") ||
             filename.endsWith("input.yaml") ||
@@ -172,7 +173,7 @@ function writeFixtures(
 ) {
     const linter = getLinter(ruleName)
     const errorFile = inputFile.replace(
-        /input\.(?:json5?|ya?ml|toml|vue)$/u,
+        /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
         "errors.json",
     )
 
@@ -226,7 +227,7 @@ function getConfig(ruleName: string, inputFile: string) {
     const code0 = fs.readFileSync(inputFile, "utf8")
     let code, config
     let configFile: string = inputFile.replace(
-        /input\.(?:json5?|ya?ml|toml|vue)$/u,
+        /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
         "config.json",
     )
     const hashComment =
@@ -235,7 +236,8 @@ function getConfig(ruleName: string, inputFile: string) {
         inputFile.endsWith(".toml")
     const blockComment =
         (!hashComment && inputFile.endsWith(".json")) ||
-        inputFile.endsWith(".json5")
+        inputFile.endsWith(".json5") ||
+        inputFile.endsWith(".js")
     if (!exists(configFile)) {
         configFile = path.join(path.dirname(inputFile), "_config.json")
     }
@@ -292,6 +294,9 @@ function getParserName(fileName: string): string {
     }
     if (fileName.endsWith(".toml")) {
         return "toml-eslint-parser"
+    }
+    if (fileName.endsWith(".js")) {
+        return "espree"
     }
     return "jsonc-eslint-parser"
 }

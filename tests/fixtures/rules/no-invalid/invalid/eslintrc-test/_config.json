@@ -8,7 +8,8 @@
                         "eslintrc-yaml-input.yaml",
                         "eslintrc-sparse-array-input.json5",
                         "eslintrc-toml-input.toml",
-                        "eslintrc-escape-input.json"
+                        "eslintrc-escape-input.json",
+                        "eslintrc-js-input.js"
                     ],
                     "schema": "https://json.schemastore.org/eslintrc"
                 }

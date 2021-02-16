@@ -12,14 +12,21 @@ import Ajv from "ajv"
 import type { ErrorObject } from "ajv"
 import minimatch from "minimatch"
 import path from "path"
+import type { PathData } from "../utils/ast"
 import {
     getJSONNodeFromPath,
     getYAMLNodeFromPath,
     getTOMLNodeFromPath,
+    analyzeJsAST,
 } from "../utils/ast"
 import { loadSchema } from "../utils/schema"
 import type { RuleContext } from "../types"
 import type { NodeData } from "../utils/ast/common"
+import type {
+    ESLintAssignmentExpression,
+    ESLintExportDefaultDeclaration,
+    ESLintObjectExpression,
+} from "vue-eslint-parser/ast"
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
 type Schema = object
@@ -296,14 +303,6 @@ export default createRule("no-invalid", {
         type: "suggestion",
     },
     create(context) {
-        if (
-            !context.parserServices.isJSON &&
-            !context.parserServices.isYAML &&
-            !context.parserServices.isTOML
-        ) {
-            return {}
-        }
-
         const validator = parseOption(context.options[0] || {}, context)
 
         if (!validator) {
@@ -311,47 +310,104 @@ export default createRule("no-invalid", {
             return {}
         }
 
+        let existsExports = false
         const sourceCode = context.getSourceCode()
+
+        /**
+         * Validate JSON Schema
+         */
+        function validateData(
+            data: unknown,
+            resolveLoc: (error: ValidateError) => JSON.SourceLocation | null,
+        ) {
+            const errors = validator!(data)
+            for (const error of errors) {
+                const loc = resolveLoc(error)
+
+                if (!loc) {
+                    // Ignore
+                    continue
+                }
+
+                context.report({
+                    loc,
+                    message: error.message,
+                })
+            }
+        }
+
+        /**
+         * Validate JS Object
+         */
+        function validateJSExport(node: ESLintObjectExpression) {
+            if (existsExports) {
+                return
+            }
+            const { object, pathData } = analyzeJsAST(node, context)
+
+            validateData(object, (error) => {
+                let target: PathData | undefined = pathData
+                for (const p of error.path) {
+                    target = target?.children[p]
+                }
+                const key = target?.key
+                const range = typeof key === "function" ? key(sourceCode) : key
+                if (!range) {
+                    return null
+                }
+                return {
+                    start: sourceCode.getLocFromIndex(range[0]),
+                    end: sourceCode.getLocFromIndex(range[1]),
+                }
+            })
+            existsExports = true
+        }
 
         return {
             Program(node) {
-                let data: unknown
-                let resolveLoc: (error: ValidateError) => JSON.SourceLocation
                 if (context.parserServices.isJSON) {
                     const program = node as JSON.JSONProgram
-                    data = getStaticJSONValue(program)
-                    resolveLoc = (error) => {
+                    validateData(getStaticJSONValue(program), (error) => {
                         return errorDataToLoc(
                             getJSONNodeFromPath(program, error.path),
                         )
-                    }
+                    })
                 } else if (context.parserServices.isYAML) {
                     const program = node as YAML.YAMLProgram
-                    data = getStaticYAMLValue(program)
-                    resolveLoc = (error) => {
+                    validateData(getStaticYAMLValue(program), (error) => {
                         return errorDataToLoc(
                             getYAMLNodeFromPath(program, error.path),
                         )
-                    }
+                    })
                 } else if (context.parserServices.isTOML) {
                     const program = node as TOML.TOMLProgram
-                    data = getStaticTOMLValue(program)
-                    resolveLoc = (error) => {
+                    validateData(getStaticTOMLValue(program), (error) => {
                         return errorDataToLoc(
                             getTOMLNodeFromPath(program, error.path),
                         )
-                    }
-                } else {
-                    return
-                }
-                const errors = validator(data)
-                for (const error of errors) {
-                    const loc: JSON.SourceLocation = resolveLoc(error)
-
-                    context.report({
-                        loc,
-                        message: error.message,
                     })
+                }
+            },
+            ExportDefaultDeclaration(node: ESLintExportDefaultDeclaration) {
+                if (node.declaration.type === "ObjectExpression") {
+                    validateJSExport(node.declaration)
+                }
+            },
+            AssignmentExpression(node: ESLintAssignmentExpression) {
+                if (
+                    node.right.type === "ObjectExpression" &&
+                    // exports = {}
+                    ((node.left.type === "Identifier" &&
+                        node.left.name === "exports") ||
+                        // module.exports = {}
+                        (node.left.type === "MemberExpression" &&
+                            node.left.object.type === "Identifier" &&
+                            node.left.object.name === "module" &&
+                            node.left.computed === false &&
+                            node.left.property.type === "Identifier" &&
+                            node.left.property.name === "exports"))
+                ) {
+                    validateJSExport(node.right)
                 }
             },
         }
