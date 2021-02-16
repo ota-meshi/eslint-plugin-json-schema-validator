@@ -147,7 +147,7 @@ module.exports = {
 ```
 
 - `http` ... Settings to resolve schema URLs.
-  - `getModulePath` ... Module path to `GET` the URL. The default implementation is [./src/utils/http-client/get-modules/http.ts](./src/utils/http-client/get-modules/http.ts).
+  - `getModulePath` ... Module path to `GET` the URL. The default implementation is [./src/utils/http-client/get-modules/http.ts](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/src/utils/http-client/get-modules/http.ts).
   - `requestOptions` ... Options used in the module.
 
 #### Example of `http`
