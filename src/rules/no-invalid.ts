@@ -19,6 +19,7 @@ import {
 } from "../utils/ast"
 import { loadSchema } from "../utils/schema"
 import type { RuleContext } from "../types"
+import type { NodeData } from "../utils/ast/common"
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
 type Schema = object
@@ -315,47 +316,37 @@ export default createRule("no-invalid", {
         return {
             Program(node) {
                 let data: unknown
+                let resolveLoc: (error: ValidateError) => JSON.SourceLocation
                 if (context.parserServices.isJSON) {
-                    data = getStaticJSONValue(node as JSON.JSONProgram)
+                    const program = node as JSON.JSONProgram
+                    data = getStaticJSONValue(program)
+                    resolveLoc = (error) => {
+                        return errorDataToLoc(
+                            getJSONNodeFromPath(program, error.path),
+                        )
+                    }
                 } else if (context.parserServices.isYAML) {
-                    data = getStaticYAMLValue(node as YAML.YAMLProgram)
+                    const program = node as YAML.YAMLProgram
+                    data = getStaticYAMLValue(program)
+                    resolveLoc = (error) => {
+                        return errorDataToLoc(
+                            getYAMLNodeFromPath(program, error.path),
+                        )
+                    }
                 } else if (context.parserServices.isTOML) {
-                    data = getStaticTOMLValue(node as TOML.TOMLProgram)
+                    const program = node as TOML.TOMLProgram
+                    data = getStaticTOMLValue(program)
+                    resolveLoc = (error) => {
+                        return errorDataToLoc(
+                            getTOMLNodeFromPath(program, error.path),
+                        )
+                    }
                 } else {
                     return
                 }
                 const errors = validator(data)
                 for (const error of errors) {
-                    let errorData
-                    if (context.parserServices.isJSON) {
-                        errorData = getJSONNodeFromPath(
-                            node as JSON.JSONProgram,
-                            error.path,
-                        )
-                    } else if (context.parserServices.isYAML) {
-                        errorData = getYAMLNodeFromPath(
-                            node as YAML.YAMLProgram,
-                            error.path,
-                        )
-                    } else if (context.parserServices.isTOML) {
-                        errorData = getTOMLNodeFromPath(
-                            node as TOML.TOMLProgram,
-                            error.path,
-                        )
-                    } else {
-                        continue
-                    }
-
-                    let loc: JSON.SourceLocation
-                    if (errorData.key) {
-                        const range = errorData.key(sourceCode)
-                        loc = {
-                            start: sourceCode.getLocFromIndex(range[0]),
-                            end: sourceCode.getLocFromIndex(range[1]),
-                        }
-                    } else {
-                        loc = errorData.value.loc
-                    }
+                    const loc: JSON.SourceLocation = resolveLoc(error)
 
                     context.report({
                         loc,
@@ -363,6 +354,22 @@ export default createRule("no-invalid", {
                     })
                 }
             },
+        }
+
+        /**
+         * ErrorData to report location.
+         */
+        function errorDataToLoc(
+            errorData: NodeData<JSON.JSONNode | YAML.YAMLNode | TOML.TOMLNode>,
+        ) {
+            if (errorData.key) {
+                const range = errorData.key(sourceCode)
+                return {
+                    start: sourceCode.getLocFromIndex(range[0]),
+                    end: sourceCode.getLocFromIndex(range[1]),
+                }
+            }
+            return errorData.value.loc
         }
     },
 })
