@@ -1,0 +1,8 @@
+{
+    "extends": ["config:base", ":preserveSemverRanges"],
+    "packageRules": [
+        {
+            "matchUpdateTypes": ["minor", "patch", "pin", "digest", 42]
+        }
+    ]
+}
