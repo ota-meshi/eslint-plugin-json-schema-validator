@@ -76,6 +76,79 @@ Example **.vscode/settings.json**:
 
 <!--USAGE_GUIDE_END-->
 
+<!--ADVANCED_USAGE_GUIDE_START-->
+
+## :trollface: Advanced Usage
+
+### Settings
+
+Use `.eslintrc.*` file to configure `settings`. See also: [https://eslint.org/docs/user-guide/configuring/configuration-files#adding-shared-settings](https://eslint.org/docs/user-guide/configuring/configuration-files#adding-shared-settings).
+
+Example **.eslintrc.js**:
+
+```js
+module.exports = {
+  settings: {
+    "json-schema-validator": {
+      http: {
+        getModulePath: "",
+        requestOptions: {},
+      }
+    }
+  }
+}
+```
+
+- `http` ... Settings to resolve schema URLs.
+  - `getModulePath` ... Module path to `GET` the URL. The default implementation is [./src/utils/http-client/get-modules/http.ts](./src/utils/http-client/get-modules/http.ts).
+  - `requestOptions` ... Options used in the module.
+
+#### Example of `http`
+
+Example of using the `request` module for HTTP requests.
+
+**`./path/to/request-get.js`**:
+
+```js
+const request = require("request")
+
+/**
+ * GET Method using request module.
+ */
+module.exports = function get(url, options) {
+    return new Promise((resolve, reject) => {
+        request.get(url, options, (error, _response, body) => {
+            if (error) {
+                reject(error)
+            }
+            resolve(body)
+        })
+    })
+}
+```
+
+**.eslintrc.js**:
+
+<!-- eslint-skip -->
+
+```js
+module.exports = {
+  settings: {
+    "json-schema-validator": {
+      http: {
+        getModulePath: require.resolve("./path/to/request-get.js"),
+        requestOptions: {
+          // Example of proxy settings.
+          proxy: "http://my.proxy.com:8080/"
+        },
+      }
+    }
+  }
+}
+```
+
+<!--ADVANCED_USAGE_GUIDE_END-->
+
 ## :question: FAQ
 
 - TODO

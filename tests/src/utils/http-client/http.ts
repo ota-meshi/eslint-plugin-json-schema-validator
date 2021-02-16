@@ -16,7 +16,7 @@ describe("HTTP GET.", () => {
         const res = await get(
             "https://www.schemastore.org/api/json/catalog.json",
             {},
-            require.resolve("./get-modules/request"),
+            require.resolve("./get-modules/request-get"),
         )
         assert.deepStrictEqual(
             JSON.parse(res),
@@ -28,7 +28,7 @@ describe("HTTP GET.", () => {
         const res = syncGet(
             "https://www.schemastore.org/api/json/catalog.json",
             {},
-            require.resolve("./get-modules/request"),
+            require.resolve("./get-modules/request-get"),
         )
         assert.deepStrictEqual(
             JSON.parse(res),
