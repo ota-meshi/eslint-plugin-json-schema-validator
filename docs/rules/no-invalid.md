@@ -63,6 +63,53 @@ This rule validates the file with JSON Schema and reports errors.
   - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file or URL.
 - `"useSchemastoreCatalog"` ... If `true`, it will automatically configure some schemas defined in [https://www.schemastore.org/api/json/catalog.json](https://www.schemastore.org/api/json/catalog.json). Default `true`
 
+### Use with `.vue`
+
+This rule supports [`.vue` custom blocks](https://vue-loader.vuejs.org/guide/custom-blocks.html).
+
+Example:
+
+```vue
+<i18n>
+{
+    "en": {
+        "hello": "Hello"
+    }
+}
+</i18n>
+```
+
+To match a custom block, use a glob like this:
+
+```json5
+{
+    // If you want to match the <i18n> block.
+    "fileMatch": ["**/*blockType=i18n*"],
+    "schema": { "type": "object" /* JSON Schema Definition */ }
+}
+```
+
+The following custom blocks will try to test if it matches with the virtual filenames.
+
+<!-- eslint-skip -->
+
+```vue
+<i18n lang="yaml">
+# path/to/foo.vue/i18n.yaml?vue&type=custom&blockType=i18n&lang=yaml
+foo: bar
+</i18n>
+
+<i18n lang="json">
+// path/to/foo.vue/i18n.json?vue&type=custom&blockType=i18n&lang=json
+{ "foo": "bar" }
+</i18n>
+
+<i18n>
+// path/to/foo.vue/i18n.json?vue&type=custom&blockType=i18n
+{ "foo": "bar"}
+</i18n>
+```
+
 ## :books: Further reading
 
 - [JSON Schema](https://json-schema.org/)

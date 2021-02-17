@@ -125,7 +125,7 @@ The rules with the following star :star: are included in the configs.
 
 <!--ADVANCED_USAGE_GUIDE_START-->
 
-## :trollface: Advanced Usage
+## :zap: Advanced Usage
 
 ### Settings
 

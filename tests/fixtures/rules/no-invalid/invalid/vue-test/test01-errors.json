@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"\" should be object.",
+        "line": 2,
+        "column": 7,
+        "endLine": 3,
+        "endColumn": 6
+    },
+    {
+        "message": "\"\" should be object.",
+        "line": 10,
+        "column": 7,
+        "endLine": 11,
+        "endColumn": 3
+    }
+]

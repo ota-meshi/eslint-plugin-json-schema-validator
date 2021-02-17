@@ -78,7 +78,7 @@ Example **.vscode/settings.json**:
 
 <!--ADVANCED_USAGE_GUIDE_START-->
 
-## :trollface: Advanced Usage
+## :zap: Advanced Usage
 
 ### Settings
 
