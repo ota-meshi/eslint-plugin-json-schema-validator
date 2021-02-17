@@ -1,0 +1,23 @@
+[
+    {
+        "message": "\"escapes[\"/\"]\" should be number.",
+        "line": 4,
+        "column": 9,
+        "endLine": 4,
+        "endColumn": 12
+    },
+    {
+        "message": "\"escapes[\" \"]\" should be number.",
+        "line": 5,
+        "column": 9,
+        "endLine": 5,
+        "endColumn": 12
+    },
+    {
+        "message": "\"escapes[\"~\"]\" should be number.",
+        "line": 6,
+        "column": 9,
+        "endLine": 6,
+        "endColumn": 12
+    }
+]

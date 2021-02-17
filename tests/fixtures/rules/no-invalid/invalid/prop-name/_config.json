@@ -27,7 +27,10 @@
                                     "\r": { "type": "number" },
                                     "\f": { "type": "number" },
                                     "\t": { "type": "number" },
-                                    "[]": { "type": "number" }
+                                    "[]": { "type": "number" },
+                                    "/": { "type": "number" },
+                                    " ": { "type": "number" },
+                                    "~": { "type": "number" }
                                 }
                             }
                         }

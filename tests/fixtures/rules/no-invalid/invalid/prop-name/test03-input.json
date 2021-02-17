@@ -1,0 +1,7 @@
+{
+    "escapes": {
+        "/": { "type": "number" },
+        " ": { "type": "number" },
+        "~": { "type": "number" }
+    }
+}
