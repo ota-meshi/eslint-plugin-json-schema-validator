@@ -67,7 +67,7 @@ This rule validates the file with JSON Schema and reports errors.
 
 This rule supports [`.vue` custom blocks](https://vue-loader.vuejs.org/guide/custom-blocks.html).
 
-Like:
+Example:
 
 ```vue
 <i18n>
