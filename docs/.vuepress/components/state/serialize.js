@@ -22,6 +22,7 @@ function getEnabledRules(allRules) {
  */
 export function serializeState(state) {
     const saveData = {
+        fileName: state.fileName,
         code: state.code,
         rules: state.rules ? getEnabledRules(state.rules) : undefined,
     }

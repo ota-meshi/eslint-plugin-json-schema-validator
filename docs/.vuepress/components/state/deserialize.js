@@ -8,6 +8,7 @@ import pako from "../../../../node_modules/pako"
  */
 export function deserializeState(serializedString) {
     const state = {
+        fileName: undefined,
         code: undefined,
         rules: undefined,
     }
@@ -28,6 +29,9 @@ export function deserializeState(serializedString) {
         if (typeof json === "object" && json != null) {
             if (typeof json.code === "string") {
                 state.code = json.code
+            }
+            if (typeof json.fileName === "string") {
+                state.fileName = json.fileName
             }
             if (typeof json.rules === "object" && json.rules != null) {
                 state.rules = {}

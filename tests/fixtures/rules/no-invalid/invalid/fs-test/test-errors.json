@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"foo\" should be string.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 10
+    }
+]

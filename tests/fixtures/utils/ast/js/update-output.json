@@ -1,0 +1,16 @@
+{
+    "object": {
+        "one++": "$UNKNOWN$",
+        "++one": "$UNKNOWN$",
+        "one--": "$UNKNOWN$",
+        "--one": "$UNKNOWN$",
+        "obj.foo++": "$UNKNOWN$",
+        "++obj.foo": "$UNKNOWN$",
+        "obj.foo--": "$UNKNOWN$",
+        "--obj.foo": "$UNKNOWN$"
+    },
+    "paths": {
+        "key": "{\n    \"one++\": one++,\n    \"++one\": ++one,\n    \"one--\": one--,\n    \"--one\": --one,\n\n    \"obj.foo++\": obj.foo++,\n    \"++obj.foo\": ++obj.foo,\n    \"obj.foo--\": obj.foo--,\n    \"--obj.foo\": --obj.foo,\n}",
+        "children": {}
+    }
+}

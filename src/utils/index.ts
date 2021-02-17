@@ -32,6 +32,9 @@ export function createRule(
             },
         },
         create(context: Rule.RuleContext): any {
+            const visitor = rule.create(context as any, {
+                customBlock: false,
+            })
             if (
                 typeof context.parserServices.defineCustomBlocksVisitor ===
                     "function" &&
@@ -70,7 +73,7 @@ export function createRule(
                     context,
                     tomlESLintParser,
                     {
-                        target: ["toml", "toml"],
+                        target: ["toml"],
                         create(blockContext: RuleContext) {
                             return rule.create(blockContext, {
                                 customBlock: true,
@@ -79,14 +82,14 @@ export function createRule(
                     },
                 )
                 return compositingVisitors(
+                    visitor,
                     jsonVisitor,
                     yamlVisitor,
                     tomlVisitor,
                 )
             }
-            return rule.create(context as any, {
-                customBlock: false,
-            })
+
+            return visitor
         },
     }
 }

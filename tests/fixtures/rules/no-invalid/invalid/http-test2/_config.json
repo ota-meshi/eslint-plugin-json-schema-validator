@@ -1,0 +1,20 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.json"],
+                    "schema": "https://yarnpkg.com/configuration/yarnrc.json"
+                }
+            ]
+        }
+    ],
+    "settings": {
+        "json-schema-validator": {
+            "http": {
+                "getModulePath": "./tests/src/utils/http-client/get-modules/request-get.ts",
+                "requestOptions": {}
+            }
+        }
+    }
+}

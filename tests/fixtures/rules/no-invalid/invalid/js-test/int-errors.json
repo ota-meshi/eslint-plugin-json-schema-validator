@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"int\" should be >= 0.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 8
+    }
+]

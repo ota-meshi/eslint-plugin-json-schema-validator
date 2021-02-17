@@ -86,7 +86,7 @@ export default {
             ""
         const state = deserializeState(serializedString)
         return {
-            fileName: ".eslintrc.json",
+            fileName: state.fileName || ".eslintrc.json",
             code: state.code || DEFAULT_CODE,
             rules: state.rules || Object.assign({}, DEFAULT_RULES_CONFIG),
             messages: [],
@@ -96,11 +96,14 @@ export default {
         serializedString() {
             const defaultCode = DEFAULT_CODE
             const defaultRules = DEFAULT_RULES_CONFIG
+            const fileName =
+                this.fileName === ".eslintrc.json" ? undefined : this.fileName
             const code = defaultCode === this.code ? undefined : this.code
             const rules = equalsRules(defaultRules, this.rules)
                 ? undefined
                 : this.rules
             const serializedString = serializeState({
+                fileName,
                 code,
                 rules,
             })
@@ -138,6 +141,7 @@ export default {
                 ""
             if (serializedString !== this.serializedString) {
                 const state = deserializeState(serializedString)
+                this.fileName = state.fileName || ".eslintrc.json"
                 this.code = state.code || DEFAULT_CODE
                 this.rules =
                     state.rules || Object.assign({}, DEFAULT_RULES_CONFIG)

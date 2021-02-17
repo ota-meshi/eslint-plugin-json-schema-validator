@@ -1,0 +1,14 @@
+{
+    "object": {
+        "a": 3
+    },
+    "paths": {
+        "key": "{\n    a: (1, 2, 3),\n}",
+        "children": {
+            "a": {
+                "key": "a",
+                "children": {}
+            }
+        }
+    }
+}

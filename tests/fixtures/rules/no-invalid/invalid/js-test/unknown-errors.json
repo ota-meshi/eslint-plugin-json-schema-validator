@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"enum2\" should be equal to one of the allowed values.",
+        "line": 11,
+        "column": 5,
+        "endLine": 11,
+        "endColumn": 10
+    }
+]

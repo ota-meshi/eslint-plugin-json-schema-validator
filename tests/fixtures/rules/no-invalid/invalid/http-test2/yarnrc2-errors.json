@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"npmAlwaysAuth\" should be boolean.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 20
+    }
+]

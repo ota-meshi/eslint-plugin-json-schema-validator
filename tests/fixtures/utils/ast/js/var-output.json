@@ -1,0 +1,16 @@
+{
+    "object": {
+        "a": 42,
+        "c": "$UNKNOWN$",
+        "b": "$UNKNOWN$"
+    },
+    "paths": {
+        "key": "b",
+        "children": {
+            "a": {
+                "key": "a",
+                "children": {}
+            }
+        }
+    }
+}

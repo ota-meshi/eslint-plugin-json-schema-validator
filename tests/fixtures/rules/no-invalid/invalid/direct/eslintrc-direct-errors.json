@@ -1,0 +1,23 @@
+[
+    {
+        "message": "\"extends[0]\" should be string.",
+        "line": 3,
+        "column": 15,
+        "endLine": 3,
+        "endColumn": 17
+    },
+    {
+        "message": "\"plugins[1]\" should be string.",
+        "line": 4,
+        "column": 22,
+        "endLine": 4,
+        "endColumn": 26
+    },
+    {
+        "message": "\"plugins[2]\" should be string.",
+        "line": 4,
+        "column": 27,
+        "endLine": 4,
+        "endColumn": 28
+    }
+]

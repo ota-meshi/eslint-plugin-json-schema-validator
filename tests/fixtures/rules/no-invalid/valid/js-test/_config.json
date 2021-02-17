@@ -1,0 +1,38 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.js"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "str": { "type": "string" },
+                            "str2": { "type": "string" },
+                            "str3": { "type": "string" },
+                            "str4": { "type": "string" },
+                            "str5": { "type": "string" },
+                            "str6": { "type": "string" },
+                            "str7": { "type": "string" },
+                            "num": { "type": "number" },
+                            "int": { "type": "number", "minimum": 0 },
+                            "bool": { "type": "boolean" },
+                            "bool2": { "type": "boolean" },
+                            "bool3": { "type": "boolean" },
+                            "bool4": { "type": "boolean" },
+                            "enum": { "enum": ["a", "b", "c"] },
+                            "enum2": { "enum": ["a", "b", "c"] },
+                            "enum3": { "enum": ["a", "b", "c"] },
+                            "enum4": { "enum": ["a", "b", "c"] },
+                            "requiredFoo": {
+                                "type": "object",
+                                "properties": { "foo": { "type": "string" } },
+                                "required": ["foo"]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

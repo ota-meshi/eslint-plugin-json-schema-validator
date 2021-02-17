@@ -112,10 +112,10 @@ function makeDirs(dir: string) {
  * JSON Schema to string
  */
 function schemaStringify(schema: Schema) {
-    return JSON.stringify(schema, (key, value) => {
-        if (key === "description" && typeof value === "string") {
-            return undefined
-        }
+    return JSON.stringify(schema, (_key, value) => {
+        // if (key === "description" && typeof value === "string") {
+        //     return undefined
+        // }
         return value
     })
 }
