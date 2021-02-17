@@ -52,7 +52,7 @@
     },
     "dependencies": {
         "@actions/core": "^1.2.6",
-        "ajv": "^6.12.6",
+        "ajv": "^7.0.0",
         "debug": "^4.3.1",
         "eslint-utils": "^2.1.0",
         "jsonc-eslint-parser": "^0.6.2",

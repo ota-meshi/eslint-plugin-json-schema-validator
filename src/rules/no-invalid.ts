@@ -1,13 +1,12 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair -- ignore
 /* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore */
-import type { AST as JSON } from "jsonc-eslint-parser"
+import type { AST as JSONAST } from "jsonc-eslint-parser"
 import { getStaticJSONValue } from "jsonc-eslint-parser"
 import type { AST as YAML } from "yaml-eslint-parser"
 import { getStaticYAMLValue } from "yaml-eslint-parser"
 import type { AST as TOML } from "toml-eslint-parser"
 import { getStaticTOMLValue } from "toml-eslint-parser"
 import { createRule } from "../utils"
-import type { AdditionalPropertiesParams } from "ajv"
 import Ajv from "ajv"
 import type { ErrorObject } from "ajv"
 import minimatch from "minimatch"
@@ -34,104 +33,43 @@ type Validator = (data: unknown) => ValidateError[]
 type ValidateError = { message: string; path: string[] }
 
 const ajv = new Ajv({
-    schemaId: "auto",
+    // schemaId: "auto",
     allErrors: true,
     verbose: true,
     validateSchema: false,
-    missingRefs: "ignore",
-    extendRefs: "ignore",
+    // missingRefs: "ignore",
+    // extendRefs: "ignore",
     logger: false,
+    strict: false,
 })
-ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
+// ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
 ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"))
 
-/** Escape data path */
-function escapeQuotes(str: string) {
-    return str
-        .replace(/'|\\/g, "\\$&")
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
-        .replace(/\f/g, "\\f")
-        .replace(/\t/g, "\\t")
+/** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
+function unescapeFragment(str: string): string {
+    return unescapeJsonPointer(decodeURIComponent(str))
 }
 
-/* eslint-disable complexity -- X( */
+/** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L72 */
+function unescapeJsonPointer(str: string): string {
+    return str.replace(/~1/g, "/").replace(/~0/g, "~")
+}
+
 /**
  * Parse data path
  */
-function parseDataPath(
-    /* eslint-enable complexity -- X( */
-    error: ErrorObject,
-): string[] {
-    const dataPath = error.dataPath.startsWith(".")
+function parseDataPath(error: ErrorObject): string[] {
+    const dataPath = error.dataPath.startsWith("/")
         ? error.dataPath.slice(1)
         : error.dataPath
     // console.log(dataPath)
-    const paths: string[] = []
-    let index = 0
-    while (index < dataPath.length) {
-        const c = dataPath[index]
-        if (c === "[") {
-            index++
-            let prop = ""
-            if (dataPath[index] === "'") {
-                index++
-                for (; index < dataPath.length; index++) {
-                    const c = dataPath[index]
-                    if (c === "\\") {
-                        index++
-                        const k = dataPath[index]
-                        prop +=
-                            k === "n"
-                                ? "\n"
-                                : k === "r"
-                                ? "\r"
-                                : k === "f"
-                                ? "\f"
-                                : k === "t"
-                                ? "\t"
-                                : k
-                        continue
-                    }
-                    if (c === "'") {
-                        index++
-                        index++
-                        break
-                    }
-                    prop += c
-                }
-            } else {
-                for (; index < dataPath.length; index++) {
-                    const c = dataPath[index]
-                    if (c === "]") {
-                        index++
-                        break
-                    }
-                    prop += c
-                }
-            }
-            paths.push(prop)
-        } else if (c === ".") {
-            index++
-        } else {
-            let prop = ""
-            for (; index < dataPath.length; index++) {
-                const c = dataPath[index]
-                if (c === ".") {
-                    index++
-                    break
-                }
-                if (c === "[") {
-                    break
-                }
-                prop += c
-            }
-            paths.push(prop)
-        }
-    }
+    const paths: string[] = dataPath
+        ? dataPath.split("/").map(unescapeFragment)
+        : []
+
     if (error.keyword === "additionalProperties") {
-        const additionalProperty = (error.params as AdditionalPropertiesParams)
-            .additionalProperty
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+        const additionalProperty = (error.params as any).additionalProperty
         paths.push(additionalProperty)
     }
     // console.log(paths)
@@ -139,26 +77,38 @@ function parseDataPath(
 }
 
 /**
- * Get error message from schema error.
+ * Schema error to validate error.
  */
-function getErrorMessage(error: ErrorObject): string {
-    const dataPath = error.dataPath.startsWith(".")
-        ? error.dataPath.slice(1)
-        : error.dataPath
+function errorToValidateError(error: ErrorObject): ValidateError {
+    const path = parseDataPath(error)
 
     if (error.keyword === "additionalProperties") {
-        const property = (error.params as AdditionalPropertiesParams)
-            .additionalProperty
-        const escaped = escapeQuotes(property)
-        let errorPath = dataPath
-        if (property === escaped) {
-            errorPath = errorPath ? `${errorPath}.${property}` : property
-        } else {
-            errorPath += `['${escaped}']`
+        return {
+            message: `Unexpected property "${joinPath(path)}"`,
+            path,
         }
-        return `Unexpected property "${errorPath}"`
     }
-    return `"${dataPath}" ${error.message}.`
+    return {
+        message: `"${joinPath(path)}" ${error.message}.`,
+        path,
+    }
+
+    /** Join paths */
+    function joinPath(paths: string[]) {
+        let result = ""
+        for (const p of paths) {
+            if (/^[a-z_$][\w$]*$/iu.test(p)) {
+                if (result) {
+                    result += `.${p}`
+                } else {
+                    result = p
+                }
+            } else {
+                result += `[${/^\d+$/iu.test(p) ? p : JSON.stringify(p)}]`
+            }
+        }
+        return result
+    }
 }
 
 /**
@@ -171,12 +121,7 @@ function schemaToValidator(schema: Schema): Validator {
             return []
         }
 
-        return validateSchema.errors!.map((error) => {
-            return {
-                message: getErrorMessage(error),
-                path: parseDataPath(error),
-            }
-        })
+        return validateSchema.errors!.map(errorToValidateError)
     }
 }
 
@@ -338,7 +283,7 @@ export default createRule("no-invalid", {
          */
         function validateData(
             data: unknown,
-            resolveLoc: (error: ValidateError) => JSON.SourceLocation | null,
+            resolveLoc: (error: ValidateError) => JSONAST.SourceLocation | null,
         ) {
             const errors = validator!(data)
             for (const error of errors) {
@@ -391,7 +336,7 @@ export default createRule("no-invalid", {
         return {
             Program(node) {
                 if (context.parserServices.isJSON) {
-                    const program = node as JSON.JSONProgram
+                    const program = node as JSONAST.JSONProgram
                     validateData(getStaticJSONValue(program), (error) => {
                         return errorDataToLoc(
                             getJSONNodeFromPath(program, error.path),
@@ -445,7 +390,9 @@ export default createRule("no-invalid", {
          * ErrorData to report location.
          */
         function errorDataToLoc(
-            errorData: NodeData<JSON.JSONNode | YAML.YAMLNode | TOML.TOMLNode>,
+            errorData: NodeData<
+                JSONAST.JSONNode | YAML.YAMLNode | TOML.TOMLNode
+            >,
         ) {
             if (errorData.key) {
                 const range = errorData.key(sourceCode)
