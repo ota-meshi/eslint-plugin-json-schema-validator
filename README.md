@@ -1,7 +1,5 @@
 # Introduction
 
-<h1 align="center">This plugin is an experimental feature.</h1>
-
 [eslint-plugin-json-schema-validator](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) is ESLint plugin that validates data using JSON Schema Validator.
 
 [![NPM license](https://img.shields.io/npm/l/eslint-plugin-json-schema-validator.svg)](https://www.npmjs.com/package/eslint-plugin-json-schema-validator)
@@ -15,7 +13,7 @@
 
 ## :name_badge: Features
 
-This ESLint plugin validates [JSON], [JSONC], [JSON5], [YAML], [TOML] and JavaScript with JSON Schema.
+This ESLint plugin validates [JSON], [JSONC], [JSON5], [YAML], [TOML], **JavaScript** and [Vue Custom Blocks] with JSON Schema.
 
 <!--DOCS_IGNORE_START-->
 
@@ -63,7 +61,8 @@ module.exports = {
 
 This plugin provides configs:
 
-- `plugin:json-schema-validator/recommended` ... Above, plus rules to prevent errors or unintended behavior.
+- `plugin:json-schema-validator/base` ... Configuration to enable correct JSON, YAML and TOML parsing.
+- `plugin:json-schema-validator/recommended` ... Above, plus rule to validate with JSON Schema.
 
 ### Running ESLint from the command line
 
@@ -219,9 +218,11 @@ This plugin uses [jsonc-eslint-parser](https://github.com/ota-meshi/jsonc-eslint
 - [eslint-plugin-jsonc](https://github.com/ota-meshi/eslint-plugin-jsonc) ... ESLint plugin for JSON, JSON with comments (JSONC) and JSON5.
 - [eslint-plugin-yml](https://github.com/ota-meshi/eslint-plugin-yml) ... ESLint plugin for YAML.
 - [eslint-plugin-toml](https://github.com/ota-meshi/eslint-plugin-toml) ... ESLint plugin for TOML.
+- [eslint-plugin-vue](https://eslint.vuejs.org/) ... Official ESLint plugin for Vue.js.
 - [jsonc-eslint-parser](https://github.com/ota-meshi/jsonc-eslint-parser) ... JSON, JSONC and JSON5 parser for use with ESLint plugins.
 - [yaml-eslint-parser](https://github.com/ota-meshi/yaml-eslint-parser) ... YAML parser for use with ESLint plugins.
 - [toml-eslint-parser](https://github.com/ota-meshi/toml-eslint-parser) ... TOML parser for use with ESLint plugins.
+- [vue-eslint-parser](https://github.com/vuejs/vue-eslint-parser) ... The ESLint custom parser for `.vue` files.
 
 ## :lock: License
 
@@ -235,3 +236,4 @@ The JSON Schema included in this plugin release is copy from [SchemaStore]. Chec
 [JSON5]: https://json5.org/
 [YAML]: https://yaml.org/
 [TOML]: https://toml.io/
+[Vue Custom Blocks]: https://vue-loader.vuejs.org/guide/custom-blocks.html

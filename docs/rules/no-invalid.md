@@ -79,6 +79,8 @@ Example:
 </i18n>
 ```
 
+You must also install [eslint-plugin-vue](https://eslint.vuejs.org/) to enable `.vue` files validation. See [here](https://eslint.vuejs.org/user-guide/) for details.
+
 To match a custom block, use a glob like this:
 
 ```json5

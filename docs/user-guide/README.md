@@ -37,7 +37,8 @@ module.exports = {
 
 This plugin provides configs:
 
-- `plugin:json-schema-validator/recommended` ... Above, plus rules to prevent errors or unintended behavior.
+- `plugin:json-schema-validator/base` ... Configuration to enable correct JSON, YAML and TOML parsing.
+- `plugin:json-schema-validator/recommended` ... Above, plus rule to validate with JSON Schema.
 
 ### Running ESLint from the command line
 
