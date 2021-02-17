@@ -27,6 +27,14 @@ module.exports = {
                     http: require.resolve("./shim/empty"),
                     https: require.resolve("./shim/empty"),
                     eslint: path.resolve(__dirname, "./shim/eslint"),
+                    ajv: path.resolve(
+                        require.resolve("eslint/package.json"),
+                        "../node_modules/ajv",
+                    ),
+                    [path.resolve(
+                        __dirname,
+                        "../../lib/utils/ajv",
+                    )]: path.resolve(__dirname, "../../node_modules/ajv"),
                 },
             },
         }
