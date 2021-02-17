@@ -60,7 +60,7 @@ This rule validates the file with JSON Schema and reports errors.
 
 - `schema` ... Define an array of any JSON Schema.
   - `fileMatch` ... A list of known file names (or globs) that match the schema.
-  - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file. You can also use some URLs that start with `https://json.schemastore.org/`.
+  - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file or URL.
 - `"useSchemastoreCatalog"` ... If `true`, it will automatically configure some schemas defined in [https://www.schemastore.org/api/json/catalog.json](https://www.schemastore.org/api/json/catalog.json). Default `true`
 
 ## :books: Further reading
