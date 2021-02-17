@@ -63,7 +63,7 @@ This rule validates the file with JSON Schema and reports errors.
   - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file or URL.
 - `"useSchemastoreCatalog"` ... If `true`, it will automatically configure some schemas defined in [https://www.schemastore.org/api/json/catalog.json](https://www.schemastore.org/api/json/catalog.json). Default `true`
 
-### Using with `.vue`
+### Use with `.vue`
 
 This rule supports [`.vue` custom blocks](https://vue-loader.vuejs.org/guide/custom-blocks.html).
 
