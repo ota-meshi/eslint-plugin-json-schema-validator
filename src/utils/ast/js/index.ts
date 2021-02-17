@@ -229,8 +229,8 @@ const VISITORS = {
         }
     },
     Identifier(node: ESLintIdentifier, context: RuleContext): SubPathData {
-        const initNode = findInitNode(context, node)
-        if (initNode == null) {
+        const init = findInitNode(context, node)
+        if (init == null) {
             const evalData = getStaticValue(context, node)
             if (evalData != null) {
                 return {
@@ -241,7 +241,72 @@ const VISITORS = {
 
             return UNKNOWN_PATH_DATA
         }
-        return getPathData(initNode, context)
+        const data = getPathData(init.node, context)
+        if (typeof data.data === "object" && data.data != null) {
+            for (const readId of init.reads) {
+                const props = getWriteProps(readId)
+                if (props == null) {
+                    continue
+                }
+                let objData = data
+                let obj: Record<string, any> = data.data
+                while (props.length) {
+                    const prop = props.shift()!
+                    const child = objData.children.get(prop)
+                    if (child) {
+                        if (child === UNKNOWN) {
+                            break
+                        }
+                        const nextObj = obj[prop]
+                        if (typeof nextObj === "object" && nextObj != null) {
+                            objData = child
+                            obj = obj[prop]
+                        } else {
+                            break
+                        }
+                    } else {
+                        obj[prop] = UNKNOWN
+                        objData.children.set(prop, UNKNOWN)
+                        break
+                    }
+                }
+            }
+        }
+        return data
+
+        /**
+         * Get write properties from given Identifier
+         */
+        function getWriteProps(id: ESLintIdentifier) {
+            if (
+                !id.parent ||
+                id.parent.type !== "MemberExpression" ||
+                id.parent.object !== id
+            ) {
+                return null
+            }
+            const results: string[] = []
+            let mem = id.parent
+            while (mem) {
+                const name = getStaticPropertyName(mem, context)
+                if (name == null) {
+                    break
+                }
+                results.push(name)
+                if (
+                    !mem.parent ||
+                    mem.parent.type !== "MemberExpression" ||
+                    mem.parent.object !== mem
+                ) {
+                    break
+                }
+                mem = mem.parent
+            }
+            if (!mem.parent || mem.parent.type !== "AssignmentExpression") {
+                return null
+            }
+            return results
+        }
     },
     Literal(node: ESLintLiteral, _context: RuleContext): SubPathData {
         return {

@@ -1,0 +1,16 @@
+{
+    "object": {
+        "requiredFoo": {
+            "foo": "$UNKNOWN$"
+        }
+    },
+    "paths": {
+        "key": "{\n    requiredFoo: obj,\n}",
+        "children": {
+            "requiredFoo": {
+                "key": "requiredFoo",
+                "children": {}
+            }
+        }
+    }
+}

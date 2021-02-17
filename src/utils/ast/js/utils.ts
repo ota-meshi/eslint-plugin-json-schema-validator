@@ -44,13 +44,13 @@ export function getStaticPropertyName(
         return getStringLiteralValue(key)
     }
     if (key.type === "Identifier") {
-        const keyNode = findInitNode(context, key)
-        if (keyNode) {
+        const init = findInitNode(context, key)
+        if (init) {
             if (
-                keyNode.type === "Literal" ||
-                keyNode.type === "TemplateLiteral"
+                init.node.type === "Literal" ||
+                init.node.type === "TemplateLiteral"
             ) {
-                return getStringLiteralValue(keyNode)
+                return getStringLiteralValue(init.node)
             }
         }
     }
@@ -106,7 +106,7 @@ export function getStaticValue(
 export function findInitNode(
     context: RuleContext,
     node: ESLintIdentifier,
-): ESLintExpression | null {
+): { node: ESLintExpression; reads: ESLintIdentifier[] } | null {
     const variable = findVariable(context, node)
     if (!variable) {
         return null
@@ -118,13 +118,23 @@ export function findInitNode(
             def.parent.kind === "const" &&
             def.node.init
         ) {
-            const init = def.node.init as ESLintExpression
+            let init = def.node.init as ESLintExpression
+            const reads = variable.references
+                .filter((ref) => ref.isRead())
+                .map((ref) => ref.identifier as ESLintIdentifier)
             if (init.type === "Identifier") {
-                return findInitNode(context, init)
+                const data = findInitNode(context, init)
+                if (!data) {
+                    return null
+                }
+                init = data.node
+                reads.push(...data.reads)
             }
 
-            // TODO check adds
-            return init
+            return {
+                node: init,
+                reads,
+            }
         }
     }
     return null
