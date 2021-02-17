@@ -6,7 +6,7 @@ import type { AST as YAML } from "yaml-eslint-parser"
 import type { AST as TOML } from "toml-eslint-parser"
 import type { AST as ES } from "eslint"
 import type { Comment as ESTreeComment } from "estree"
-import type { ESLintNode } from "vue-eslint-parser/ast"
+import type { ESLintNode, VElement } from "vue-eslint-parser/ast"
 export interface RuleListener {
     [key: string]: ((node: never) => void) | undefined
 }
@@ -35,7 +35,10 @@ export interface RuleMetaData {
 
 export interface PartialRuleModule {
     meta: PartialRuleMetaData
-    create(context: RuleContext, params: { customBlock: boolean }): RuleListener
+    create(
+        context: RuleContext,
+        params: { customBlock: boolean; filename: string },
+    ): RuleListener
 }
 
 export interface PartialRuleMetaData {
@@ -68,6 +71,7 @@ export interface RuleContext {
         isJSON?: true
         isYAML?: true
         isTOML?: true
+        customBlock?: VElement
     }
     getAncestors(): Node[]
     getFilename(): string

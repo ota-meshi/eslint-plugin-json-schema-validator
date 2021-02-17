@@ -18,5 +18,6 @@ module.exports = {
         "prefer-template": "off",
         yoda: "off",
         "require-jsdoc": "off",
+        "jsonc/vue-custom-block/no-parsing-error": "off",
     },
 }

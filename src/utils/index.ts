@@ -32,13 +32,15 @@ export function createRule(
             },
         },
         create(context: Rule.RuleContext): any {
+            const filename = context.getFilename()
             const visitor = rule.create(context as any, {
                 customBlock: false,
+                filename,
             })
             if (
                 typeof context.parserServices.defineCustomBlocksVisitor ===
                     "function" &&
-                path.extname(context.getFilename()) === ".vue"
+                path.extname(filename) === ".vue"
             ) {
                 const jsonVisitor = context.parserServices.defineCustomBlocksVisitor(
                     context,
@@ -53,6 +55,10 @@ export function createRule(
                         create(blockContext: RuleContext) {
                             return rule.create(blockContext, {
                                 customBlock: true,
+                                filename: getBlockFileName(
+                                    blockContext.parserServices.customBlock!,
+                                    "json",
+                                ),
                             })
                         },
                     },
@@ -65,6 +71,10 @@ export function createRule(
                         create(blockContext: RuleContext) {
                             return rule.create(blockContext, {
                                 customBlock: true,
+                                filename: getBlockFileName(
+                                    blockContext.parserServices.customBlock!,
+                                    "yaml",
+                                ),
                             })
                         },
                     },
@@ -77,10 +87,15 @@ export function createRule(
                         create(blockContext: RuleContext) {
                             return rule.create(blockContext, {
                                 customBlock: true,
+                                filename: getBlockFileName(
+                                    blockContext.parserServices.customBlock!,
+                                    "toml",
+                                ),
                             })
                         },
                     },
                 )
+
                 return compositingVisitors(
                     visitor,
                     jsonVisitor,
@@ -90,6 +105,31 @@ export function createRule(
             }
 
             return visitor
+
+            /** Get file name of block */
+            function getBlockFileName(
+                customBlock: VueAST.VElement,
+                langFallback: string,
+            ): string {
+                const attrs: Record<string, string | null> = {}
+                for (const attr of customBlock.startTag.attributes) {
+                    if (!attr.directive) {
+                        attrs[attr.key.name] = attr.value?.value ?? null
+                    }
+                }
+                const ext = attrs.lang || langFallback
+
+                let attrQuery = ""
+                for (const [key, val] of Object.entries(attrs)) {
+                    if (["id", "index", "src", "type"].includes(key)) {
+                        continue
+                    }
+                    attrQuery += `&${key}=${val}`
+                }
+
+                const result = `${customBlock.name}.${ext}`
+                return `${filename}/${result}?vue&type=custom&blockType=${customBlock.name}${attrQuery}`
+            }
         },
     }
 }

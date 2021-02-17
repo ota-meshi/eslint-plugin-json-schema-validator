@@ -151,8 +151,8 @@ function parseOption(
           }
         | string,
     context: RuleContext,
+    filename: string,
 ): Validator | null {
-    const filename: string = context.getFilename()
     if (typeof option === "string") {
         return parseOption(
             {
@@ -162,6 +162,7 @@ function parseOption(
                 useSchemastoreCatalog: false,
             },
             context,
+            filename,
         )
     }
 
@@ -267,8 +268,13 @@ export default createRule("no-invalid", {
         messages: {},
         type: "suggestion",
     },
-    create(context) {
-        const validator = parseOption(context.options[0] || {}, context)
+    create(context, { filename }) {
+        const cwd = getCwd(context)
+        const validator = parseOption(
+            context.options[0] || {},
+            context,
+            filename.startsWith(cwd) ? filename.slice(cwd.length) : filename,
+        )
 
         if (!validator) {
             // ignore
@@ -405,3 +411,13 @@ export default createRule("no-invalid", {
         }
     },
 })
+
+/**
+ * Get cwd
+ */
+function getCwd(context: RuleContext) {
+    if (context.getCwd) {
+        return context.getCwd()
+    }
+    return path.resolve("")
+}
