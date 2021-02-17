@@ -1,0 +1,44 @@
+{
+    "object": [1, 2, 3, 4, "$UNKNOWN$", null, null, 8, null, 10],
+    "paths": {
+        "key": "[1, 2, 3, 4, unknown, , , 8, null, 10]",
+        "children": {
+            "0": {
+                "key": "1",
+                "children": {}
+            },
+            "1": {
+                "key": "2",
+                "children": {}
+            },
+            "2": {
+                "key": "3",
+                "children": {}
+            },
+            "3": {
+                "key": "4",
+                "children": {}
+            },
+            "5": {
+                "key": " ",
+                "children": {}
+            },
+            "6": {
+                "key": " ",
+                "children": {}
+            },
+            "7": {
+                "key": "8",
+                "children": {}
+            },
+            "8": {
+                "key": "null",
+                "children": {}
+            },
+            "9": {
+                "key": "10",
+                "children": {}
+            }
+        }
+    }
+}

@@ -65,10 +65,9 @@ export function getStringLiteralValue(
 ): string | null {
     if (node.type === "Literal") {
         if (node.value == null) {
-            if (!(node as any).bigint != null) {
-                return (node as any).bigint
+            if ((node as any).bigint != null) {
+                return String((node as any).bigint)
             }
-            return null
         }
         return String(node.value)
     }

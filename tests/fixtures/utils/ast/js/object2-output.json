@@ -1,0 +1,19 @@
+{
+    "object": {
+        "null": null,
+        "tmp": "tmp"
+    },
+    "paths": {
+        "key": "{\n    [null]: null,\n    [`tmp`]: \"tmp\",\n}",
+        "children": {
+            "null": {
+                "key": "null",
+                "children": {}
+            },
+            "tmp": {
+                "key": "`tmp`",
+                "children": {}
+            }
+        }
+    }
+}
