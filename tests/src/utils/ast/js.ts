@@ -77,7 +77,11 @@ function* listupInput(rootDir: string): IterableIterator<string> {
 function toOutput(result: AnalyzedJsAST, sourceCode: SourceCode) {
     const text = sourceCode.text
     return {
-        object: result.object,
+        object: JSON.parse(
+            JSON.stringify(result.object, (_k, v) =>
+                typeof v === "symbol" ? "$UNKNOWN$" : v,
+            ),
+        ),
         paths: normalizePathData(result.pathData),
     }
 
@@ -88,7 +92,7 @@ function toOutput(result: AnalyzedJsAST, sourceCode: SourceCode) {
                 : pathData.key
         const children: Record<string, any> = {}
         pathData.children.forEach((val, key) => {
-            if (val == null) {
+            if (val == null || typeof val === "symbol") {
                 return
             }
             children[key] = normalizePathData(val)

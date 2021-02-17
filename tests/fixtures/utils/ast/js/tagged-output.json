@@ -1,8 +1,11 @@
 {
     "object": {
         "a": "aaa42",
+        "b": "$UNKNOWN$",
         "c": "a\\nb\\nc42",
-        "e": "a\\nb\\nc42"
+        "d": "$UNKNOWN$",
+        "e": "a\\nb\\nc42",
+        "f": "$UNKNOWN$"
     },
     "paths": {
         "key": "{\n    a: `aaa${v}`,\n    b: t`a\\nb\\nc${v}`,\n    c: String.raw`a\\nb\\nc${v}`,\n    d: u`a\\nb\\nc${v}`,\n    e: u.raw`a\\nb\\nc${v}`,\n    f: String.raw`a\\nb\\nc${unknown}`,\n}",

@@ -373,7 +373,8 @@ export default createRule("no-invalid", {
             validateData(data.object, (error) => {
                 let target: PathData | undefined = data.pathData
                 for (const p of error.path) {
-                    target = target?.children.get(p)
+                    const next = target?.children.get(p)
+                    target = typeof next === "symbol" ? undefined : next
                 }
                 const key = target?.key
                 const range = typeof key === "function" ? key(sourceCode) : key

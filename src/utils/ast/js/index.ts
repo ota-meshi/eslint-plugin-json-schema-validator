@@ -22,19 +22,22 @@ import type { RuleContext, SourceCode } from "../../../types"
 import { findInitNode, getStaticValue } from "./utils"
 import { getStaticPropertyName } from "./utils"
 
+const UNKNOWN = Symbol("unknown value")
+type TUnknown = typeof UNKNOWN
 const EMPTY_MAP = Object.freeze(new Map())
+const UNKNOWN_PATH_DATA: SubPathData = { data: UNKNOWN, children: EMPTY_MAP }
 export type PathData = {
     key:
         | [number, number]
         | null
         | ((sourceCode: SourceCode) => [number, number] | null)
     data: unknown
-    children: Readonly<Map<string, PathData | undefined>>
+    children: Readonly<Map<string, PathData | TUnknown>>
 }
 
 type SubPathData = {
     data: unknown
-    children: Readonly<Map<string, PathData | undefined>>
+    children: Readonly<Map<string, PathData | TUnknown>>
 }
 export type AnalyzedJsAST = {
     object: unknown
@@ -49,7 +52,7 @@ export function analyzeJsAST(
     context: RuleContext,
 ): AnalyzedJsAST | null {
     const data = getPathData(node, context)
-    if (data == null) {
+    if (data.data === UNKNOWN) {
         return null
     }
     const pathData: PathData = {
@@ -143,22 +146,23 @@ const VISITORS = {
                         prop.value as ESLintExpression,
                         context,
                     )
-                    if (propData) {
+                    if (propData.data !== UNKNOWN) {
                         data[keyName] = propData.data
                         children.set(keyName, {
                             key: prop.key.range,
                             ...propData,
                         })
+                    } else {
+                        data[keyName] = UNKNOWN
+                        children.set(keyName, UNKNOWN)
                     }
                 }
             } else if (prop.type === "SpreadElement") {
                 const propData = getPathData(prop.argument, context)
-                if (propData) {
-                    propData.children.forEach((val, key) => {
-                        data[key] = (propData.data as any)[key]
-                        children.set(key, val)
-                    })
-                }
+                propData.children.forEach((val, key) => {
+                    data[key] = (propData.data as any)[key]
+                    children.set(key, val)
+                })
             }
         }
 
@@ -178,12 +182,15 @@ const VISITORS = {
             if (element) {
                 if (element.type !== "SpreadElement") {
                     const propData = getPathData(element, context)
-                    if (propData) {
+                    if (propData.data !== UNKNOWN) {
                         data[index] = propData.data
                         children.set(String(index), {
                             key: element.range,
                             ...propData,
                         })
+                    } else {
+                        data[index] = UNKNOWN
+                        children.set(String(index), UNKNOWN)
                     }
                 }
             } else {
@@ -221,10 +228,7 @@ const VISITORS = {
             children,
         }
     },
-    Identifier(
-        node: ESLintIdentifier,
-        context: RuleContext,
-    ): SubPathData | null {
+    Identifier(node: ESLintIdentifier, context: RuleContext): SubPathData {
         const initNode = findInitNode(context, node)
         if (initNode == null) {
             const evalData = getStaticValue(context, node)
@@ -235,11 +239,11 @@ const VISITORS = {
                 }
             }
 
-            return null
+            return UNKNOWN_PATH_DATA
         }
         return getPathData(initNode, context)
     },
-    Literal(node: ESLintLiteral, _context: RuleContext): SubPathData | null {
+    Literal(node: ESLintLiteral, _context: RuleContext): SubPathData {
         return {
             data: node.value,
             children: EMPTY_MAP,
@@ -248,14 +252,14 @@ const VISITORS = {
     UnaryExpression(
         node: ESLintUnaryExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const argData = getPathData(node.argument, context)
-        if (argData == null) {
-            return null
+        if (argData.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
         const calc = CALC_UNARY[node.operator]
         if (!calc) {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         const data: unknown = calc(argData.data)
 
@@ -267,18 +271,18 @@ const VISITORS = {
     BinaryExpression(
         node: ESLintBinaryExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const leftData = getPathData(node.left, context)
-        if (leftData == null) {
-            return null
+        if (leftData.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
         const rightData = getPathData(node.right, context)
-        if (rightData == null) {
-            return null
+        if (rightData.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
         const calc = CALC_BINARY[node.operator]
         if (!calc) {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         const data: unknown = calc(leftData.data, rightData.data)
 
@@ -290,10 +294,10 @@ const VISITORS = {
     LogicalExpression(
         node: ESLintLogicalExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const leftData = getPathData(node.left, context)
-        if (leftData == null) {
-            return null
+        if (leftData.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
         const operator: "||" | "&&" | "??" = node.operator
         if (operator === "||") {
@@ -309,44 +313,37 @@ const VISITORS = {
                 return leftData
             }
         } else {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         const rightData = getPathData(node.right, context)
-        if (rightData == null) {
-            return null
-        }
         return rightData
     },
     AssignmentExpression(
         node: ESLintAssignmentExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const rightData = getPathData(node.right, context)
-        if (rightData == null) {
-            return null
-        }
-
         return rightData
     },
     MemberExpression(
         node: ESLintMemberExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         if (node.object.type === "Super") {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         const objectData = getPathData(node.object, context)
-        if (objectData == null) {
-            return null
+        if (objectData.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
 
         const propName = getStaticPropertyName(node, context)
         if (propName == null) {
-            return null
+            return UNKNOWN_PATH_DATA
         }
 
         const define = objectData.children.get(propName)
-        if (define) {
+        if (define && define !== UNKNOWN) {
             return define
         }
         if (objectData.data != null) {
@@ -356,15 +353,15 @@ const VISITORS = {
             }
         }
 
-        return null
+        return UNKNOWN_PATH_DATA
     },
     ConditionalExpression(
         node: ESLintConditionalExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const testData = getPathData(node.test, context)
-        if (testData == null) {
-            return null
+        if (testData.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
         if (testData.data) {
             return getPathData(node.consequent, context)
@@ -374,10 +371,10 @@ const VISITORS = {
     CallExpression(
         node: ESLintCallExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const evalData = getStaticValue(context, node)
         if (!evalData) {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         return {
             data: evalData.value,
@@ -387,10 +384,10 @@ const VISITORS = {
     NewExpression(
         node: ESLintNewExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const evalData = getStaticValue(context, node)
         if (!evalData) {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         return {
             data: evalData.value,
@@ -400,19 +397,19 @@ const VISITORS = {
     SequenceExpression(
         node: ESLintSequenceExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const last = node.expressions[node.expressions.length - 1]
         return getPathData(last, context)
     },
     TemplateLiteral(
         node: ESLintTemplateLiteral,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const expressions = []
         for (const e of node.expressions) {
             const data = getPathData(e, context)
-            if (data == null) {
-                return null
+            if (data.data === UNKNOWN) {
+                return UNKNOWN_PATH_DATA
             }
             expressions.push(data.data)
         }
@@ -426,19 +423,19 @@ const VISITORS = {
     TaggedTemplateExpression(
         node: ESLintTaggedTemplateExpression,
         context: RuleContext,
-    ): SubPathData | null {
+    ): SubPathData {
         const tag = getPathData(node.tag, context)
-        if (tag == null) {
-            return null
+        if (tag.data === UNKNOWN) {
+            return UNKNOWN_PATH_DATA
         }
         if (tag.data !== String.raw) {
-            return null
+            return UNKNOWN_PATH_DATA
         }
         const expressions = []
         for (const e of node.quasi.expressions) {
             const data = getPathData(e, context)
-            if (data == null) {
-                return null
+            if (data.data === UNKNOWN) {
+                return UNKNOWN_PATH_DATA
             }
             expressions.push(data.data)
         }
@@ -454,28 +451,28 @@ const VISITORS = {
         }
     },
     UpdateExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     ThisExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     FunctionExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     ArrowFunctionExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     YieldExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     ClassExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     MetaProperty() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
     AwaitExpression() {
-        return null
+        return UNKNOWN_PATH_DATA
     },
 }
 
@@ -485,10 +482,10 @@ const VISITORS = {
 function getPathData(
     node: ESLintExpression,
     context: RuleContext,
-): SubPathData | null {
+): SubPathData {
     const visitor = VISITORS[node.type]
     if (visitor) {
         return visitor(node as any, context)
     }
-    return null
+    return UNKNOWN_PATH_DATA
 }

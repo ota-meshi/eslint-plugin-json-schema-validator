@@ -61,13 +61,20 @@ function parseUrlAndOptions(urlStr: string, baseOptions: RequestOptions) {
         options.auth = `${url.username}:${url.password}`
     }
 
+    const PROXY_ENV = [
+        "https_proxy",
+        "HTTPS_PROXY",
+        "http_proxy",
+        "HTTP_PROXY",
+        "npm_config_https_proxy",
+        "npm_config_http_proxy",
+    ]
+
     const proxyStr: string =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
         (options as any)?.proxy ||
         // eslint-disable-next-line no-process-env -- ignore
-        process.env.http_proxy ||
-        // eslint-disable-next-line no-process-env -- ignore
-        process.env.npm_config_https_proxy
+        PROXY_ENV.map((k) => process.env[k]).find((v) => v)
     if (proxyStr) {
         const proxyUrl = new URL(proxyStr)
 
