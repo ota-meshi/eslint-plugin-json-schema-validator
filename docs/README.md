@@ -15,6 +15,8 @@
 
 This ESLint plugin validates [JSON], [JSONC], [JSON5], [YAML], [TOML], **JavaScript** and [Vue Custom Blocks] with JSON Schema.
 
+You can check on the [Online DEMO](./playground/).
+
 ## :book: Usage
 
 See [User Guide](./user-guide/README.md).
