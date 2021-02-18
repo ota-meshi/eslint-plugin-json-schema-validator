@@ -133,7 +133,12 @@ function postProcess(
 
     fs.writeFileSync(
         jsonFilePath,
-        schemaStringify({ schema, timestamp: Date.now() }),
+        schemaStringify({
+            schema,
+            timestamp: Date.now(),
+            // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
+            v: require("../../package.json").version,
+        }),
     )
     delete require.cache[jsonFilePath]
 
