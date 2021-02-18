@@ -1,3 +1,4 @@
+import fs from "fs"
 import updateSchemaStore from "./update-schemastore"
 import checkDiff from "./check-diff"
 import { git, npm } from "./git-and-npm"
@@ -10,6 +11,12 @@ async function main(): Promise<boolean> {
     if (!(await checkDiff())) {
         return false
     }
+
+    fs.writeFileSync(
+        require.resolve("../../schemastore/timestamp.json"),
+        JSON.stringify({ timestamp: Date.now() }),
+        "utf8",
+    )
 
     // eslint-disable-next-line no-process-env -- ignore
     const GITHUB_ACTOR = process.env.GITHUB_ACTOR
