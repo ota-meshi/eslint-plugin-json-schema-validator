@@ -1,9 +1,13 @@
 import path from "path"
 import fs from "fs"
 import type { RuleContext } from "../types"
-import { syncGet } from "./http-client"
+import { syncGet, get } from "./http-client"
 import debugBuilder from "debug"
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
+
+const TTL = 1000 * 60 * 60 * 24
+const TTL_FOR_SCHEMASTORE_RESOURCE = 1000 * 60 * 60 * 24 * 365
+const RELOADING = new Set<string>()
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
 type Schema = object
@@ -33,8 +37,20 @@ export function loadSchema(
         if (!jsonPath) {
             return loadSchemaFromURL(schemaPath, context)
         }
-        // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-        return require(`../../schemastore/${jsonPath}`)
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
+        const timestamp: number = require("../../schemastore/timestamp.json")
+            .timestamp
+        if (timestamp + TTL_FOR_SCHEMASTORE_RESOURCE >= Date.now()) {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
+                return require(`../../schemastore/${jsonPath}`)
+            } catch {
+                // error
+            }
+        } else {
+            // Maybe I've stopped maintaining this package, so We'll get the resource from the URL.
+        }
+        return loadSchemaFromURL(schemaPath, context)
     }
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
     return require(path.resolve(getCwd(context), schemaPath))
@@ -56,16 +72,37 @@ function loadSchemaFromURL(
         __dirname,
         `../../.cached_schemastore/${jsonPath}`,
     )
-    makeDirs(path.dirname(jsonFilePath))
-    if (fs.existsSync(jsonFilePath)) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-        return require(jsonFilePath)
-    }
 
     const options = context.settings?.["json-schema-validator"]?.http
 
     const httpRequestOptions = options?.requestOptions ?? {}
     const httpGetModulePath = resolvePath(options?.getModulePath, context)
+
+    makeDirs(path.dirname(jsonFilePath))
+    if (fs.existsSync(jsonFilePath)) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
+        const { schema, timestamp } = require(jsonFilePath) as {
+            schema: Schema
+            timestamp: number
+        }
+        if (schema != null && typeof timestamp === "number") {
+            if (timestamp + TTL < Date.now()) {
+                // Reload!
+                // However, the data can actually be used the next time access it.
+                if (!RELOADING.has(schemaUrl)) {
+                    RELOADING.add(schemaUrl)
+                    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- ignore
+                    get(schemaUrl, httpRequestOptions, httpGetModulePath).then(
+                        (json) => {
+                            postProcess(schemaUrl, jsonFilePath, json, context)
+                            RELOADING.delete(schemaUrl)
+                        },
+                    )
+                }
+            }
+            return schema
+        }
+    }
 
     let json: string
     try {
@@ -78,6 +115,19 @@ function loadSchemaFromURL(
         // })
         return null
     }
+
+    return postProcess(schemaUrl, jsonFilePath, json, context)
+}
+
+/**
+ * Post process
+ */
+function postProcess(
+    schemaUrl: string,
+    jsonFilePath: string,
+    json: string,
+    context: RuleContext,
+): Schema | null {
     let schema
     try {
         schema = JSON.parse(json)
@@ -89,7 +139,11 @@ function loadSchemaFromURL(
         return null
     }
 
-    fs.writeFileSync(jsonFilePath, schemaStringify(schema))
+    fs.writeFileSync(
+        jsonFilePath,
+        schemaStringify({ schema, timestamp: Date.now() }),
+    )
+    delete require.cache[jsonFilePath]
 
     return schema
 }
