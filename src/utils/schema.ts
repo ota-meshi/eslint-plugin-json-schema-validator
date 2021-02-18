@@ -6,7 +6,6 @@ import debugBuilder from "debug"
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 
 const TTL = 1000 * 60 * 60 * 24
-const TTL_FOR_SCHEMASTORE_RESOURCE = 1000 * 60 * 60 * 24 * 365
 const RELOADING = new Set<string>()
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- ignore
@@ -37,18 +36,11 @@ export function loadSchema(
         if (!jsonPath) {
             return loadSchemaFromURL(schemaPath, context)
         }
-        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
-        const timestamp: number = require("../../schemastore/timestamp.json")
-            .timestamp
-        if (timestamp + TTL_FOR_SCHEMASTORE_RESOURCE >= Date.now()) {
-            try {
-                // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-                return require(`../../schemastore/${jsonPath}`)
-            } catch {
-                // error
-            }
-        } else {
-            // Maybe I've stopped maintaining this package, so We'll get the resource from the URL.
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
+            return require(`../../schemastore/${jsonPath}`)
+        } catch {
+            // error
         }
         return loadSchemaFromURL(schemaPath, context)
     }
