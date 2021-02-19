@@ -189,28 +189,31 @@ function parseOption(
         }
         validators.push(schemaToValidator(schema))
     }
-    if (option.useSchemastoreCatalog !== false) {
-        const catalog = require("../../schemastore/www.schemastore.org/api/json/catalog.json")
-        const schemas: {
-            name?: string
-            description?: string
-            fileMatch: string[]
-            url: string
-        }[] = catalog.schemas
+    if (!validators.length) {
+        // If it matches the user's definition, don't use `catalog.json`.
+        if (option.useSchemastoreCatalog !== false) {
+            const catalog = require("../../schemastore/www.schemastore.org/api/json/catalog.json")
+            const schemas: {
+                name?: string
+                description?: string
+                fileMatch: string[]
+                url: string
+            }[] = catalog.schemas
 
-        for (const schemaData of schemas) {
-            if (!schemaData.fileMatch) {
-                continue
+            for (const schemaData of schemas) {
+                if (!schemaData.fileMatch) {
+                    continue
+                }
+                if (!matchFile(filename, schemaData.fileMatch)) {
+                    continue
+                }
+                const schema = loadSchema(schemaData.url, context)
+                if (!schema) {
+                    continue
+                }
+                const validator = schemaToValidator(schema)
+                validators.push(validator)
             }
-            if (!matchFile(filename, schemaData.fileMatch)) {
-                continue
-            }
-            const schema = loadSchema(schemaData.url, context)
-            if (!schema) {
-                continue
-            }
-            const validator = schemaToValidator(schema)
-            validators.push(validator)
         }
     }
     if (!validators.length) {
