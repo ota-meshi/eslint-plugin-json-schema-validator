@@ -10,4 +10,31 @@ const tester = new RuleTester({
     },
 })
 
-tester.run("no-invalid", rule as any, loadTestCases("no-invalid"))
+tester.run(
+    "no-invalid",
+    rule as any,
+    loadTestCases(
+        "no-invalid",
+        {},
+        {
+            invalid: [
+                {
+                    filename: ".eslintrc.json",
+                    code: '{ "extends": [ 42 ] }',
+                    options: [
+                        {
+                            schemas: [
+                                {
+                                    fileMatch: [".eslintrc.*"],
+                                    schema:
+                                        "https://json.schemastore.org/eslintrc",
+                                },
+                            ],
+                        },
+                    ],
+                    errors: ['"extends[0]" should be string.'],
+                },
+            ],
+        },
+    ),
+)
