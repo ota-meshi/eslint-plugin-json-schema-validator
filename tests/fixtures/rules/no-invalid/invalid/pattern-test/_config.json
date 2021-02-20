@@ -1,0 +1,33 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "pattern": {
+                                "type": "string",
+                                "pattern": "^\\d+$"
+                            },
+                            "patternProperties": {
+                                "type": "object",
+                                "patternProperties": {
+                                    "^[a-zA-Z]+$": { "type": "string" },
+                                    "^\\d+$": { "type": "number" }
+                                }
+                            },
+                            "propertyNames": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "pattern": "^\\d+$"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

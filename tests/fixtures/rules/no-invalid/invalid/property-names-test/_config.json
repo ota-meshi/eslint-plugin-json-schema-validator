@@ -1,0 +1,34 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "pattern": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "pattern": "^\\d+$"
+                                }
+                            },
+                            "enum": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "enum": ["a", "b", "c"]
+                                }
+                            },
+                            "const": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "const": "foo"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

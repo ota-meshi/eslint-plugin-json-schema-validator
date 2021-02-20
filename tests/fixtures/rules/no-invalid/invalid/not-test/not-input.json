@@ -1,0 +1,7 @@
+{
+    "notObject": {},
+    "notNumStr": 42,
+    "numStr": true,
+    "notEnum": 2,
+    "notMax10": 9
+}

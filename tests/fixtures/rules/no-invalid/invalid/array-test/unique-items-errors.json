@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"uniqueItemsTest\" should NOT have duplicate items (items ## 1 and 3 are identical).",
+        "line": 3,
+        "column": 34,
+        "endLine": 3,
+        "endColumn": 35
+    }
+]

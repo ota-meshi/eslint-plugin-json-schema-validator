@@ -1,0 +1,23 @@
+[
+    {
+        "message": "\"anyOfTest[2]\" should be string.",
+        "line": 3,
+        "column": 31,
+        "endLine": 3,
+        "endColumn": 35
+    },
+    {
+        "message": "\"anyOfTest[2]\" should be number.",
+        "line": 3,
+        "column": 31,
+        "endLine": 3,
+        "endColumn": 35
+    },
+    {
+        "message": "\"anyOfTest[2]\" should match some schema in anyOf.",
+        "line": 3,
+        "column": 31,
+        "endLine": 3,
+        "endColumn": 35
+    }
+]

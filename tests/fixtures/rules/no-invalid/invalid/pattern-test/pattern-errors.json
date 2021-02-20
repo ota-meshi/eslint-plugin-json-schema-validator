@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"pattern\" should match pattern \"^\\d+$\".",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 14
+    }
+]

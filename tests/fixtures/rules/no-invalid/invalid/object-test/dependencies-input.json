@@ -1,0 +1,10 @@
+{
+    "dependencies1": {
+        "name": "John Doe",
+        "credit_card": 5555555555555555
+    },
+    "dependencies2": {
+        "name": "John Doe",
+        "credit_card": 5555555555555555
+    }
+}

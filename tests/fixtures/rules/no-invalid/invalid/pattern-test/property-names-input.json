@@ -1,0 +1,8 @@
+{
+    "propertyNames": {
+        "123": 123,
+        "abc": "abc",
+        "456": "foo",
+        "def": 42
+    }
+}

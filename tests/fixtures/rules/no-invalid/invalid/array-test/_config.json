@@ -1,0 +1,45 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "maxItemsTest": {
+                                "type": "array",
+                                "maxItems": 2
+                            },
+                            "additionalItemsTest": {
+                                "type": "array",
+                                "items": [
+                                    { "type": "string" },
+                                    { "type": "number" }
+                                ],
+                                "additionalItems": false
+                            },
+                            "anyOfTest": {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        { "type": "string" },
+                                        { "type": "number" }
+                                    ]
+                                }
+                            },
+                            "containsTest": {
+                                "type": "array",
+                                "contains": { "type": "number" }
+                            },
+                            "uniqueItemsTest": {
+                                "type": "array",
+                                "uniqueItems": true
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

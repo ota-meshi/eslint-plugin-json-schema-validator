@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"multipleOf\" should be multiple of 10.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 17
+    }
+]

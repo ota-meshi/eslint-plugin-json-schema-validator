@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"maxLength\" should NOT have more than 2 characters.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 16
+    },
+    {
+        "message": "\"minLength\" should NOT have fewer than 2 characters.",
+        "line": 4,
+        "column": 5,
+        "endLine": 4,
+        "endColumn": 16
+    }
+]

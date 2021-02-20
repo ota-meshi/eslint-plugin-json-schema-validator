@@ -1,0 +1,30 @@
+[
+    {
+        "message": "\"propertyNames\" property name \"abc\" should match pattern \"^\\d+$\".",
+        "line": 5,
+        "column": 9,
+        "endLine": 5,
+        "endColumn": 14
+    },
+    {
+        "message": "\"propertyNames\" property name \"abc\" is invalid.",
+        "line": 5,
+        "column": 9,
+        "endLine": 5,
+        "endColumn": 14
+    },
+    {
+        "message": "\"propertyNames\" property name \"def\" should match pattern \"^\\d+$\".",
+        "line": 7,
+        "column": 9,
+        "endLine": 7,
+        "endColumn": 14
+    },
+    {
+        "message": "\"propertyNames\" property name \"def\" is invalid.",
+        "line": 7,
+        "column": 9,
+        "endLine": 7,
+        "endColumn": 14
+    }
+]

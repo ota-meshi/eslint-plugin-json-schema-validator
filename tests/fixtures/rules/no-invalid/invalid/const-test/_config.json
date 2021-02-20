@@ -1,0 +1,19 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "const": {
+                                "const": "foo"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
