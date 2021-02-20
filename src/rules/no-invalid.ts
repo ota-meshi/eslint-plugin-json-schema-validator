@@ -68,8 +68,7 @@ function parseDataPath(error: ErrorObject): string[] {
         : []
 
     if (error.keyword === "additionalProperties") {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-        const additionalProperty = (error.params as any).additionalProperty
+        const additionalProperty = error.params.additionalProperty
         paths.push(additionalProperty)
     }
     // console.log(paths)
@@ -88,9 +87,32 @@ function errorToValidateError(error: ErrorObject): ValidateError {
             path,
         }
     }
+    if (error.keyword === "enum") {
+        const allowedValues = error.params.allowedValues
+        return {
+            message: `"${joinPath(path)}" should be equal to ${joinEnums(
+                allowedValues,
+            )}.`,
+            path,
+        }
+    }
+    // if (!["type", "required", "minItems", "oneOf"].includes(error.keyword)) {
+    //     console.log(error.keyword)
+    // }
+
     return {
         message: `"${joinPath(path)}" ${error.message}.`,
         path,
+    }
+
+    /** Join enums */
+    function joinEnums(enums: string[]) {
+        const list = enums.map((v: string) => JSON.stringify(v))
+        const last = list.pop()
+        if (list.length) {
+            return `${list.join(", ")} or ${last}`
+        }
+        return last
     }
 
     /** Join paths */

@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"enum3\" should be equal to one of the allowed values.",
+        "message": "\"enum3\" should be equal to \"a\", \"b\" or \"c\".",
         "line": 8,
         "column": 5,
         "endLine": 8,
