@@ -64,6 +64,14 @@ export function getTOMLNodeFromPath(
     paths: string[],
 ): NodeData<TOML.TOMLNode> {
     const topLevelTable = node.body[0]
+    if (!paths.length) {
+        return {
+            key: (sourceCode) =>
+                (sourceCode.getFirstToken(topLevelTable) || topLevelTable)
+                    .range!,
+            value: topLevelTable,
+        }
+    }
 
     for (const body of topLevelTable.body) {
         if (body.type === "TOMLKeyValue") {

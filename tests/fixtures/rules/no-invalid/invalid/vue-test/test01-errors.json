@@ -1,15 +1,15 @@
 [
     {
-        "message": "\"\" should be object.",
-        "line": 2,
-        "column": 7,
+        "message": "Root should be object.",
+        "line": 3,
+        "column": 1,
         "endLine": 3,
         "endColumn": 6
     },
     {
-        "message": "\"\" should be object.",
-        "line": 10,
-        "column": 7,
+        "message": "Root should be object.",
+        "line": 11,
+        "column": 1,
         "endLine": 11,
         "endColumn": 3
     }

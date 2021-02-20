@@ -91,6 +91,16 @@ export function getJSONNodeFromPath(
     [...paths]: string[],
 ): NodeData<JSON.JSONNode> {
     let data: NodeData<JSON.JSONNode> = {
+        key: (sourceCode) => {
+            const dataNode = node.body[0].expression
+            if (
+                dataNode.type === "JSONObjectExpression" ||
+                dataNode.type === "JSONArrayExpression"
+            ) {
+                return sourceCode.getFirstToken(dataNode).range!
+            }
+            return dataNode.range
+        },
         value: node,
     }
     while (paths.length && data.value) {

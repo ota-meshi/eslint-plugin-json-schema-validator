@@ -27,6 +27,7 @@ describe("AST for JS.", () => {
                             result = toOutput(
                                 analyzeJsAST(
                                     node.declaration as never,
+                                    node.declaration.range,
                                     context as never,
                                 )!,
                                 context.getSourceCode() as never,

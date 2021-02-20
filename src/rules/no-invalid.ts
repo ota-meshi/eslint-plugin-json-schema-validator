@@ -76,13 +76,13 @@ function errorToValidateError(
     if (error.keyword === "additionalProperties") {
         path.push(error.params.additionalProperty)
         return {
-            message: `Unexpected property "${joinPath(path)}"`,
+            message: `Unexpected property ${joinPath(path)}`,
             path,
         }
     }
     if (error.keyword === "propertyNames") {
         return {
-            message: `"${joinPath(path)}" property name ${JSON.stringify(
+            message: `${joinPath(path)} property name ${JSON.stringify(
                 error.params.propertyName,
             )} is invalid.`,
             path: [...path, error.params.propertyName],
@@ -91,7 +91,7 @@ function errorToValidateError(
     if (error.keyword === "uniqueItems") {
         const baseMessage = `should NOT have duplicate items (items ## ${error.params.j} and ${error.params.i} are identical)`
         return {
-            message: `"${joinPath(path)}" ${baseMessage}.`,
+            message: `${joinPath(path)} ${baseMessage}.`,
             path: [...path, String(error.params.i)],
         }
     }
@@ -154,14 +154,14 @@ function errorToValidateError(
 
     if (error.propertyName) {
         return {
-            message: `"${joinPath(path)}" property name ${JSON.stringify(
+            message: `${joinPath(path)} property name ${JSON.stringify(
                 error.propertyName,
             )} ${baseMessage}.`,
             path: [...path, error.propertyName],
         }
     }
     return {
-        message: `"${joinPath(path)}" ${baseMessage}.`,
+        message: `${joinPath(path)} ${baseMessage}.`,
         path,
     }
 
@@ -177,6 +177,9 @@ function errorToValidateError(
 
     /** Join paths */
     function joinPath(paths: string[]) {
+        if (!paths.length) {
+            return "Root"
+        }
         let result = ""
         for (const p of paths) {
             if (/^[a-z_$][\w$]*$/iu.test(p)) {
@@ -189,7 +192,7 @@ function errorToValidateError(
                 result += `[${/^\d+$/iu.test(p) ? p : JSON.stringify(p)}]`
             }
         }
-        return result
+        return `"${result}"`
     }
 }
 
@@ -395,13 +398,16 @@ export default createRule("no-invalid", {
         /**
          * Validate JS Object
          */
-        function validateJSExport(node: ESLintExpression) {
+        function validateJSExport(
+            node: ESLintExpression,
+            rootRange: [number, number],
+        ) {
             if (existsExports) {
                 return
             }
             existsExports = true
 
-            const data = analyzeJsAST(node, context)
+            const data = analyzeJsAST(node, rootRange, context)
             if (data == null) {
                 return
             }
@@ -457,7 +463,13 @@ export default createRule("no-invalid", {
                 ) {
                     return
                 }
-                validateJSExport(node.declaration)
+                const defaultToken = sourceCode.getTokenBefore(
+                    node.declaration,
+                )!
+                validateJSExport(node.declaration, [
+                    node.range[0],
+                    defaultToken.range![1],
+                ])
             },
             AssignmentExpression(node: ESLintAssignmentExpression) {
                 if (
@@ -472,7 +484,7 @@ export default createRule("no-invalid", {
                         node.left.property.type === "Identifier" &&
                         node.left.property.name === "exports")
                 ) {
-                    validateJSExport(node.right)
+                    validateJSExport(node.right, node.left.range)
                 }
             },
         }

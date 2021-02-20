@@ -35,10 +35,7 @@ export type PathData = {
     children: Readonly<Map<string, PathData | TUnknown>>
 }
 
-type SubPathData = {
-    data: unknown
-    children: Readonly<Map<string, PathData | TUnknown>>
-}
+type SubPathData = Pick<PathData, "data" | "children">
 export type AnalyzedJsAST = {
     object: unknown
     pathData: PathData
@@ -49,6 +46,7 @@ export type AnalyzedJsAST = {
  */
 export function analyzeJsAST(
     node: ESLintExpression,
+    rootRange: [number, number],
     context: RuleContext,
 ): AnalyzedJsAST | null {
     const data = getPathData(node, context)
@@ -56,7 +54,7 @@ export function analyzeJsAST(
         return null
     }
     const pathData: PathData = {
-        key: node.range,
+        key: rootRange,
         ...data,
     }
     const result: AnalyzedJsAST = {

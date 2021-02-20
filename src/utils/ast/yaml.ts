@@ -128,6 +128,22 @@ export function getYAMLNodeFromPath(
     [...paths]: string[],
 ): NodeData<YAML.YAMLNode> {
     let data: NodeData<YAML.YAMLNode> = {
+        key: (sourceCode) => {
+            if (node.body.length > 1) {
+                return sourceCode.getFirstToken(node.body[0]).range!
+            }
+            const dataNode = node.body[0].content
+            if (dataNode == null) {
+                return sourceCode.getFirstToken(node.body[0]).range!
+            }
+            if (
+                dataNode.type === "YAMLMapping" ||
+                dataNode.type === "YAMLSequence"
+            ) {
+                return sourceCode.getFirstToken(dataNode).range!
+            }
+            return dataNode.range
+        },
         value: node,
     }
     while (paths.length && data.value) {

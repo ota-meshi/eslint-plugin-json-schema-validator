@@ -1,0 +1,14 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "number"
+                    }
+                }
+            ]
+        }
+    ]
+}
