@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"additionalProperties.office_number\" should be string.",
+        "line": 7,
+        "column": 9,
+        "endLine": 7,
+        "endColumn": 24
+    }
+]

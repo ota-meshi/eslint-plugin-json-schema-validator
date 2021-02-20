@@ -1,0 +1,8 @@
+{
+    "additionalProperties": {
+        "number": 1600,
+        "street_name": "Pennsylvania",
+        "street_type": "Avenue",
+        "office_number": 201
+    }
+}
