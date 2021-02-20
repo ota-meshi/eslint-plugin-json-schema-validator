@@ -1,7 +1,19 @@
 <template>
     <div class="app">
         <sns-bar />
-        <label class="file-name">FileName: <input v-model="fileName" /></label>
+        <div class="tools">
+            <label class="file-name"
+                >FileName: <input v-model="fileName"
+            /></label>
+
+            <label>Examples: </label>
+            <button @click="onClickExampleJavaScript">JavaScript</button>
+            <button @click="onClickExampleJSON">JSON</button>
+            <button @click="onClickExampleYAML">YAML</button>
+            <button @click="onClickExampleTOML">TOML</button>
+            <button @click="onClickExampleVue">Vue</button>
+        </div>
+
         <div class="main-content">
             <rules-settings
                 ref="settings"
@@ -65,6 +77,68 @@ const DEFAULT_CODE = `{
         "strict": "off"
     }
 }
+`
+
+const JS_CODE = `/* eslint json-schema-validator/no-invalid: [
+      "error",
+      "https://json.schemastore.org/eslintrc"
+   ]
+   -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
+*/
+module.exports = {
+    extends: [ 42 ],
+    env: {
+        browser: true
+    },
+    rules: {
+        eqeqeq: "warn",
+        strict: "off"
+    }
+}
+`
+const JSON_CODE = `/* eslint json-schema-validator/no-invalid: [
+      "error",
+      "https://json.schemastore.org/eslintrc"
+   ]
+   -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
+*/
+{
+    "extends": [ 42 ],
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "eqeqeq": "warn",
+        "strict": "off"
+    }
+}
+`
+const YAML_CODE = `# eslint json-schema-validator/no-invalid: [error, "https://json.schemastore.org/eslintrc"]
+# -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
+extends:
+  - 42
+env:
+  browser": true
+rules:
+  "eqeqeq": "warn"
+  "strict": "off"
+`
+const TOML_CODE = `# eslint json-schema-validator/no-invalid: [error, "https://json.schemastore.org/prettierrc"]
+# -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
+trailingComma = "es3"
+tabWidth = 4
+semi = false
+singleQuote = true
+`
+// eslint-disable-next-line no-useless-escape -- ignore
+const scriptEnd = `<\/script>`
+const VUE_CODE = `<i18n>
+42
+</i18n>
+<script>
+/* eslint json-schema-validator/no-invalid: [error, { schemas: [{ fileMatch: ['*.vue/*blockType=i18n*'],schema: { type: object } }] }]
+ -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options */
+${scriptEnd}
 `
 
 const ruleURLs = {}
@@ -145,8 +219,27 @@ export default {
                 this.code = state.code || DEFAULT_CODE
                 this.rules =
                     state.rules || Object.assign({}, DEFAULT_RULES_CONFIG)
-                this.script = state.script
             }
+        },
+        onClickExampleJavaScript() {
+            this.fileName = ".eslintrc.js"
+            this.code = JS_CODE
+        },
+        onClickExampleJSON() {
+            this.fileName = ".eslintrc.json"
+            this.code = JSON_CODE
+        },
+        onClickExampleYAML() {
+            this.fileName = ".eslintrc.yaml"
+            this.code = YAML_CODE
+        },
+        onClickExampleTOML() {
+            this.fileName = ".prettierrc.toml"
+            this.code = TOML_CODE
+        },
+        onClickExampleVue() {
+            this.fileName = "App.vue"
+            this.code = VUE_CODE
         },
     },
 }
@@ -167,8 +260,7 @@ function equalsRules(a, b) {
 }
 </script>
 <style scoped>
-.file-name {
-    display: block;
+.tools {
     padding-top: 16px;
 }
 

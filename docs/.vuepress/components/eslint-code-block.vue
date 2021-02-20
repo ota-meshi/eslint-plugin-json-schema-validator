@@ -6,9 +6,19 @@
         :rules="rules"
         dark
         :fix="fix"
-        :language="language"
         :file-name="fileName"
-        :parser="parser"
+        :language="language"
+        :parser="
+            language === 'yaml'
+                ? 'yaml-eslint-parser'
+                : language === 'toml'
+                ? 'toml-eslint-parser'
+                : language === 'html'
+                ? 'vue-eslint-parser'
+                : language === 'json'
+                ? 'jsonc-eslint-parser'
+                : 'espree'
+        "
     />
 </template>
 
@@ -28,15 +38,7 @@ export default {
                 return {}
             },
         },
-        language: {
-            type: String,
-            default: undefined,
-        },
         fileName: {
-            type: String,
-            default: undefined,
-        },
-        parser: {
             type: String,
             default: undefined,
         },
@@ -46,6 +48,24 @@ export default {
             code: "",
             height: "",
         }
+    },
+    computed: {
+        language() {
+            const fileName = `${this.fileName}`.toLowerCase()
+            if (fileName.endsWith(".yaml") || fileName.endsWith(".yml")) {
+                return "yaml"
+            }
+            if (fileName.endsWith(".toml")) {
+                return "toml"
+            }
+            if (fileName.endsWith(".vue")) {
+                return "html"
+            }
+            if (fileName.endsWith(".js")) {
+                return "javascript"
+            }
+            return "json"
+        },
     },
     mounted() {
         this.code = `${this.computeCodeFromSlot(this.$slots.default).trim()}\n`

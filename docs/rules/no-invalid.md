@@ -63,6 +63,37 @@ This rule validates the file with JSON Schema and reports errors.
   - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file or URL.
 - `"useSchemastoreCatalog"` ... If `true`, it will automatically configure some schemas defined in [https://www.schemastore.org/api/json/catalog.json](https://www.schemastore.org/api/json/catalog.json). Default `true`
 
+This option can also be given a JSON schema file or URL. This is useful for configuring with the `/* eslint */` directive comments.
+
+<eslint-code-block file-name=".eslintrc.js">
+
+<!-- eslint-skip -->
+
+```js
+/* eslint json-schema-validator/no-invalid: [
+      "error",
+      "https://json.schemastore.org/eslintrc"
+   ]
+*/
+
+module.exports = {
+    overrides: [
+        {
+            files: ["good"],
+            /* ✓ GOOD */
+            extends: ["foo"]
+        },
+        {
+            files: ["bad"],
+            /* ✗ BAD */
+            extends: [42]
+        }
+    ]
+}
+```
+
+</eslint-code-block>
+
 ### Use with `.vue`
 
 This rule supports [`.vue` custom blocks](https://vue-loader.vuejs.org/guide/custom-blocks.html).
