@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"dependencies1\" should have property billing_address when property credit_card is present.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 20
+    },
+    {
+        "message": "\"dependencies2\" should have required property 'billing_address'.",
+        "line": 7,
+        "column": 5,
+        "endLine": 7,
+        "endColumn": 20
+    }
+]

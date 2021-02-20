@@ -1,0 +1,3 @@
+{
+    "anyOfTest": [123, "abc", true]
+}

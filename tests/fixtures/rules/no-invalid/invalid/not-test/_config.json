@@ -1,0 +1,40 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "notObject": {
+                                "not": {
+                                    "type": "object"
+                                }
+                            },
+                            "notNumStr": {
+                                "not": {
+                                    "type": ["number", "string"]
+                                }
+                            },
+                            "numStr": {
+                                "type": ["number", "string"]
+                            },
+                            "notEnum": {
+                                "not": {
+                                    "enum": [1, 2, 3]
+                                }
+                            },
+                            "notMax10": {
+                                "not": {
+                                    "type": "number",
+                                    "maximum": 10
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

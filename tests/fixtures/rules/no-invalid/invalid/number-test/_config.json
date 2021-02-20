@@ -1,0 +1,36 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "maximum": {
+                                "type": "number",
+                                "maximum": 100
+                            },
+                            "minimum": {
+                                "type": "number",
+                                "minimum": 10
+                            },
+                            "exclusiveMaximum": {
+                                "type": "number",
+                                "exclusiveMaximum": 100
+                            },
+                            "exclusiveMinimum": {
+                                "type": "number",
+                                "exclusiveMinimum": 10
+                            },
+                            "multipleOf": {
+                                "type": "number",
+                                "multipleOf": 10
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

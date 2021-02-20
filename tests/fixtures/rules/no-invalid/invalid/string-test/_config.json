@@ -1,0 +1,30 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "maxLength": {
+                                "type": "string",
+                                "maxLength": 2
+                            },
+                            "minLength": {
+                                "type": "string",
+                                "minLength": 2
+                            },
+                            "formatDateTime1": {
+                                "format": "data-time"
+                            },
+                            "formatDateTime2": {
+                                "format": "data-time"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

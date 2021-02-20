@@ -8,7 +8,7 @@ import type { AST as TOML } from "toml-eslint-parser"
 import { getStaticTOMLValue } from "toml-eslint-parser"
 import { createRule } from "../utils"
 import Ajv from "../utils/ajv"
-import type { ErrorObject } from "ajv"
+import type { DefinedError, ErrorObject } from "ajv"
 import minimatch from "minimatch"
 import path from "path"
 import type { PathData } from "../utils/ast"
@@ -55,42 +55,124 @@ function unescapeJsonPointer(str: string): string {
     return str.replace(/~1/g, "/").replace(/~0/g, "~")
 }
 
+/* eslint-disable complexity -- X( */
 /**
- * Parse data path
+ * Schema error to validate error.
  */
-function parseDataPath(error: ErrorObject): string[] {
+function errorToValidateError(
+    /* eslint-enable complexity -- X( */
+    errorObject: ErrorObject,
+): ValidateError {
+    const error: DefinedError = errorObject as DefinedError
+
     const dataPath = error.dataPath.startsWith("/")
         ? error.dataPath.slice(1)
         : error.dataPath
     // console.log(dataPath)
-    const paths: string[] = dataPath
+    const path: string[] = dataPath
         ? dataPath.split("/").map(unescapeFragment)
         : []
 
     if (error.keyword === "additionalProperties") {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-        const additionalProperty = (error.params as any).additionalProperty
-        paths.push(additionalProperty)
-    }
-    // console.log(paths)
-    return paths
-}
-
-/**
- * Schema error to validate error.
- */
-function errorToValidateError(error: ErrorObject): ValidateError {
-    const path = parseDataPath(error)
-
-    if (error.keyword === "additionalProperties") {
+        path.push(error.params.additionalProperty)
         return {
             message: `Unexpected property "${joinPath(path)}"`,
             path,
         }
     }
+    if (error.keyword === "propertyNames") {
+        return {
+            message: `"${joinPath(path)}" property name ${JSON.stringify(
+                error.params.propertyName,
+            )} is invalid.`,
+            path: [...path, error.params.propertyName],
+        }
+    }
+    if (error.keyword === "uniqueItems") {
+        const baseMessage = `should NOT have duplicate items (items ## ${error.params.j} and ${error.params.i} are identical)`
+        return {
+            message: `"${joinPath(path)}" ${baseMessage}.`,
+            path: [...path, String(error.params.i)],
+        }
+    }
+    let baseMessage: string
+    if (error.keyword === "enum") {
+        baseMessage = `should be equal to ${joinEnums(
+            error.params.allowedValues,
+        )}`
+    } else if (error.keyword === "const") {
+        baseMessage = `should be equal to ${JSON.stringify(
+            error.params.allowedValue,
+        )}`
+    } else if (error.keyword === "not") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+        const schema: any = error.schema!
+        const schemaKeys = Object.keys(schema)
+        if (schemaKeys.length === 1 && schemaKeys[0] === "type") {
+            // { type: "foo" }
+            baseMessage = `should NOT be ${schema.type}`
+        } else if (schemaKeys.length === 1 && schemaKeys[0] === "enum") {
+            // { enum: ["foo"] }
+            baseMessage = `should NOT be equal to ${joinEnums(schema.enum)}`
+        } else {
+            baseMessage = `should NOT be valid of define schema`
+        }
+    } else if (
+        error.keyword === "type" || // should be X
+        error.keyword === "oneOf" || // should match exactly one schema in oneOf
+        error.keyword === "anyOf" || // should match some schema in anyOf
+        // array
+        error.keyword === "minItems" || // should NOT have fewer than X items
+        error.keyword === "maxItems" || // should NOT have more than X items
+        error.keyword === "additionalItems" || // should NOT have more than X items
+        error.keyword === "contains" || // should contain at least 1 valid item(s)
+        // object
+        error.keyword === "required" || // should have required property 'X'
+        error.keyword === "maxProperties" || // should NOT have more than X items
+        error.keyword === "minProperties" || // should NOT have fewer than X items
+        error.keyword === "dependencies" || // should have property X when property Y is present
+        // string
+        error.keyword === "pattern" || // should match pattern "X"
+        error.keyword === "maxLength" || // should NOT have more than X characters
+        error.keyword === "minLength" || // should NOT have fewer than X characters
+        error.keyword === "format" ||
+        // number
+        error.keyword === "maximum" || // should be <= X
+        error.keyword === "minimum" || // should be >= X
+        error.keyword === "exclusiveMaximum" || // should be < X
+        error.keyword === "exclusiveMinimum" || // should be > X
+        error.keyword === "multipleOf" || // should be multiple of X
+        // other
+        error.keyword === "if" // should match "X" schema
+    ) {
+        // Use error.message
+        baseMessage = error.message!
+    } else {
+        // Others
+        baseMessage = error.message!
+    }
+
+    if (error.propertyName) {
+        return {
+            message: `"${joinPath(path)}" property name ${JSON.stringify(
+                error.propertyName,
+            )} ${baseMessage}.`,
+            path: [...path, error.propertyName],
+        }
+    }
     return {
-        message: `"${joinPath(path)}" ${error.message}.`,
+        message: `"${joinPath(path)}" ${baseMessage}.`,
         path,
+    }
+
+    /** Join enums */
+    function joinEnums(enums: string[]) {
+        const list = enums.map((v: string) => JSON.stringify(v))
+        const last = list.pop()
+        if (list.length) {
+            return `${list.join(", ")} or ${last}`
+        }
+        return last
     }
 
     /** Join paths */

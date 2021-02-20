@@ -1,0 +1,70 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.*"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "maxProperties": {
+                                "type": "object",
+                                "maxProperties": 2
+                            },
+                            "minProperties": {
+                                "type": "object",
+                                "minProperties": 2
+                            },
+                            "dependencies1": {
+                                "type": "object",
+                                "properties": {
+                                    "name": { "type": "string" },
+                                    "credit_card": { "type": "number" },
+                                    "billing_address": { "type": "string" }
+                                },
+                                "required": ["name"],
+                                "dependencies": {
+                                    "credit_card": ["billing_address"]
+                                }
+                            },
+                            "dependencies2": {
+                                "type": "object",
+                                "properties": {
+                                    "name": { "type": "string" },
+                                    "credit_card": { "type": "number" }
+                                },
+                                "required": ["name"],
+                                "dependencies": {
+                                    "credit_card": {
+                                        "properties": {
+                                            "billing_address": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": ["billing_address"]
+                                    }
+                                }
+                            },
+                            "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                    "number": { "type": "number" },
+                                    "street_name": { "type": "string" },
+                                    "street_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Street",
+                                            "Avenue",
+                                            "Boulevard"
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": { "type": "string" }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
