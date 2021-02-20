@@ -8,8 +8,8 @@ const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 const TTL = 1000 * 60 * 60 * 24
 const RELOADING = new Set<string>()
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- ignore
-type Schema = object
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+type Schema = Record<string, any>
 
 /**
  * Converts the given URL to the path of the schema file.
@@ -34,18 +34,18 @@ export function loadSchema(
     if (schemaPath.startsWith("http://") || schemaPath.startsWith("https://")) {
         const jsonPath = urlToSchemastoreFilePath(schemaPath)
         if (!jsonPath) {
-            return loadSchemaFromURL(schemaPath, context)
+            return adjustSchema(loadSchemaFromURL(schemaPath, context))
         }
         try {
-            // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-            return require(`../../schemastore/${jsonPath}`)
+            // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
+            return adjustSchema(require(`../../schemastore/${jsonPath}`))
         } catch {
             // error
         }
-        return loadSchemaFromURL(schemaPath, context)
+        return adjustSchema(loadSchemaFromURL(schemaPath, context))
     }
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-    return require(path.resolve(getCwd(context), schemaPath))
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
+    return adjustSchema(require(path.resolve(getCwd(context), schemaPath)))
 }
 
 /**
@@ -192,4 +192,22 @@ function getCwd(context: RuleContext) {
         return context.getCwd()
     }
     return path.resolve("")
+}
+
+/**
+ * Adjust Schema data
+ *
+ */
+function adjustSchema(schema: Schema | null): Schema | null {
+    if (schema == null) {
+        return schema
+    }
+    if (schema.id) {
+        // See https://github.com/ajv-validator/ajv/blob/fcbca58748bbfd9e75fb2aba8c21a621a1d7be2a/lib/vocabularies/core/id.ts#L6
+        if (!schema.$id) {
+            schema.$id = schema.id
+        }
+        delete schema.id
+    }
+    return schema
 }
