@@ -19,8 +19,6 @@ describe("Validator Factory.", () => {
     describe("Loads the schema and does not crash.", () => {
         for (const fileName of listupFiles(SCHEMASTORE_ROOT)) {
             if (
-                // Does not support v4.
-                fileName.endsWith("swagger-2.0.json") || // exclusiveMinimum value must be ["number"]
                 // Schema bug?
                 fileName.endsWith("cirrus.json") || // cannot resolve id
                 fileName.endsWith("compilerconfig.json") || // cannot resolve id

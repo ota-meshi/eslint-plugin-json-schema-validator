@@ -7,6 +7,7 @@ import type {
 import { URL } from "url"
 import type { RuleContext } from "../types"
 import Ajv from "./ajv"
+import { applyLimitNumberKeywords } from "./ajv-custom/limit-number"
 import { loadSchema } from "./schema"
 
 const ajv = new Ajv({
@@ -26,6 +27,8 @@ ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"))
 // Avoid exceptions due to incorrect schema.
 // See https://github.com/ajv-validator/ajv/blob/fcbca58748bbfd9e75fb2aba8c21a621a1d7be2a/lib/vocabularies/core/id.ts#L6
 ajv.removeKeyword("id")
+
+applyLimitNumberKeywords(ajv)
 
 /** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
 function unescapeFragment(str: string): string {
