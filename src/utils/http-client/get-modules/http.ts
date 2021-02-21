@@ -14,6 +14,15 @@ export default function get(
     url: string,
     options?: RequestOptions,
 ): Promise<string> {
+    return get0(url, options, 0)
+}
+
+/** Implementation of HTTP GET method */
+function get0(
+    url: string,
+    options: RequestOptions | undefined,
+    redirectCount: number,
+): Promise<string> {
     const client = url.startsWith("https") ? https : http
     const parsedOptions = parseUrlAndOptions(url, options || {})
 
@@ -24,6 +33,16 @@ export default function get(
                 result += chunk
             })
             res.on("end", () => {
+                if (
+                    res.statusCode &&
+                    res.statusCode >= 300 &&
+                    res.statusCode < 400 &&
+                    redirectCount < 3 // max redirect
+                ) {
+                    const redirectUrl = res.headers.location!
+                    resolve(get0(redirectUrl, options, redirectCount + 1))
+                    return
+                }
                 resolve(result)
             })
         })

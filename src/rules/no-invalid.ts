@@ -7,8 +7,7 @@ import { getStaticYAMLValue } from "yaml-eslint-parser"
 import type { AST as TOML } from "toml-eslint-parser"
 import { getStaticTOMLValue } from "toml-eslint-parser"
 import { createRule } from "../utils"
-import Ajv from "../utils/ajv"
-import type { DefinedError, ErrorObject } from "ajv"
+import type { SchemaObject } from "ajv"
 import minimatch from "minimatch"
 import path from "path"
 import type { PathData } from "../utils/ast"
@@ -26,189 +25,8 @@ import type {
     ESLintExportDefaultDeclaration,
     ESLintExpression,
 } from "vue-eslint-parser/ast"
-
-// eslint-disable-next-line @typescript-eslint/ban-types -- ignore
-type Schema = object
-type Validator = (data: unknown) => ValidateError[]
-type ValidateError = { message: string; path: string[] }
-
-const ajv = new Ajv({
-    // schemaId: "auto",
-    allErrors: true,
-    verbose: true,
-    validateSchema: false,
-    // missingRefs: "ignore",
-    // extendRefs: "ignore",
-    logger: false,
-    strict: false,
-})
-// ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
-ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"))
-
-/** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
-function unescapeFragment(str: string): string {
-    return unescapeJsonPointer(decodeURIComponent(str))
-}
-
-/** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L72 */
-function unescapeJsonPointer(str: string): string {
-    return str.replace(/~1/g, "/").replace(/~0/g, "~")
-}
-
-/* eslint-disable complexity -- X( */
-/**
- * Schema error to validate error.
- */
-function errorToValidateError(
-    /* eslint-enable complexity -- X( */
-    errorObject: ErrorObject,
-): ValidateError {
-    const error: DefinedError = errorObject as DefinedError
-
-    const dataPath = error.dataPath.startsWith("/")
-        ? error.dataPath.slice(1)
-        : error.dataPath
-    // console.log(dataPath)
-    const path: string[] = dataPath
-        ? dataPath.split("/").map(unescapeFragment)
-        : []
-
-    if (error.keyword === "additionalProperties") {
-        path.push(error.params.additionalProperty)
-        return {
-            message: `Unexpected property ${joinPath(path)}`,
-            path,
-        }
-    }
-    if (error.keyword === "propertyNames") {
-        return {
-            message: `${joinPath(path)} property name ${JSON.stringify(
-                error.params.propertyName,
-            )} is invalid.`,
-            path: [...path, error.params.propertyName],
-        }
-    }
-    if (error.keyword === "uniqueItems") {
-        const baseMessage = `should NOT have duplicate items (items ## ${error.params.j} and ${error.params.i} are identical)`
-        return {
-            message: `${joinPath(path)} ${baseMessage}.`,
-            path: [...path, String(error.params.i)],
-        }
-    }
-    let baseMessage: string
-    if (error.keyword === "enum") {
-        baseMessage = `should be equal to ${joinEnums(
-            error.params.allowedValues,
-        )}`
-    } else if (error.keyword === "const") {
-        baseMessage = `should be equal to ${JSON.stringify(
-            error.params.allowedValue,
-        )}`
-    } else if (error.keyword === "not") {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-        const schema: any = error.schema!
-        const schemaKeys = Object.keys(schema)
-        if (schemaKeys.length === 1 && schemaKeys[0] === "type") {
-            // { type: "foo" }
-            baseMessage = `should NOT be ${schema.type}`
-        } else if (schemaKeys.length === 1 && schemaKeys[0] === "enum") {
-            // { enum: ["foo"] }
-            baseMessage = `should NOT be equal to ${joinEnums(schema.enum)}`
-        } else {
-            baseMessage = `should NOT be valid of define schema`
-        }
-    } else if (
-        error.keyword === "type" || // should be X
-        error.keyword === "oneOf" || // should match exactly one schema in oneOf
-        error.keyword === "anyOf" || // should match some schema in anyOf
-        // array
-        error.keyword === "minItems" || // should NOT have fewer than X items
-        error.keyword === "maxItems" || // should NOT have more than X items
-        error.keyword === "additionalItems" || // should NOT have more than X items
-        error.keyword === "contains" || // should contain at least 1 valid item(s)
-        // object
-        error.keyword === "required" || // should have required property 'X'
-        error.keyword === "maxProperties" || // should NOT have more than X items
-        error.keyword === "minProperties" || // should NOT have fewer than X items
-        error.keyword === "dependencies" || // should have property X when property Y is present
-        // string
-        error.keyword === "pattern" || // should match pattern "X"
-        error.keyword === "maxLength" || // should NOT have more than X characters
-        error.keyword === "minLength" || // should NOT have fewer than X characters
-        error.keyword === "format" ||
-        // number
-        error.keyword === "maximum" || // should be <= X
-        error.keyword === "minimum" || // should be >= X
-        error.keyword === "exclusiveMaximum" || // should be < X
-        error.keyword === "exclusiveMinimum" || // should be > X
-        error.keyword === "multipleOf" || // should be multiple of X
-        // other
-        error.keyword === "if" // should match "X" schema
-    ) {
-        // Use error.message
-        baseMessage = error.message!
-    } else {
-        // Others
-        baseMessage = error.message!
-    }
-
-    if (error.propertyName) {
-        return {
-            message: `${joinPath(path)} property name ${JSON.stringify(
-                error.propertyName,
-            )} ${baseMessage}.`,
-            path: [...path, error.propertyName],
-        }
-    }
-    return {
-        message: `${joinPath(path)} ${baseMessage}.`,
-        path,
-    }
-
-    /** Join enums */
-    function joinEnums(enums: string[]) {
-        const list = enums.map((v: string) => JSON.stringify(v))
-        const last = list.pop()
-        if (list.length) {
-            return `${list.join(", ")} or ${last}`
-        }
-        return last
-    }
-
-    /** Join paths */
-    function joinPath(paths: string[]) {
-        if (!paths.length) {
-            return "Root"
-        }
-        let result = ""
-        for (const p of paths) {
-            if (/^[a-z_$][\w$]*$/iu.test(p)) {
-                if (result) {
-                    result += `.${p}`
-                } else {
-                    result = p
-                }
-            } else {
-                result += `[${/^\d+$/iu.test(p) ? p : JSON.stringify(p)}]`
-            }
-        }
-        return `"${result}"`
-    }
-}
-
-/**
- * Build validator
- */
-function schemaToValidator(schema: Schema): Validator {
-    const validateSchema = ajv.compile(schema)
-    return (data) => {
-        if (validateSchema(data)) {
-            return []
-        }
-
-        return validateSchema.errors!.map(errorToValidateError)
-    }
-}
+import type { ValidateError, Validator } from "../utils/validator-factory"
+import { compile } from "../utils/validator-factory"
 
 /**
  * Checks if match file
@@ -230,7 +48,7 @@ function parseOption(
                   name?: string
                   description?: string
                   fileMatch: string[]
-                  schema: Schema | string
+                  schema: SchemaObject | string
               }[]
               useSchemastoreCatalog?: boolean
           }
@@ -272,7 +90,11 @@ function parseOption(
             })
             continue
         }
-        validators.push(schemaToValidator(schema))
+        const schemaPath =
+            typeof schemaData.schema === "string"
+                ? schemaData.schema
+                : getCwd(context)
+        validators.push(compile(schema, schemaPath, context))
     }
     if (!validators.length) {
         // If it matches the user's definition, don't use `catalog.json`.
@@ -296,7 +118,7 @@ function parseOption(
                 if (!schema) {
                     continue
                 }
-                const validator = schemaToValidator(schema)
+                const validator = compile(schema, schemaData.url, context)
                 validators.push(validator)
             }
         }
