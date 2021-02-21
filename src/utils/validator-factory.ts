@@ -65,7 +65,7 @@ function schemaToValidator(
         try {
             validateSchema = ajv.compile(schema)
         } catch (e) {
-            if (resolveError(e, schemaPath, context)) {
+            if (resolveError(e, schemaPath, schema, context)) {
                 continue
             }
             throw e
@@ -89,6 +89,7 @@ function resolveError(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
     error: any,
     baseSchemaPath: string,
+    baseSchema: SchemaObject,
     context: RuleContext,
 ): boolean {
     if (error.missingRef) {
@@ -103,13 +104,17 @@ function resolveError(
             schemaPath = uri.toString()
             schemaId = schemaPath
         } else {
-            const baseUri = new URL(baseSchemaPath)
-            baseUri.pathname = ""
+            const ref = error.missingRef
+            const baseUri = new URL(baseSchema.$id || baseSchemaPath)
             baseUri.hash = ""
-            const uri = new URL(`${baseUri.toString()}${error.missingRef}`)
+            const slashIndex = baseUri.pathname.lastIndexOf("/")
+            if (slashIndex >= 0) {
+                baseUri.pathname = baseUri.pathname.slice(0, slashIndex + 1)
+            }
+            const uri = new URL(`${baseUri.toString()}${ref}`)
             uri.hash = ""
             schemaPath = uri.toString()
-            schemaId = error.missingRef
+            schemaId = ref.split("#")[0]
         }
         if (schemaPath) {
             const refSchema = loadSchema(schemaPath, context)
@@ -120,7 +125,7 @@ function resolveError(
                     try {
                         ajv.addSchema(refSchema, schemaId)
                     } catch (e) {
-                        if (resolveError(e, schemaPath, context)) {
+                        if (resolveError(e, schemaPath, refSchema, context)) {
                             continue
                         }
                         throw e

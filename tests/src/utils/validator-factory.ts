@@ -59,7 +59,8 @@ describe("Validator Factory.", () => {
                 fileName.endsWith("vs-2017.3.host.json") || // Invalid regular expression
                 // So big file X(
                 fileName.endsWith("ansible-role-2.9.json") ||
-                fileName.endsWith("ansible-playbook.json")
+                fileName.endsWith("ansible-playbook.json") ||
+                false
             ) {
                 continue
             }
