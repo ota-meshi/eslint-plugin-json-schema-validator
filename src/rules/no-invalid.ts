@@ -7,7 +7,6 @@ import { getStaticYAMLValue } from "yaml-eslint-parser"
 import type { AST as TOML } from "toml-eslint-parser"
 import { getStaticTOMLValue } from "toml-eslint-parser"
 import { createRule } from "../utils"
-import type { SchemaObject } from "ajv"
 import minimatch from "minimatch"
 import path from "path"
 import type { PathData } from "../utils/ast"
@@ -27,6 +26,7 @@ import type {
 } from "vue-eslint-parser/ast"
 import type { ValidateError, Validator } from "../utils/validator-factory"
 import { compile } from "../utils/validator-factory"
+import type { SchemaObject } from "../utils/types"
 
 /**
  * Checks if match file

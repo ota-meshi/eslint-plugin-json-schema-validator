@@ -3,7 +3,7 @@ import fs from "fs"
 import type { RuleContext } from "../types"
 import { syncGet, get } from "./http-client"
 import debugBuilder from "debug"
-import type { SchemaObject } from "ajv"
+import type { SchemaObject } from "./types"
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 
 const TTL = 1000 * 60 * 60 * 24

@@ -3,7 +3,7 @@ import type {
     ErrorObject,
     SchemaObject,
     ValidateFunction,
-} from "ajv"
+} from "./ajv"
 import { URL } from "url"
 import type { RuleContext } from "../types"
 import Ajv from "./ajv"

@@ -1,6 +1,6 @@
-import type Ajv from "ajv"
-import { _, str } from "ajv"
-import type { CodeKeywordDefinition } from "ajv"
+import type Ajv from "../ajv"
+import { _, str } from "../ajv"
+import type { CodeKeywordDefinition } from "../ajv"
 
 const ops = {
     GT: _`>`,
