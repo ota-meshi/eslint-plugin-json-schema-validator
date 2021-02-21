@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"maximum\" should be <= 100.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 14
+    },
+    {
+        "message": "\"minimum\" should be >= 10.",
+        "line": 4,
+        "column": 5,
+        "endLine": 4,
+        "endColumn": 14
+    }
+]

@@ -3,13 +3,11 @@ import fs from "fs"
 import type { RuleContext } from "../types"
 import { syncGet, get } from "./http-client"
 import debugBuilder from "debug"
+import type { SchemaObject } from "ajv"
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 
 const TTL = 1000 * 60 * 60 * 24
 const RELOADING = new Set<string>()
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-type Schema = Record<string, any>
 
 /**
  * Converts the given URL to the path of the schema file.
@@ -30,22 +28,22 @@ export function urlToSchemastoreFilePath(url: string): string | null {
 export function loadSchema(
     schemaPath: string,
     context: RuleContext,
-): null | Schema {
+): null | SchemaObject {
     if (schemaPath.startsWith("http://") || schemaPath.startsWith("https://")) {
         const jsonPath = urlToSchemastoreFilePath(schemaPath)
         if (!jsonPath) {
-            return adjustSchema(loadSchemaFromURL(schemaPath, context))
+            return loadSchemaFromURL(schemaPath, context)
         }
         try {
-            // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
-            return adjustSchema(require(`../../schemastore/${jsonPath}`))
+            // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
+            return require(`../../schemastore/${jsonPath}`)
         } catch {
             // error
         }
-        return adjustSchema(loadSchemaFromURL(schemaPath, context))
+        return loadSchemaFromURL(schemaPath, context)
     }
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
-    return adjustSchema(require(path.resolve(getCwd(context), schemaPath)))
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
+    return require(path.resolve(getCwd(context), schemaPath))
 }
 
 /**
@@ -54,7 +52,7 @@ export function loadSchema(
 function loadSchemaFromURL(
     schemaUrl: string,
     context: RuleContext,
-): null | Schema {
+): null | SchemaObject {
     let jsonPath = schemaUrl.replace(/^https?:\/\//u, "")
     if (!jsonPath.endsWith(".json")) {
         jsonPath = `${jsonPath}.json`
@@ -74,7 +72,7 @@ function loadSchemaFromURL(
     if (fs.existsSync(jsonFilePath)) {
         // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore
         const { schema, timestamp } = require(jsonFilePath) as {
-            schema: Schema
+            schema: SchemaObject
             timestamp: number
         }
         if (schema != null && typeof timestamp === "number") {
@@ -119,7 +117,7 @@ function postProcess(
     jsonFilePath: string,
     json: string,
     context: RuleContext,
-): Schema | null {
+): SchemaObject | null {
     let schema
     try {
         schema = JSON.parse(json)
@@ -162,7 +160,7 @@ function makeDirs(dir: string) {
 /**
  * JSON Schema to string
  */
-function schemaStringify(schema: Schema) {
+function schemaStringify(schema: SchemaObject) {
     return JSON.stringify(schema, (_key, value) => {
         // if (key === "description" && typeof value === "string") {
         //     return undefined
@@ -192,22 +190,4 @@ function getCwd(context: RuleContext) {
         return context.getCwd()
     }
     return path.resolve("")
-}
-
-/**
- * Adjust Schema data
- *
- */
-function adjustSchema(schema: Schema | null): Schema | null {
-    if (schema == null) {
-        return schema
-    }
-    if (schema.id) {
-        // See https://github.com/ajv-validator/ajv/blob/fcbca58748bbfd9e75fb2aba8c21a621a1d7be2a/lib/vocabularies/core/id.ts#L6
-        if (!schema.$id) {
-            schema.$id = schema.id
-        }
-        delete schema.id
-    }
-    return schema
 }
