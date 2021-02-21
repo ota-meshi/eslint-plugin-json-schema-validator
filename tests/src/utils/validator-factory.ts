@@ -66,13 +66,14 @@ describe("Validator Factory.", () => {
             it(fileName, () => {
                 const schema = loadSchema(fileName, ctx)
 
-                compile(
+                const validator = compile(
                     schema!,
                     `https://json.schemastore.org${fileName.slice(
                         SCHEMASTORE_ROOT.length,
                     )}`,
                     ctx,
                 )
+                validator({})
             })
         }
     })
