@@ -4,6 +4,7 @@
 /dist
 /docs/.vuepress/dist
 /docs/.vuepress/components/demo/demo-code.js
+/lib
 /node_modules
 /schemastore
 /tests/fixtures/integrations
