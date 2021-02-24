@@ -33,13 +33,16 @@ async function main(): Promise<boolean> {
     await git("commit", "-m", "Update schema store")
     await npm("version", "patch")
 
+    const version = JSON.parse(
+        fs.readFileSync(require.resolve("../../package"), "utf8"),
+    ).version
     // eslint-disable-next-line no-process-env -- ignore
     const { GITHUB_TOKEN } = process.env
     await git(
         "push",
         `https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/ota-meshi/eslint-plugin-json-schema-validator.git`,
         "main",
-        "--tags",
+        `v${version}`,
     )
 
     return true

@@ -1,8 +1,10 @@
 name: Update SchemaStore
 description: Update SchemaStore
 outputs:
-  updated:
-    description: 1 if there is an update
+    updated:
+        description: 1 if there is an update
+    version:
+        description: package new version
 runs:
-  using: node12
-  main: index.js
+    using: node12
+    main: index.js
