@@ -28,8 +28,6 @@ module.exports = {
         "no-lonely-if": "off",
         "new-cap": "off",
         "no-shadow": "off",
-
-        "yml/flow-mapping-curly-spacing": "off",
     },
     overrides: [
         {
@@ -72,13 +70,7 @@ module.exports = {
         },
         {
             files: ["src/rules/**"],
-            rules: {
-                // "@mysticatea/eslint-plugin/report-message-format": [
-                //     "error",
-                //     "[^a-z].*\\.$",
-                // ],
-                // "@mysticatea/eslint-plugin/require-meta-docs-url": "off",
-            },
+            rules: {},
         },
         {
             files: ["scripts/**/*.ts", "tests/**/*.ts"],
