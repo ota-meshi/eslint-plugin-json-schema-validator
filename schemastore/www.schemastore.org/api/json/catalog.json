@@ -348,6 +348,15 @@
       "url": "https://json.schemastore.org/bungee-plugin"
     },
     {
+      "name": "CMake Presets",
+      "description": "Schema for CMake Presets",
+      "fileMatch": [
+        "CMakePresets.json",
+        "CMakeUserPresets.json"
+      ],
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json"
+    },
+    {
       "name": "Camel K YAML DSL",
       "description": "Schema for Camel K YAML DSL",
       "fileMatch": [
@@ -2744,6 +2753,24 @@
         ".swcrc"
       ],
       "url": "https://json.schemastore.org/swcrc"
+    },
+    {
+      "name": "OpenWeather Road Risk API",
+      "description": "JSON Schema for OpenWeather Road Risk API responses.",
+      "fileMatch": [],
+      "url": "https://json.schemastore.org/openweather.roadrisk"
+    },
+    {
+      "name": "OpenWeather Current Weather API",
+      "description": "JSON Schema for OpenWeather Current Weather API responses.",
+      "fileMatch": [],
+      "url": "https://json.schemastore.org/openweather.current"
+    },
+    {
+      "name": "JSON-e templates",
+      "description": "JSON Schema for JSON-e templates.",
+      "fileMatch": [],
+      "url": "https://json.schemastore.org/jsone"
     }
   ]
 }
