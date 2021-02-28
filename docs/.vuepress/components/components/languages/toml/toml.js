@@ -11,7 +11,7 @@ export const language = {
     numberOctal: /0o[0-7]+[0-7_]*/,
     numberHex: /0x[\da-fA-F]+[\da-fA-F_]*/,
     numberBinary: /0b[01]+[01_]*/,
-    numberDate: /\d{4}-\d\d-\d\d([Tt ]\d\d:\d\d:\d\d(\.\d+)?(( ?[+-]\d\d?(:\d\d)?)|Z)?)?/,
+    numberDate: /\d{4}-\d{2}-\d{2}([Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?(( ?[+-]\d{1,2}(:\d{2})?)|Z)?)?/,
     escapes: /\\(?:[btnfr\\"])/,
     tokenizer: {
         root: [

@@ -47,7 +47,7 @@ fs.writeFileSync(
             /\(https:\/\/ota-meshi.github.io\/eslint-plugin-json-schema-validator/gu,
             "(.",
         )
-        .replace(/\n\n\n+/gu, "\n\n"),
+        .replace(/\n{3,}/gu, "\n\n"),
     "utf8",
 )
 
