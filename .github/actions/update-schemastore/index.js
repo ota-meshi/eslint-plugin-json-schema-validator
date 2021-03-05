@@ -13,4 +13,6 @@ result.default.then((res) => {
         "utf8",
     )
     core.setOutput("version", JSON.parse(packageJson).version)
+
+    return new Promise((resolve) => setTimeout(resolve, 5000)) // wait
 })
