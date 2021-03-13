@@ -7,12 +7,12 @@ export const language = {
     ],
     keywords: ["true", "false", "nan", "+nan", "-nan", "inf", "+inf", "-inf"],
     numberInteger: /(?:0|[+-]?\d+[\d_]*)/,
-    numberFloat: /(?:0|[+-]?\d+[\d_]*)(?:\.\d+)?(?:e[-+]?[1-9]\d*)?/,
+    numberFloat: /(?:0|[+-]?\d+[\d_]*)(?:\.\d+)?(?:e[+-]?[1-9]\d*)?/,
     numberOctal: /0o[0-7]+[0-7_]*/,
-    numberHex: /0x[\da-fA-F]+[\da-fA-F_]*/,
+    numberHex: /0x[\dA-Fa-f]+[\dA-F_a-f]*/,
     numberBinary: /0b[01]+[01_]*/,
-    numberDate: /\d{4}-\d{2}-\d{2}([Tt ]\d{2}:\d{2}:\d{2}(\.\d+)?(( ?[+-]\d{1,2}(:\d{2})?)|Z)?)?/,
-    escapes: /\\(?:[btnfr\\"])/,
+    numberDate: /\d{4}-\d{2}-\d{2}([ Tt]\d{2}:\d{2}:\d{2}(\.\d+)?(( ?[+-]\d{1,2}(:\d{2})?)|Z)?)?/,
+    escapes: /\\["\\bfnrt]/,
     tokenizer: {
         root: [
             { include: "@whitespace" },
@@ -20,7 +20,7 @@ export const language = {
             { include: "@inlineCollections" },
             // Key=Value pair
             [
-                /(".*?"|'.*?'|.*?)([ \t]*)(=)(\s*|$)/,
+                /(".*?"|'.*?'|.*?)([\t ]*)(=)(\s*|$)/,
                 ["type", "white", "operators", "white"],
             ],
             { include: "@numbers" },
@@ -47,14 +47,14 @@ export const language = {
             // Key=Value delimiter
             [/[=]/, "operators"],
             // Key=Value key
-            [/(?:".*?"|'.*?'|[^,{[]+?)(?=[=])/u, "type"],
+            [/(?:".*?"|'.*?'|[^,[{]+?)(?=[=])/u, "type"],
             // Values
             { include: "@inlineCollections" },
             { include: "@scalars" },
             { include: "@numbers" },
             // Other value (keyword or string)
             [
-                /[^},\s]+/u,
+                /[^\s,}]+/u,
                 {
                     cases: {
                         "@keywords": "keyword",
@@ -79,7 +79,7 @@ export const language = {
             { include: "@numbers" },
             // Other value (keyword or string)
             [
-                /[^\],.\s]+/,
+                /[^\s,.\]]+/,
                 {
                     cases: {
                         "@keywords": "keyword",
@@ -88,7 +88,7 @@ export const language = {
                 },
             ],
         ],
-        whitespace: [[/[ \t\r\n]+/, "white"]],
+        whitespace: [[/[\t\n\r ]+/, "white"]],
         // Only line comments
         comment: [[/#.*$/, "comment"]],
         // Start collections
@@ -106,31 +106,31 @@ export const language = {
             [/"/, "string", "@doubleQuotedString"],
         ],
         mlDoubleQuotedString: [
-            [/[^\\"]+/, "string"],
+            [/[^"\\]+/, "string"],
             [/@escapes/, "string.escape"],
             [/\\./, "string.escape.invalid"],
             [/"""/, "string", "@pop"],
         ],
         doubleQuotedString: [
-            [/[^\\"]+/, "string"],
+            [/[^"\\]+/, "string"],
             [/@escapes/, "string.escape"],
             [/\\./, "string.escape.invalid"],
             [/"/, "string", "@pop"],
         ],
         // Numbers
         numbers: [
-            [/@numberInteger(?=[ \t]*[#,\]}])/u, "number"],
-            [/@numberFloat(?=[ \t]*[#,\]}])/u, "number.float"],
-            [/@numberOctal(?=[ \t]*[#,\]}])/u, "number.octal"],
-            [/@numberBinary(?=[ \t]*[#,\]}])/u, "number.binary"],
-            [/@numberHex(?=[ \t]*[#,\]}])/u, "number.hex"],
-            [/@numberDate(?=[ \t]*[#,\]}])/u, "number.date"],
-            [/@numberInteger(?![ \t]*\S+)/, "number"],
-            [/@numberFloat(?![ \t]*\S+)/, "number.float"],
-            [/@numberBinary(?![ \t]*\S+)/u, "number.binary"],
-            [/@numberOctal(?![ \t]*\S+)/, "number.octal"],
-            [/@numberHex(?![ \t]*\S+)/, "number.hex"],
-            [/@numberDate(?![ \t]*\S+)/, "number.date"],
+            [/@numberInteger(?=[\t ]*[#,\]}])/u, "number"],
+            [/@numberFloat(?=[\t ]*[#,\]}])/u, "number.float"],
+            [/@numberOctal(?=[\t ]*[#,\]}])/u, "number.octal"],
+            [/@numberBinary(?=[\t ]*[#,\]}])/u, "number.binary"],
+            [/@numberHex(?=[\t ]*[#,\]}])/u, "number.hex"],
+            [/@numberDate(?=[\t ]*[#,\]}])/u, "number.date"],
+            [/@numberInteger(?![\t ]*\S+)/, "number"],
+            [/@numberFloat(?![\t ]*\S+)/, "number.float"],
+            [/@numberBinary(?![\t ]*\S+)/u, "number.binary"],
+            [/@numberOctal(?![\t ]*\S+)/, "number.octal"],
+            [/@numberHex(?![\t ]*\S+)/, "number.hex"],
+            [/@numberDate(?![\t ]*\S+)/, "number.date"],
         ],
     },
 }
