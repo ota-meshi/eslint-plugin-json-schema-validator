@@ -48,7 +48,7 @@ export function createRule(
                     {
                         target(lang: string | null, block: VueAST.VElement) {
                             if (lang) {
-                                return /^json(?:c|5)?$/i.test(lang)
+                                return /^json[5c]?$/i.test(lang)
                             }
                             return block.name === "i18n"
                         },

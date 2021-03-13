@@ -270,7 +270,7 @@ function errorToValidateError(
         }
         let result = ""
         for (const p of paths) {
-            if (/^[a-z_$][\w$]*$/iu.test(p)) {
+            if (/^[$_a-z][\w$]*$/iu.test(p)) {
                 if (result) {
                     result += `.${p}`
                 } else {
