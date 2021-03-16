@@ -60,10 +60,9 @@
     {
       "name": "Ansible Collection Galaxy",
       "description": "Ansible Collection Galaxy metadata",
-      "url": "https://json.schemastore.org/ansible-collection-galaxy",
+      "url": "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-galaxy.json",
       "fileMatch": [
-        "galaxy.yml",
-        "galaxy.yaml"
+        "galaxy.yml"
       ]
     },
     {
@@ -2735,9 +2734,10 @@
         "*gradle-enterprise.yml",
         "*gradle-enterprise.yaml"
       ],
-      "url": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-1.json",
+      "url": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-2.json",
       "versions": {
-        "1.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-1.json"
+        "1.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-1.json",
+        "2.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-2.json"
       }
     },
     {
