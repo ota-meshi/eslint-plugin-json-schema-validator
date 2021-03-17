@@ -33,12 +33,13 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
               if: success() && steps.updateSchemastore.outputs.updated == 1
-#             - name: Create Release
-#               id: create_release
-#               uses: actions/create-release@v1
-#               with:
-#                   tag_name: v${{ steps.updateSchemastore.outputs.version }}
-#                   body: Update schema store
-#               env:
-#                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#               if: success() && steps.updateSchemastore.outputs.updated == 1
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              with:
+                  tag_name: v${{ steps.updateSchemastore.outputs.version }}
+                  body: Update schema store
+                  commitish: main
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: success() && steps.updateSchemastore.outputs.updated == 1
