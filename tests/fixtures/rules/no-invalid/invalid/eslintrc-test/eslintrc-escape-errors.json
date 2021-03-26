@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"overrides[0]\" should have required property 'files'.",
+        "message": "\"overrides[0]\" must have required property 'files'.",
         "line": 4,
         "column": 9,
         "endLine": 7,

@@ -1,41 +1,41 @@
 [
     {
-        "message": "\"plugins[1]\" should be string.",
+        "message": "\"plugins[1]\" must be string.",
         "line": 6,
         "column": 6,
         "endLine": 7,
         "endColumn": 5
     },
     {
-        "message": "\"plugins[2]\" should be string.",
+        "message": "\"plugins[2]\" must be string.",
         "line": 7,
         "column": 6,
         "endLine": 8,
         "endColumn": 5
     },
     {
-        "message": "\"overrides[0].files\" should be string.",
+        "message": "\"overrides[0].files\" must be string.",
         "line": 10,
         "column": 7,
         "endLine": 10,
         "endColumn": 12
     },
     {
-        "message": "\"overrides[0].files\" should NOT have fewer than 1 items.",
+        "message": "\"overrides[0].files\" must NOT have fewer than 1 items.",
         "line": 10,
         "column": 7,
         "endLine": 10,
         "endColumn": 12
     },
     {
-        "message": "\"overrides[0].files\" should match exactly one schema in oneOf.",
+        "message": "\"overrides[0].files\" must match exactly one schema in oneOf.",
         "line": 10,
         "column": 7,
         "endLine": 10,
         "endColumn": 12
     },
     {
-        "message": "\"overrides[0].extends[1]\" should be string.",
+        "message": "\"overrides[0].extends[1]\" must be string.",
         "line": 13,
         "column": 12,
         "endLine": 14,

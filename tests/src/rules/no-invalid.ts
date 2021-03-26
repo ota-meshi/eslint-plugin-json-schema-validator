@@ -32,7 +32,7 @@ tester.run(
                             ],
                         },
                     ],
-                    errors: ['"extends[0]" should be string.'],
+                    errors: ['"extends[0]" must be string.'],
                 },
             ],
         },

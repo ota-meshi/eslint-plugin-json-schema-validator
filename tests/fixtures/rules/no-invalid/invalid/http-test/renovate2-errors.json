@@ -1,34 +1,34 @@
 [
     {
-        "message": "\"packageRules[0].matchUpdateTypes\" should be string.",
+        "message": "\"packageRules[0].matchUpdateTypes\" must be string.",
         "line": 6,
         "column": 13,
         "endLine": 6,
         "endColumn": 31
     },
     {
-        "message": "\"packageRules[0].matchUpdateTypes\" should be equal to \"major\", \"minor\", \"patch\", \"pin\", \"digest\", \"lockFileMaintenance\", \"rollback\" or \"bump\".",
+        "message": "\"packageRules[0].matchUpdateTypes\" must be equal to \"major\", \"minor\", \"patch\", \"pin\", \"digest\", \"lockFileMaintenance\", \"rollback\" or \"bump\".",
         "line": 6,
         "column": 13,
         "endLine": 6,
         "endColumn": 31
     },
     {
-        "message": "\"packageRules[0].matchUpdateTypes\" should match exactly one schema in oneOf.",
+        "message": "\"packageRules[0].matchUpdateTypes\" must match exactly one schema in oneOf.",
         "line": 6,
         "column": 13,
         "endLine": 6,
         "endColumn": 31
     },
     {
-        "message": "\"packageRules[0].matchUpdateTypes[4]\" should be string.",
+        "message": "\"packageRules[0].matchUpdateTypes[4]\" must be string.",
         "line": 6,
         "column": 69,
         "endLine": 6,
         "endColumn": 71
     },
     {
-        "message": "\"packageRules[0].matchUpdateTypes[4]\" should be equal to \"major\", \"minor\", \"patch\", \"pin\", \"digest\", \"lockFileMaintenance\", \"rollback\" or \"bump\".",
+        "message": "\"packageRules[0].matchUpdateTypes[4]\" must be equal to \"major\", \"minor\", \"patch\", \"pin\", \"digest\", \"lockFileMaintenance\", \"rollback\" or \"bump\".",
         "line": 6,
         "column": 69,
         "endLine": 6,

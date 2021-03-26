@@ -1,6 +1,6 @@
 [
     {
-        "message": "Root should be number.",
+        "message": "Root must be number.",
         "line": 2,
         "column": 1,
         "endLine": 2,

@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"str\" should be string.",
+        "message": "\"str\" must be string.",
         "line": 4,
         "column": 5,
         "endLine": 4,
