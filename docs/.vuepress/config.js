@@ -26,6 +26,7 @@ module.exports = {
                     child_process: require.resolve("./shim/empty"),
                     http: require.resolve("./shim/empty"),
                     https: require.resolve("./shim/empty"),
+                    "json-schema-migrate": require.resolve("./shim/empty"),
                     eslint: path.resolve(__dirname, "./shim/eslint"),
                     ajv: path.resolve(
                         require.resolve("eslint/package.json"),
