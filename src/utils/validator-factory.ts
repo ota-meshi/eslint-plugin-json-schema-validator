@@ -7,7 +7,7 @@ import type {
 import { URL } from "url"
 import type { RuleContext } from "../types"
 import Ajv from "./ajv"
-import { applyLimitNumberKeywords } from "./ajv-custom/limit-number"
+import { draft7 as migrateToDraft7 } from "json-schema-migrate"
 import { loadSchema } from "./schema"
 
 const ajv = new Ajv({
@@ -23,12 +23,6 @@ const ajv = new Ajv({
 // ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
 // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
 ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"))
-
-// Avoid exceptions due to incorrect schema.
-// See https://github.com/ajv-validator/ajv/blob/fcbca58748bbfd9e75fb2aba8c21a621a1d7be2a/lib/vocabularies/core/id.ts#L6
-ajv.removeKeyword("id")
-
-applyLimitNumberKeywords(ajv)
 
 /** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
 function unescapeFragment(str: string): string {
@@ -63,12 +57,32 @@ function schemaToValidator(
     context: RuleContext,
 ): Validator {
     let validateSchema: ValidateFunction
+
+    let schemaObject = schema
     // eslint-disable-next-line no-constant-condition -- ignore
     while (true) {
         try {
-            validateSchema = ajv.compile(schema)
+            if (
+                typeof schemaObject.$id === "string" &&
+                ajv.getSchema(schemaObject.$id.replace(/#$/u, ""))
+            ) {
+                ajv.removeSchema(schemaObject.$id.replace(/#$/u, ""))
+            }
+            validateSchema = ajv.compile(schemaObject)
         } catch (e) {
-            if (resolveError(e, schemaPath, schema, context)) {
+            if (
+                (e.message ===
+                    'NOT SUPPORTED: keyword "id", use "$id" for schema ID' ||
+                    /exclusive(?:Maximum|Minimum) value must be .*"number".*/u.test(
+                        e.message,
+                    )) &&
+                schema === schemaObject
+            ) {
+                schemaObject = JSON.parse(JSON.stringify(schemaObject))
+                migrateToDraft7(schemaObject)
+                continue
+            }
+            if (resolveError(e, schemaPath, schemaObject, context)) {
                 continue
             }
             throw e

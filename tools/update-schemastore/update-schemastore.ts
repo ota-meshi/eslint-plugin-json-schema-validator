@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import { draft7 as migrateToDraft7 } from "json-schema-migrate"
 import { get } from "../../src/utils/http-client"
 import { urlToSchemastoreFilePath } from "../../src/utils/schema"
 
@@ -43,7 +44,9 @@ async function fetchAndSave(url: string, isSchema: boolean): Promise<string> {
  * Reduce JSON Schema
  */
 function reduceSchema(text: string) {
-    return JSON.stringify(JSON.parse(text), (key, value) => {
+    const schema = JSON.parse(text)
+    migrateToDraft7(schema)
+    return JSON.stringify(schema, (key, value) => {
         if (key === "description" && typeof value === "string") {
             return undefined
         }

@@ -1,1 +1,1 @@
-{"title":"JSON schema for Azure Webjobs collection files","$schema":"http://json-schema.org/draft-04/schema#","type":"object","required":["WebJobs"],"properties":{"WebJobs":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"filePath":{"type":"string"}}}}}}
+{"title":"JSON schema for Azure Webjobs collection files","$schema":"http://json-schema.org/draft-07/schema","type":"object","required":["WebJobs"],"properties":{"WebJobs":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"filePath":{"type":"string"}}}}}}

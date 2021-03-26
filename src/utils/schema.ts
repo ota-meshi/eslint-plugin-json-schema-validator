@@ -4,6 +4,7 @@ import type { RuleContext } from "../types"
 import { syncGet, get } from "./http-client"
 import debugBuilder from "debug"
 import type { SchemaObject } from "./types"
+import { draft7 as migrateToDraft7 } from "json-schema-migrate"
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema")
 
 const TTL = 1000 * 60 * 60 * 24
@@ -42,8 +43,13 @@ export function loadSchema(
         }
         return loadSchemaFromURL(schemaPath, context)
     }
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-    return require(path.resolve(getCwd(context), schemaPath))
+    const json = fs.readFileSync(
+        path.resolve(getCwd(context), schemaPath),
+        "utf-8",
+    )
+    const schema = JSON.parse(json)
+    migrateToDraft7(schema)
+    return schema
 }
 
 /**
@@ -128,6 +134,8 @@ function postProcess(
         })
         return null
     }
+
+    migrateToDraft7(schema)
 
     fs.writeFileSync(
         jsonFilePath,

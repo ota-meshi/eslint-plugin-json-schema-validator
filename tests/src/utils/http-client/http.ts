@@ -1,4 +1,5 @@
 import assert from "assert"
+import { draft7 as migrateToDraft7 } from "json-schema-migrate"
 import { get, syncGet } from "../../../../src/utils/http-client"
 
 describe("HTTP GET.", () => {
@@ -28,7 +29,9 @@ describe("HTTP GET.", () => {
  * Reduce JSON Schema
  */
 function reduceSchema(text: string) {
-    return JSON.stringify(JSON.parse(text), (key, value) => {
+    const schema = JSON.parse(text)
+    migrateToDraft7(schema)
+    return JSON.stringify(schema, (key, value) => {
         if (key === "description" && typeof value === "string") {
             return undefined
         }
