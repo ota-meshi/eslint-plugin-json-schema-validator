@@ -1,13 +1,13 @@
 [
     {
-        "message": "\"num\" should be number.",
+        "message": "\"num\" must be number.",
         "line": 3,
         "column": 5,
         "endLine": 3,
         "endColumn": 8
     },
     {
-        "message": "\"str\" should be string.",
+        "message": "\"str\" must be string.",
         "line": 7,
         "column": 5,
         "endLine": 7,

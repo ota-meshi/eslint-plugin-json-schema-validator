@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"const\" should be equal to \"foo\".",
+        "message": "\"const\" must be equal to \"foo\".",
         "line": 3,
         "column": 5,
         "endLine": 3,

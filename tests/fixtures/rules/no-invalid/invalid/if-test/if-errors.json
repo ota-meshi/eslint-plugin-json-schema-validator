@@ -1,13 +1,13 @@
 [
     {
-        "message": "\"b\" should match \"else\" schema.",
+        "message": "\"b\" must match \"else\" schema.",
         "line": 8,
         "column": 5,
         "endLine": 8,
         "endColumn": 8
     },
     {
-        "message": "\"b.postal_code\" should match pattern \"[A-Z][0-9][A-Z] [0-9][A-Z][0-9]\".",
+        "message": "\"b.postal_code\" must match pattern \"[A-Z][0-9][A-Z] [0-9][A-Z][0-9]\".",
         "line": 11,
         "column": 9,
         "endLine": 11,

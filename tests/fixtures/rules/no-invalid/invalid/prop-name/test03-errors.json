@@ -1,20 +1,20 @@
 [
     {
-        "message": "\"escapes[\"/\"]\" should be number.",
+        "message": "\"escapes[\"/\"]\" must be number.",
         "line": 4,
         "column": 9,
         "endLine": 4,
         "endColumn": 12
     },
     {
-        "message": "\"escapes[\" \"]\" should be number.",
+        "message": "\"escapes[\" \"]\" must be number.",
         "line": 5,
         "column": 9,
         "endLine": 5,
         "endColumn": 12
     },
     {
-        "message": "\"escapes[\"~\"]\" should be number.",
+        "message": "\"escapes[\"~\"]\" must be number.",
         "line": 6,
         "column": 9,
         "endLine": 6,

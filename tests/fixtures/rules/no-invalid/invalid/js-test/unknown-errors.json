@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"enum2\" should be equal to \"a\", \"b\" or \"c\".",
+        "message": "\"enum2\" must be equal to \"a\", \"b\" or \"c\".",
         "line": 11,
         "column": 5,
         "endLine": 11,

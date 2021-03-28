@@ -45,13 +45,16 @@ async function fetchAndSave(url: string, isSchema: boolean): Promise<string> {
  */
 function reduceSchema(text: string) {
     const schema = JSON.parse(text)
-    migrateToDraft7(schema)
-    return JSON.stringify(schema, (key, value) => {
-        if (key === "description" && typeof value === "string") {
-            return undefined
-        }
-        return value
-    })
+    const omitted = JSON.parse(
+        JSON.stringify(schema, (key, value) => {
+            if (key === "description" && typeof value === "string") {
+                return undefined
+            }
+            return value
+        }),
+    )
+    migrateToDraft7(omitted)
+    return JSON.stringify(omitted)
 }
 
 /** Main */

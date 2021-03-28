@@ -1,34 +1,34 @@
 [
     {
-        "message": "\"escapes[\"\\n\"]\" should be number.",
+        "message": "\"escapes[\"\\n\"]\" must be number.",
         "line": 4,
         "column": 9,
         "endLine": 4,
         "endColumn": 13
     },
     {
-        "message": "\"escapes[\"\\r\"]\" should be number.",
+        "message": "\"escapes[\"\\r\"]\" must be number.",
         "line": 5,
         "column": 9,
         "endLine": 5,
         "endColumn": 13
     },
     {
-        "message": "\"escapes[\"\\f\"]\" should be number.",
+        "message": "\"escapes[\"\\f\"]\" must be number.",
         "line": 6,
         "column": 9,
         "endLine": 6,
         "endColumn": 13
     },
     {
-        "message": "\"escapes[\"\\t\"]\" should be number.",
+        "message": "\"escapes[\"\\t\"]\" must be number.",
         "line": 7,
         "column": 9,
         "endLine": 7,
         "endColumn": 13
     },
     {
-        "message": "\"escapes[\"[]\"]\" should be number.",
+        "message": "\"escapes[\"[]\"]\" must be number.",
         "line": 8,
         "column": 9,
         "endLine": 8,

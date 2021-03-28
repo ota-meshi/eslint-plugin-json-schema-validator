@@ -93,6 +93,7 @@ export function loadTestCases(
         )
         let errors
         try {
+            // writeFixtures(ruleName, inputFile, { force: true })
             errors = fs.readFileSync(errorFile, "utf8")
         } catch (e) {
             writeFixtures(ruleName, inputFile)

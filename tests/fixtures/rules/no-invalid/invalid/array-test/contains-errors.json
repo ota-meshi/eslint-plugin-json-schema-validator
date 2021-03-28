@@ -1,20 +1,20 @@
 [
     {
-        "message": "\"containsTest\" should contain at least 1 valid item(s).",
+        "message": "\"containsTest\" must contain at least 1 valid item(s).",
         "line": 3,
         "column": 5,
         "endLine": 3,
         "endColumn": 19
     },
     {
-        "message": "\"containsTest[0]\" should be number.",
+        "message": "\"containsTest[0]\" must be number.",
         "line": 3,
         "column": 22,
         "endLine": 3,
         "endColumn": 27
     },
     {
-        "message": "\"containsTest[1]\" should be number.",
+        "message": "\"containsTest[1]\" must be number.",
         "line": 3,
         "column": 29,
         "endLine": 3,

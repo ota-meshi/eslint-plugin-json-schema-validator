@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"maxItemsTest\" should NOT have more than 2 items.",
+        "message": "\"maxItemsTest\" must NOT have more than 2 items.",
         "line": 3,
         "column": 5,
         "endLine": 3,

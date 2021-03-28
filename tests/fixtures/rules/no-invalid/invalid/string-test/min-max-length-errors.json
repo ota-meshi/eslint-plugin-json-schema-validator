@@ -1,13 +1,13 @@
 [
     {
-        "message": "\"maxLength\" should NOT have more than 2 characters.",
+        "message": "\"maxLength\" must NOT have more than 2 characters.",
         "line": 3,
         "column": 5,
         "endLine": 3,
         "endColumn": 16
     },
     {
-        "message": "\"minLength\" should NOT have fewer than 2 characters.",
+        "message": "\"minLength\" must NOT have fewer than 2 characters.",
         "line": 4,
         "column": 5,
         "endLine": 4,

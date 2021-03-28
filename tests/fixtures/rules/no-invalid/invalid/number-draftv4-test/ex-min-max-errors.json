@@ -1,13 +1,13 @@
 [
     {
-        "message": "\"exclusiveMaximum\" should be < 100.",
+        "message": "\"exclusiveMaximum\" must be < 100.",
         "line": 3,
         "column": 5,
         "endLine": 3,
         "endColumn": 23
     },
     {
-        "message": "\"exclusiveMinimum\" should be > 10.",
+        "message": "\"exclusiveMinimum\" must be > 10.",
         "line": 4,
         "column": 5,
         "endLine": 4,

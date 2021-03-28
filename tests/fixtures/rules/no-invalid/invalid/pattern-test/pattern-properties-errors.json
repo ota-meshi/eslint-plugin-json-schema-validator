@@ -1,13 +1,13 @@
 [
     {
-        "message": "\"patternProperties[456]\" should be number.",
+        "message": "\"patternProperties[456]\" must be number.",
         "line": 6,
         "column": 9,
         "endLine": 6,
         "endColumn": 14
     },
     {
-        "message": "\"patternProperties.def\" should be string.",
+        "message": "\"patternProperties.def\" must be string.",
         "line": 7,
         "column": 9,
         "endLine": 7,

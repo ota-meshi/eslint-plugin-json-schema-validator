@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"npmAlwaysAuth\" should be boolean.",
+        "message": "\"npmAlwaysAuth\" must be boolean.",
         "line": 3,
         "column": 5,
         "endLine": 3,

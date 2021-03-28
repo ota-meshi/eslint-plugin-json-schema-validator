@@ -26,7 +26,8 @@
         "preversion": "npm test && git add .",
         "version": "env-cmd -e version npm run update && git add .",
         "update:schemastore": "ts-node tools/update-schemastore",
-        "update:schemastore-only": "ts-node tools/update-schemastore/only"
+        "update:schemastore-only": "ts-node tools/update-schemastore/only",
+        "re-migrate": "ts-node tools/update-schemastore/re-migrate.ts"
     },
     "repository": {
         "type": "git",
@@ -51,10 +52,10 @@
         "eslint": ">=6.0.0"
     },
     "dependencies": {
-        "ajv": "^7.0.0",
+        "ajv": "^8.0.0",
         "debug": "^4.3.1",
         "eslint-utils": "^2.1.0",
-        "json-schema-migrate": "^1.1.0",
+        "json-schema-migrate": "^2.0.0",
         "jsonc-eslint-parser": "^1.0.0",
         "minimatch": "^3.0.4",
         "toml-eslint-parser": "^0.2.1",
@@ -98,7 +99,7 @@
         "raw-loader": "^4.0.1",
         "request": "^2.88.2",
         "semver": "^7.3.2",
-        "stylelint": "^13.6.1",
+        "stylelint": "^13.12.0",
         "stylelint-config-standard": "^21.0.0",
         "stylelint-plugin-stylus": "^0.10.0",
         "ts-node": "^9.0.0",

@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"pattern\" should match pattern \"^\\d+$\".",
+        "message": "\"pattern\" must match pattern \"^\\d+$\".",
         "line": 3,
         "column": 5,
         "endLine": 3,

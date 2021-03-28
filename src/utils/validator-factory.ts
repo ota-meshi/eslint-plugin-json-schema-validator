@@ -167,12 +167,12 @@ function errorToValidateError(
 ): ValidateError {
     const error: DefinedError = errorObject as DefinedError
 
-    const dataPath = error.dataPath.startsWith("/")
-        ? error.dataPath.slice(1)
-        : error.dataPath
-    // console.log(dataPath)
-    const path: string[] = dataPath
-        ? dataPath.split("/").map(unescapeFragment)
+    const instancePath = error.instancePath.startsWith("/")
+        ? error.instancePath.slice(1)
+        : error.instancePath
+    // console.log(instancePath)
+    const path: string[] = instancePath
+        ? instancePath.split("/").map(unescapeFragment)
         : []
 
     if (error.keyword === "additionalProperties") {
@@ -191,7 +191,7 @@ function errorToValidateError(
         }
     }
     if (error.keyword === "uniqueItems") {
-        const baseMessage = `should NOT have duplicate items (items ## ${error.params.j} and ${error.params.i} are identical)`
+        const baseMessage = `must NOT have duplicate items (items ## ${error.params.j} and ${error.params.i} are identical)`
         return {
             message: `${joinPath(path)} ${baseMessage}.`,
             path: [...path, String(error.params.i)],
@@ -199,11 +199,11 @@ function errorToValidateError(
     }
     let baseMessage: string
     if (error.keyword === "enum") {
-        baseMessage = `should be equal to ${joinEnums(
+        baseMessage = `must be equal to ${joinEnums(
             error.params.allowedValues,
         )}`
     } else if (error.keyword === "const") {
-        baseMessage = `should be equal to ${JSON.stringify(
+        baseMessage = `must be equal to ${JSON.stringify(
             error.params.allowedValue,
         )}`
     } else if (error.keyword === "not") {
@@ -212,40 +212,40 @@ function errorToValidateError(
         const schemaKeys = Object.keys(schema)
         if (schemaKeys.length === 1 && schemaKeys[0] === "type") {
             // { type: "foo" }
-            baseMessage = `should NOT be ${schema.type}`
+            baseMessage = `must NOT be ${schema.type}`
         } else if (schemaKeys.length === 1 && schemaKeys[0] === "enum") {
             // { enum: ["foo"] }
-            baseMessage = `should NOT be equal to ${joinEnums(schema.enum)}`
+            baseMessage = `must NOT be equal to ${joinEnums(schema.enum)}`
         } else {
-            baseMessage = `should NOT be valid of define schema`
+            baseMessage = `must NOT be valid of define schema`
         }
     } else if (
-        error.keyword === "type" || // should be X
-        error.keyword === "oneOf" || // should match exactly one schema in oneOf
-        error.keyword === "anyOf" || // should match some schema in anyOf
+        error.keyword === "type" || // must be X
+        error.keyword === "oneOf" || // must match exactly one schema in oneOf
+        error.keyword === "anyOf" || // must match some schema in anyOf
         // array
-        error.keyword === "minItems" || // should NOT have fewer than X items
-        error.keyword === "maxItems" || // should NOT have more than X items
-        error.keyword === "additionalItems" || // should NOT have more than X items
-        error.keyword === "contains" || // should contain at least 1 valid item(s)
+        error.keyword === "minItems" || // must NOT have fewer than X items
+        error.keyword === "maxItems" || // must NOT have more than X items
+        error.keyword === "additionalItems" || // must NOT have more than X items
+        error.keyword === "contains" || // must contain at least 1 valid item(s)
         // object
-        error.keyword === "required" || // should have required property 'X'
-        error.keyword === "maxProperties" || // should NOT have more than X items
-        error.keyword === "minProperties" || // should NOT have fewer than X items
-        error.keyword === "dependencies" || // should have property X when property Y is present
+        error.keyword === "required" || // must have required property 'X'
+        error.keyword === "maxProperties" || // must NOT have more than X items
+        error.keyword === "minProperties" || // must NOT have fewer than X items
+        error.keyword === "dependencies" || // must have property X when property Y is present
         // string
-        error.keyword === "pattern" || // should match pattern "X"
-        error.keyword === "maxLength" || // should NOT have more than X characters
-        error.keyword === "minLength" || // should NOT have fewer than X characters
+        error.keyword === "pattern" || // must match pattern "X"
+        error.keyword === "maxLength" || // must NOT have more than X characters
+        error.keyword === "minLength" || // must NOT have fewer than X characters
         error.keyword === "format" ||
         // number
-        error.keyword === "maximum" || // should be <= X
-        error.keyword === "minimum" || // should be >= X
-        error.keyword === "exclusiveMaximum" || // should be < X
-        error.keyword === "exclusiveMinimum" || // should be > X
-        error.keyword === "multipleOf" || // should be multiple of X
+        error.keyword === "maximum" || // must be <= X
+        error.keyword === "minimum" || // must be >= X
+        error.keyword === "exclusiveMaximum" || // must be < X
+        error.keyword === "exclusiveMinimum" || // must be > X
+        error.keyword === "multipleOf" || // must be multiple of X
         // other
-        error.keyword === "if" // should match "X" schema
+        error.keyword === "if" // must match "X" schema
     ) {
         // Use error.message
         baseMessage = error.message!

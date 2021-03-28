@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"b.b.b\" should be number.",
+        "message": "\"b.b.b\" must be number.",
         "line": 3,
         "column": 15,
         "endLine": 3,

@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"a.a.null\" should be number.",
+        "message": "\"a.a.null\" must be number.",
         "line": 4,
         "column": 9,
         "endLine": 4,
