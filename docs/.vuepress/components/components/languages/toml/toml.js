@@ -20,7 +20,7 @@ export const language = {
             { include: "@inlineCollections" },
             // Key=Value pair
             [
-                /(".*?"|'.*?'|.*?)([\t ]*)(=)(\s*|$)/,
+                /(".*?"|'.*?'|.*?)([\t ]*)(=)(\s+|$)/,
                 ["type", "white", "operators", "white"],
             ],
             { include: "@numbers" },
