@@ -6,7 +6,7 @@ export const language = {
         { token: "delimiter.square", open: "[", close: "]" },
     ],
     keywords: ["true", "false", "nan", "+nan", "-nan", "inf", "+inf", "-inf"],
-    numberInteger: /(?:0|[+-]?\d+[\d_]*)/,
+    numberInteger: /0|[+-]?\d+[\d_]*/,
     numberFloat: /(?:0|[+-]?\d+[\d_]*)(?:\.\d+)?(?:e[+-]?[1-9]\d*)?/,
     numberOctal: /0o[0-7]+[0-7_]*/,
     numberHex: /0x[\dA-Fa-f]+[\dA-F_a-f]*/,
