@@ -263,7 +263,7 @@ function getConfig(ruleName: string, inputFile: string) {
     }
     // inline config
     const configStr = hashComment
-        ? /^#([^\n]+?)\n/u.exec(code0)
+        ? /^#([^\n]+)\n/u.exec(code0)
         : blockComment
         ? /^\/\*(.*?)\*\//u.exec(code0)
         : /^<!--(.*?)-->/u.exec(code0)
@@ -272,7 +272,7 @@ function getConfig(ruleName: string, inputFile: string) {
         throw new Error("missing config")
     } else {
         code = hashComment
-            ? code0.replace(/^#([^\n]+?)\n/u, `# ${filename}\n`)
+            ? code0.replace(/^#([^\n]+)\n/u, `# ${filename}\n`)
             : blockComment
             ? code0.replace(/^\/\*(.*?)\*\//u, `# ${filename}\n`)
             : code0.replace(/^<!--(.*?)-->/u, `<!--${filename}-->`)
