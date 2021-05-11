@@ -26,8 +26,7 @@ tester.run(
                             schemas: [
                                 {
                                     fileMatch: [".eslintrc.*"],
-                                    schema:
-                                        "https://json.schemastore.org/eslintrc",
+                                    schema: "https://json.schemastore.org/eslintrc",
                                 },
                             ],
                         },

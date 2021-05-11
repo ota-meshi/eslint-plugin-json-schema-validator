@@ -42,59 +42,68 @@ export function createRule(
                     "function" &&
                 path.extname(filename) === ".vue"
             ) {
-                const jsonVisitor = context.parserServices.defineCustomBlocksVisitor(
-                    context,
-                    jsoncESLintParser,
-                    {
-                        target(lang: string | null, block: VueAST.VElement) {
-                            if (lang) {
-                                return /^json[5c]?$/i.test(lang)
-                            }
-                            return block.name === "i18n"
+                const jsonVisitor =
+                    context.parserServices.defineCustomBlocksVisitor(
+                        context,
+                        jsoncESLintParser,
+                        {
+                            target(
+                                lang: string | null,
+                                block: VueAST.VElement,
+                            ) {
+                                if (lang) {
+                                    return /^json[5c]?$/i.test(lang)
+                                }
+                                return block.name === "i18n"
+                            },
+                            create(blockContext: RuleContext) {
+                                return rule.create(blockContext, {
+                                    customBlock: true,
+                                    filename: getBlockFileName(
+                                        blockContext.parserServices
+                                            .customBlock!,
+                                        "json",
+                                    ),
+                                })
+                            },
                         },
-                        create(blockContext: RuleContext) {
-                            return rule.create(blockContext, {
-                                customBlock: true,
-                                filename: getBlockFileName(
-                                    blockContext.parserServices.customBlock!,
-                                    "json",
-                                ),
-                            })
+                    )
+                const yamlVisitor =
+                    context.parserServices.defineCustomBlocksVisitor(
+                        context,
+                        yamlESLintParser,
+                        {
+                            target: ["yaml", "yml"],
+                            create(blockContext: RuleContext) {
+                                return rule.create(blockContext, {
+                                    customBlock: true,
+                                    filename: getBlockFileName(
+                                        blockContext.parserServices
+                                            .customBlock!,
+                                        "yaml",
+                                    ),
+                                })
+                            },
                         },
-                    },
-                )
-                const yamlVisitor = context.parserServices.defineCustomBlocksVisitor(
-                    context,
-                    yamlESLintParser,
-                    {
-                        target: ["yaml", "yml"],
-                        create(blockContext: RuleContext) {
-                            return rule.create(blockContext, {
-                                customBlock: true,
-                                filename: getBlockFileName(
-                                    blockContext.parserServices.customBlock!,
-                                    "yaml",
-                                ),
-                            })
+                    )
+                const tomlVisitor =
+                    context.parserServices.defineCustomBlocksVisitor(
+                        context,
+                        tomlESLintParser,
+                        {
+                            target: ["toml"],
+                            create(blockContext: RuleContext) {
+                                return rule.create(blockContext, {
+                                    customBlock: true,
+                                    filename: getBlockFileName(
+                                        blockContext.parserServices
+                                            .customBlock!,
+                                        "toml",
+                                    ),
+                                })
+                            },
                         },
-                    },
-                )
-                const tomlVisitor = context.parserServices.defineCustomBlocksVisitor(
-                    context,
-                    tomlESLintParser,
-                    {
-                        target: ["toml"],
-                        create(blockContext: RuleContext) {
-                            return rule.create(blockContext, {
-                                customBlock: true,
-                                filename: getBlockFileName(
-                                    blockContext.parserServices.customBlock!,
-                                    "toml",
-                                ),
-                            })
-                        },
-                    },
-                )
+                    )
 
                 return compositingVisitors(
                     visitor,

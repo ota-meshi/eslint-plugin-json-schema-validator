@@ -32,10 +32,8 @@ module.exports = {
                         require.resolve("eslint/package.json"),
                         "../node_modules/ajv",
                     ),
-                    [path.resolve(
-                        __dirname,
-                        "../../lib/utils/ajv",
-                    )]: path.resolve(__dirname, "../../node_modules/ajv"),
+                    [path.resolve(__dirname, "../../lib/utils/ajv")]:
+                        path.resolve(__dirname, "../../node_modules/ajv"),
                 },
             },
         }
