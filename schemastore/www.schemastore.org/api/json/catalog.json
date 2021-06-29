@@ -658,6 +658,14 @@
       "url": "https://raw.githubusercontent.com/mozilla/contribute.json/master/schema.json"
     },
     {
+      "name": "crowdin.yml",
+      "description": "A JSON schema to configure Crowdin, a crowd-translation platform. See https://support.crowdin.com/configuration-file/.",
+      "fileMatch": [
+        "**/crowdin.yml"
+      ],
+      "url": "https://json.schemastore.org/crowdin.json"
+    },
+    {
       "name": "cypress.json",
       "description": "Cypress.io test runner configuration file",
       "fileMatch": [
@@ -1438,6 +1446,14 @@
       "url": "https://json.schemastore.org/kustomization.json"
     },
     {
+      "name": "label-commenter-config.yml",
+      "description": "A JSON schema for the configuration of the Label Commenter GitHub Action",
+      "fileMatch": [
+        ".github/label-commenter-config.yml"
+      ],
+      "url": "https://json.schemastore.org/label-commenter-config.json"
+    },
+    {
       "name": "launchsettings.json",
       "description": "A JSON schema for the ASP.NET LaunchSettings.json files",
       "fileMatch": [
@@ -1452,6 +1468,15 @@
         "lerna.json"
       ],
       "url": "https://json.schemastore.org/lerna.json"
+    },
+    {
+      "name": "lgtm.yml",
+      "description": "A JSON schema for lgtm configuration files",
+      "fileMatch": [
+        "lgtm.yml",
+        ".lgtm.yml"
+      ],
+      "url": "https://json.schemastore.org/lgtm.json"
     },
     {
       "name": "libman.json",
@@ -2129,6 +2154,14 @@
       "url": "https://schema.stackhead.io/stackhead/tag/v1/-/project-definition.schema.json"
     },
     {
+      "name": "Stale",
+      "description": "Configuration file for Stale for closing abandoned issues and pull requests. See https://probot.github.io/apps/stale/.",
+      "fileMatch": [
+        ".github/stale.yml"
+      ],
+      "url": "https://json.schemastore.org/stale.json"
+    },
+    {
       "name": "Stryker Mutator",
       "description": "Configuration file for Stryker Mutator, the mutation testing framework for JavaScript and friends. See https://stryker-mutator.io.",
       "fileMatch": [
@@ -2194,17 +2227,17 @@
       "name": "tmLanguage",
       "description": "Language grammar description files in Textmate and compatible editors",
       "fileMatch": [
-        "testEnvironments.json"
+        "*.tmLanguage.json"
       ],
-      "url": "https://json.schemastore.org/testenvironments.json"
+      "url": "https://raw.githubusercontent.com/Septh/tmlanguage/master/tmLanguage.schema.json"
     },
     {
       "name": "TestEnvironment.json",
       "description": "Schema for Visual Studio's test environment config",
       "fileMatch": [
-        "*.tmLanguage.json"
+        "testEnvironments.json"
       ],
-      "url": "https://raw.githubusercontent.com/Septh/tmlanguage/master/tmLanguage.schema.json"
+      "url": "https://json.schemastore.org/testenvironments.json"
     },
     {
       "name": ".travis.yml",
