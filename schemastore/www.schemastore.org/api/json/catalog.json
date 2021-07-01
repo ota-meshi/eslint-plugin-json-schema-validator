@@ -1892,6 +1892,14 @@
       "url": "https://json.schemastore.org/proxies.json"
     },
     {
+      "name": "publiccode.yml",
+      "description": "JSON schema for publiccode.yml",
+      "fileMatch": [
+        "publiccode.yml"
+      ],
+      "url": "https://json.schemastore.org/publiccode.json"
+    },
+    {
       "name": "pubspec.yaml",
       "description": "Schema for pubspecs, the format used by Dart's dependency manager",
       "fileMatch": [
@@ -1906,6 +1914,17 @@
         "pyrseas-0.8.json"
       ],
       "url": "https://json.schemastore.org/pyrseas-0.8.json"
+    },
+    {
+      "name": "Read the Docs",
+      "description": "Read the Docs configuration file",
+      "fileMatch": [
+        "readthedocs.yml",
+        "readthedocs.yaml",
+        ".readthedocs.yml",
+        ".readthedocs.yaml"
+      ],
+      "url": "https://raw.githubusercontent.com/readthedocs/readthedocs.org/master/readthedocs/rtd_tests/fixtures/spec/v2/schema.json"
     },
     {
       "name": "Red-DiscordBot Сog",
@@ -2183,7 +2202,8 @@
       "description": "Configuration file for stylelint",
       "fileMatch": [
         ".stylelintrc",
-        "stylelintrc.json",
+        ".stylelintrc.yml",
+        ".stylelintrc.yaml",
         ".stylelintrc.json"
       ],
       "url": "https://json.schemastore.org/stylelintrc.json"
