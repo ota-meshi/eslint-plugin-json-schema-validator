@@ -130,6 +130,14 @@
       "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"
     },
     {
+      "name": "artifacthub-repo.yml",
+      "description": "Artifact Hub repository metadata file",
+      "fileMatch": [
+        "artifact-hub.yml"
+      ],
+      "url": "https://json.schemastore.org/artifacthub-repo.json"
+    },
+    {
       "name": "Avro Avsc",
       "description": "Avro Schema Avsc file",
       "fileMatch": [
@@ -436,6 +444,22 @@
       "name": "CityJSON",
       "description": "Schema for the representation of 3D city models",
       "url": "https://raw.githubusercontent.com/cityjson/specs/1.0.1/schemas/cityjson.min.schema.json"
+    },
+    {
+      "name": "Helm Chart.yaml",
+      "description": "The Chart.yaml file is required for a chart.",
+      "fileMatch": [
+        "Chart.yaml"
+      ],
+      "url": "https://json.schemastore.org/chart.json"
+    },
+    {
+      "name": "Helm Chart.lock",
+      "description": "The Chart.lock file locks dependencies from Chart.yaml",
+      "fileMatch": [
+        "Chart.lock"
+      ],
+      "url": "https://json.schemastore.org/chart-lock.json"
     },
     {
       "name": "CircleCI config.yml",
@@ -1809,6 +1833,17 @@
         "plugin.yml"
       ],
       "url": "https://json.schemastore.org/pocketmine-plugin.json"
+    },
+    {
+      "name": "PostCSS .prettierrc",
+      "description": "PostCSS configuration file",
+      "fileMatch": [
+        ".postcssrc",
+        ".postcssrc.json",
+        ".postcssrc.yaml",
+        ".postcssrc.yml"
+      ],
+      "url": "https://json.schemastore.org/postcssrc.json"
     },
     {
       "name": ".pre-commit-config.yml",
