@@ -34,7 +34,7 @@ import type { SchemaObject } from "../utils/types"
 function matchFile(filename: string, fileMatch: string[]) {
     return (
         fileMatch.includes(path.basename(filename)) ||
-        fileMatch.some((fm) => minimatch(filename, fm))
+        fileMatch.some((fm) => minimatch(filename, fm, { dot: true }))
     )
 }
 
@@ -183,7 +183,7 @@ export default createRule("no-invalid", {
         const validator = parseOption(
             context.options[0] || {},
             context,
-            filename.startsWith(cwd) ? filename.slice(cwd.length) : filename,
+            filename.startsWith(cwd) ? path.relative(cwd, filename) : filename,
         )
 
         if (!validator) {

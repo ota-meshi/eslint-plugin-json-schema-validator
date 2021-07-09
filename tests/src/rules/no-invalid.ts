@@ -1,3 +1,4 @@
+import path from "path"
 import { RuleTester } from "eslint"
 import rule from "../../../src/rules/no-invalid"
 import { loadTestCases } from "../../utils/utils"
@@ -29,6 +30,22 @@ tester.run(
                                     schema: "https://json.schemastore.org/eslintrc",
                                 },
                             ],
+                        },
+                    ],
+                    errors: ['"extends[0]" must be string.'],
+                },
+                {
+                    filename: path.join(__dirname, ".eslintrc.js"),
+                    code: '{ "extends": [ 42 ] }',
+                    options: [
+                        {
+                            schemas: [
+                                {
+                                    fileMatch: ["tests/src/rules/.eslintrc.js"],
+                                    schema: "https://json.schemastore.org/eslintrc",
+                                },
+                            ],
+                            useSchemastoreCatalog: false,
                         },
                     ],
                     errors: ['"extends[0]" must be string.'],
