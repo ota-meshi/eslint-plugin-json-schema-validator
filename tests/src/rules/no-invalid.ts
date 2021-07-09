@@ -27,8 +27,7 @@ tester.run(
                             schemas: [
                                 {
                                     fileMatch: [".eslintrc.*"],
-                                    schema:
-                                        "https://json.schemastore.org/eslintrc",
+                                    schema: "https://json.schemastore.org/eslintrc",
                                 },
                             ],
                         },
@@ -43,10 +42,10 @@ tester.run(
                             schemas: [
                                 {
                                     fileMatch: ["tests/src/rules/.eslintrc.js"],
-                                    schema:
-                                        "https://json.schemastore.org/eslintrc",
+                                    schema: "https://json.schemastore.org/eslintrc",
                                 },
                             ],
+                            useSchemastoreCatalog: false,
                         },
                     ],
                     errors: ['"extends[0]" must be string.'],
