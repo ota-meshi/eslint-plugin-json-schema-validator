@@ -60,7 +60,7 @@
         "minimatch": "^3.0.4",
         "toml-eslint-parser": "^0.2.1",
         "tunnel-agent": "^0.6.0",
-        "yaml-eslint-parser": "^0.3.2"
+        "yaml-eslint-parser": "^0.4.0"
     },
     "devDependencies": {
         "@actions/core": "^1.2.6",
