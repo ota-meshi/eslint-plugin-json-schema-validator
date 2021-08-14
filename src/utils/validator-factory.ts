@@ -291,7 +291,7 @@ function errorToValidateError(
                     result = p
                 }
             } else {
-                result += `[${/^\d+$/iu.test(p) ? p : JSON.stringify(p)}]`
+                result += `[${/^\d+$/u.test(p) ? p : JSON.stringify(p)}]`
             }
         }
         return `"${result}"`

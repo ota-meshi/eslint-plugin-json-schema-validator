@@ -6,11 +6,11 @@ export const language = {
         { token: "delimiter.square", open: "[", close: "]" },
     ],
     keywords: ["true", "false", "nan", "+nan", "-nan", "inf", "+inf", "-inf"],
-    numberInteger: /0|[+-]?\d+[\d_]*/,
-    numberFloat: /(?:0|[+-]?\d+[\d_]*)(?:\.\d+)?(?:e[+-]?[1-9]\d*)?/,
-    numberOctal: /0o[0-7]+[0-7_]*/,
-    numberHex: /0x[\dA-Fa-f]+[\dA-F_a-f]*/,
-    numberBinary: /0b[01]+[01_]*/,
+    numberInteger: /0|[+-]?\d[\d_]*/,
+    numberFloat: /(?:0|[+-]?\d[\d_]*)(?:\.\d+)?(?:e[+-]?[1-9]\d*)?/,
+    numberOctal: /0o[0-7][0-7_]*/,
+    numberHex: /0x[\dA-Fa-f][\dA-F_a-f]*/,
+    numberBinary: /0b[01][01_]*/,
     numberDate:
         /\d{4}-\d{2}-\d{2}([ Tt]\d{2}:\d{2}:\d{2}(\.\d+)?(( ?[+-]\d{1,2}(:\d{2})?)|Z)?)?/,
     escapes: /\\["\\bfnrt]/,
@@ -21,6 +21,7 @@ export const language = {
             { include: "@inlineCollections" },
             // Key=Value pair
             [
+                // eslint-disable-next-line regexp/no-super-linear-backtracking -- ignore
                 /(".*?"|'.*?'|.*?)([\t ]*)(=)(\s+|$)/,
                 ["type", "white", "operators", "white"],
             ],
@@ -126,12 +127,12 @@ export const language = {
             [/@numberBinary(?=[\t ]*[#,\]}])/u, "number.binary"],
             [/@numberHex(?=[\t ]*[#,\]}])/u, "number.hex"],
             [/@numberDate(?=[\t ]*[#,\]}])/u, "number.date"],
-            [/@numberInteger(?![\t ]*\S+)/, "number"],
-            [/@numberFloat(?![\t ]*\S+)/, "number.float"],
-            [/@numberBinary(?![\t ]*\S+)/u, "number.binary"],
-            [/@numberOctal(?![\t ]*\S+)/, "number.octal"],
-            [/@numberHex(?![\t ]*\S+)/, "number.hex"],
-            [/@numberDate(?![\t ]*\S+)/, "number.date"],
+            [/@numberInteger(?![\t ]*\S)/, "number"],
+            [/@numberFloat(?![\t ]*\S)/, "number.float"],
+            [/@numberBinary(?![\t ]*\S)/u, "number.binary"],
+            [/@numberOctal(?![\t ]*\S)/, "number.octal"],
+            [/@numberHex(?![\t ]*\S)/, "number.hex"],
+            [/@numberDate(?![\t ]*\S)/, "number.date"],
         ],
     },
 }
