@@ -104,7 +104,7 @@ function loadSchemaFromURL(
     try {
         json = syncGet(schemaUrl, httpRequestOptions, httpGetModulePath)
     } catch (e) {
-        debug(e.message)
+        debug((e as Error).message)
         // context.report({
         //     loc: { line: 1, column: 0 },
         //     message: `Could not be resolved: "${schemaPath}"`,

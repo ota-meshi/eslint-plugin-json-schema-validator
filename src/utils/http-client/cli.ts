@@ -18,7 +18,7 @@ async function main() {
         console.log(result)
     } catch (e) {
         // eslint-disable-next-line no-console -- CLI
-        console.error(e.message)
+        console.error((e as Error).message)
         // eslint-disable-next-line no-process-exit -- CLI
         process.exit(1)
     }

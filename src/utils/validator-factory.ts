@@ -71,10 +71,10 @@ function schemaToValidator(
             validateSchema = ajv.compile(schemaObject)
         } catch (e) {
             if (
-                (e.message ===
+                ((e as Error).message ===
                     'NOT SUPPORTED: keyword "id", use "$id" for schema ID' ||
                     /exclusive(?:Maximum|Minimum) value must be .*"number".*/u.test(
-                        e.message,
+                        (e as Error).message,
                     )) &&
                 schema === schemaObject
             ) {
