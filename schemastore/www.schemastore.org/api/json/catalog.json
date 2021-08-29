@@ -131,6 +131,12 @@
       "url": "https://json.schemastore.org/appveyor.json"
     },
     {
+      "name": "architect.yml",
+      "description": "Architect.io Component Schema",
+      "fileMatch": ["architect.yml", "architect.yaml"],
+      "url": "https://raw.githubusercontent.com/architect-team/architect-cli/master/src/dependency-manager/schema/architect.schema.json"
+    },
+    {
       "name": "arc.json",
       "description": "A JSON schema for OpenJS Architect",
       "fileMatch": [
@@ -288,6 +294,14 @@
         "datamodel.beef.yaml",
         "datamodel.beef.yml",
         "datamodel.beef.json"
+      ]
+    },
+    {
+      "name": "bigquery-table",
+      "description": "BigQuery table schema",
+      "url": "https://json.schemastore.org/bigquery-table.json",
+      "fileMatch": [
+        "*.bigquery.json"
       ]
     },
     {
