@@ -666,7 +666,7 @@
         "cloudformation.yml",
         "cloudformation.yaml"
       ],
-      "url": "https://raw.githubusercontent.com/awslabs/goformation/v4.18.2/schema/cloudformation.schema.json"
+      "url": "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/cloudformation.schema.json"
     },
     {
       "name": "AWS CloudFormation Serverless Application Model (SAM)",
@@ -680,7 +680,7 @@
         "sam.yml",
         "sam.yaml"
       ],
-      "url": "https://raw.githubusercontent.com/awslabs/goformation/v4.18.2/schema/sam.schema.json"
+      "url": "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/sam.schema.json"
     },
     {
       "name": "Citation File Format",
@@ -848,6 +848,11 @@
         "detekt.yaml"
       ],
       "url": "https://json.schemastore.org/detekt.json"
+    },
+    {
+      "name": "Discord Webhook",
+      "description": "Execute Discord Webhook JSON Schema",
+      "url": "https://raw.githubusercontent.com/barraIhsan/json-schema/master/discord/webhook.json"
     },
     {
       "name": "docfx.json",
@@ -1383,15 +1388,15 @@
       "url": "https://json.schemastore.org/htmlhint.json"
     },
     {
-      "name": "hydra.yml",
-      "description": "ORY Hydra configuration file",
+      "name": "Ory Hydra configuration",
+      "description": "Schema for Ory Hydra configuration file",
       "fileMatch": [
         "hydra.json",
         "hydra.yml",
         "hydra.yaml",
         "hydra.toml"
       ],
-      "url": "https://raw.githubusercontent.com/ory/hydra/v1.10.6/.schema/version.schema.json"
+      "url": "https://raw.githubusercontent.com/ory/hydra/master/.schema/version.schema.json"
     },
     {
       "name": "imageoptimizer.json",
@@ -1565,15 +1570,15 @@
       }
     },
     {
-      "name": "keto.yml",
-      "description": "ORY Keto configuration file",
+      "name": "Ory Keto configuration",
+      "description": "Schema for Ory Keto configuration file",
       "fileMatch": [
         "keto.json",
         "keto.yml",
         "keto.yaml",
         "keto.toml"
       ],
-      "url": "https://raw.githubusercontent.com/ory/keto/master/.schema/config.schema.json"
+      "url": "https://raw.githubusercontent.com/ory/keto/master/.schema/version.schema.json"
     },
     {
       "name": "kustomization.yaml",
@@ -1893,15 +1898,15 @@
       ]
     },
     {
-      "name": "oathkeeper.yml",
-      "description": "ORY Oathkeeper configuration file",
+      "name": "Ory Oathkeeper configuration",
+      "description": "Schema for Ory Oathkeeper configuration file",
       "fileMatch": [
         "oathkeeper.json",
         "oathkeeper.yml",
         "oathkeeper.yaml",
         "oathkeeper.toml"
       ],
-      "url": "https://raw.githubusercontent.com/ory/oathkeeper/master/.schemas/config.schema.json"
+      "url": "https://raw.githubusercontent.com/ory/oathkeeper/master/.schema/version.schema.json"
     },
     {
       "name": "ocelot.json",
@@ -1966,12 +1971,13 @@
       "url": "https://raw.githubusercontent.com/outblocks/outblocks-cli/master/schema/schema-table.json"
     },
     {
-      "name": "kratos.yml",
-      "description": "ORY Kratos configuration file",
+      "name": "Ory Kratos configuration",
+      "description": "Schema for Ory Kratos configuration file",
       "fileMatch": [
         "kratos.json",
         "kratos.yml",
-        "kratos.yaml"
+        "kratos.yaml",
+        "kratos.toml"
       ],
       "url": "https://raw.githubusercontent.com/ory/kratos/master/.schema/version.schema.json"
     },
@@ -2537,6 +2543,15 @@
       "url": "https://json.schemastore.org/stylelintrc.json"
     },
     {
+      "name": "SWADL",
+      "description": "Symphony Workflow Automation Definition Language. See https://developers.symphony.com/",
+      "fileMatch": [
+        "*.swadl.yaml",
+        "*.swadl.yml"
+      ],
+      "url": "https://raw.githubusercontent.com/SymphonyPlatformSolutions/symphony-wdk/master/workflow-language/src/main/resources/swadl-schema-1.0.json"
+    },
+    {
       "name": "Swagger API 2.0",
       "description": "Swagger API 2.0 schema",
       "fileMatch": [
@@ -2570,6 +2585,14 @@
         "templatesources.json"
       ],
       "url": "https://json.schemastore.org/templatesources.json"
+    },
+    {
+      "name": "theme.json v1",
+      "description": "WordPress block theme global settings and styles configuration file version 1",
+      "fileMatch": [
+        "theme.json"
+      ],
+      "url": "https://json.schemastore.org/theme-v1.json"
     },
     {
       "name": "tmLanguage",
@@ -3304,13 +3327,14 @@
       "name": "Gradle Build Cache Node",
       "description": "Gradle Build Cache Node configuration schema",
       "fileMatch": [
-        "*build-cache-node-config-schema.yml",
-        "*build-cache-node-config-schema.yaml"
+        "*build-cache-node-config.yml",
+        "*build-cache-node-config.yaml"
       ],
-      "url": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-2.json",
+      "url": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-3.json",
       "versions": {
         "1.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-1.json",
-        "2.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-2.json"
+        "2.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-2.json",
+        "3.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-3.json"
       }
     },
     {
