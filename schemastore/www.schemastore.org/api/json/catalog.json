@@ -1415,6 +1415,14 @@
       "url": "https://json.schemastore.org/imageoptimizer.json"
     },
     {
+      "name": ".imgbotconfig",
+      "description": "Imgbot Configuration Files",
+      "fileMatch": [
+        ".imgbotconfig"
+      ],
+      "url": "https://json.schemastore.org/imgbotconfig.json"
+    },
+    {
       "name": "ioBroker JSON UI",
       "description": "Schema for ioBroker JSON-based admin user interfaces - config, custom and tabs",
       "fileMatch": [
@@ -2461,6 +2469,14 @@
         "**/branches/.sfdx-hardis.*.yaml"
       ],
       "url": "https://raw.githubusercontent.com/hardisgroupcom/sfdx-hardis/main/config/sfdx-hardis.jsonschema.json"
+    },
+    {
+      "name": "size-limit configuration",
+      "description": "Configuration file for size-limit",
+      "fileMatch": [
+        ".size-limit.json"
+      ],
+      "url": "https://json.schemastore.org/size-limit.json"
     },
     {
       "name": "skyuxconfig.json",
