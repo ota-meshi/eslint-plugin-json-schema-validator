@@ -1582,7 +1582,8 @@
       ],
       "url": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha2/schema.json",
       "versions": {
-        "v1alpha2": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha2/schema.json"
+        "v1alpha2": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha2/schema.json",
+        "v1alpha3": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"
       }
     },
     {
@@ -2279,7 +2280,7 @@
       "url": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json"
     },
     {
-      "name": "Red-DiscordBot Сog Repo",
+      "name": "Red-DiscordBot ��og Repo",
       "description": "Red-DiscordBot Сog Repo metadata file",
       "fileMatch": [
         "info.json"
