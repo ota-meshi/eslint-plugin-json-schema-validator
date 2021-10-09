@@ -2280,7 +2280,7 @@
       "url": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json"
     },
     {
-      "name": "Red-DiscordBot Сog Repo",
+      "name": "Red-DiscordBot ��og Repo",
       "description": "Red-DiscordBot Сog Repo metadata file",
       "fileMatch": [
         "info.json"
