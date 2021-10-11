@@ -1,3 +1,4 @@
+/* globals process, require -- test */
 import fs from "fs"
 import path from "path"
 import type { RuleTester } from "eslint"
@@ -6,6 +7,7 @@ import * as jsoncESLintParser from "jsonc-eslint-parser"
 import * as yamlESLintParser from "yaml-eslint-parser"
 import * as tomlESLintParser from "toml-eslint-parser"
 import * as vueESLintParser from "vue-eslint-parser"
+import semver from "semver"
 // eslint-disable-next-line @typescript-eslint/no-require-imports -- tests
 import plugin = require("../../src/index")
 
@@ -148,6 +150,26 @@ function* itrListupInput(rootDir: string): IterableIterator<string> {
             filename.endsWith("input.toml") ||
             filename.endsWith("input.vue")
         ) {
+            const requirementsPath = path.join(
+                rootDir,
+                filename.replace(/input\.\w+$/, "requirements.json"),
+            )
+            const requirements = fs.existsSync(requirementsPath)
+                ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
+                : {}
+
+            if (
+                Object.entries(requirements).some(([pkgName, pkgVersion]) => {
+                    const version =
+                        pkgName === "node"
+                            ? process.version
+                            : // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- test
+                              require(`${pkgName}/package.json`).version
+                    return !semver.satisfies(version, pkgVersion as string)
+                })
+            ) {
+                continue
+            }
             yield abs
         } else if (fs.statSync(abs).isDirectory()) {
             yield* itrListupInput(abs)
