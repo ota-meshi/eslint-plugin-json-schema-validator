@@ -2280,7 +2280,7 @@
       "url": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json"
     },
     {
-      "name": "Red-DiscordBot Сog Repo",
+      "name": "Red-DiscordBot ��og Repo",
       "description": "Red-DiscordBot Сog Repo metadata file",
       "fileMatch": [
         "info.json"
@@ -2347,6 +2347,15 @@
         "1.0": "https://raw.githubusercontent.com/spiral/roadrunner-binary/master/schemas/config/1.0.schema.json",
         "2.0": "https://raw.githubusercontent.com/spiral/roadrunner-binary/master/schemas/config/2.0.schema.json"
       }
+    },
+    {
+      "name": "Sapphire CLI Config",
+      "description": "Scheme for Sapphire CLI Config (@sapphire/cli)",
+      "fileMatch": [
+        ".sapphirerc.json",
+        ".sapphirerc.yml"
+      ],
+      "url": "https://raw.githubusercontent.com/sapphiredev/cli/main/templates/schemas/.sapphirerc.scheme.json"
     },
     {
       "name": "sarif-1.0.0.json",
@@ -2690,6 +2699,14 @@
       "url": "https://json.schemastore.org/traefik-v2-file-provider.json"
     },
     {
+      "name": "trunk.yaml schema",
+      "description": "Configuration schema for trunk, a powerful linter runner - https://docs.trunk.io",
+      "fileMatch": [
+        "trunk.yaml"
+      ],
+      "url": "https://json.schemastore.org/trunk-yaml.json"
+    },
+    {
       "name": "tsconfig.json",
       "description": "TypeScript compiler configuration file",
       "fileMatch": [
@@ -2768,7 +2785,8 @@
       "description": "UI5 Manifest (manifest.json)",
       "fileMatch": [
         "webapp/manifest.json",
-        "src/main/webapp/manifest.json"
+        "src/main/webapp/manifest.json",
+        "src/manifest.json"
       ],
       "url": "https://raw.githubusercontent.com/SAP/ui5-manifest/master/schema.json"
     },
