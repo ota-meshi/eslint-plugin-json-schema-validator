@@ -11,6 +11,14 @@
       "url": "https://raw.githubusercontent.com/adonisjs/application/master/adonisrc.schema.json"
     },
     {
+      "name": ".agripparc.json",
+      "description": "JSON schema for the Agrippa config file",
+      "fileMatch": [
+        "agripparc.json"
+      ],
+      "url": "https://json.schemastore.org/agripparc-1.2.json"
+    },
+    {
       "name": ".aiproj.json",
       "description": "Settings for project analysis by the application inspector",
       "fileMatch": [
@@ -387,7 +395,7 @@
       "fileMatch": [
         "bsconfig.json"
       ],
-      "url": "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/8.2.0/docs/docson/build-schema.json"
+      "url": "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/master/docs/docson/build-schema.json"
     },
     {
       "name": "Bukkit plugin.yml",
@@ -674,7 +682,7 @@
         "cloudformation.yml",
         "cloudformation.yaml"
       ],
-      "url": "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/cloudformation.schema.json"
+      "url": "https://raw.githubusercontent.com/awslabs/goformation/v5.2.11/schema/cloudformation.schema.json"
     },
     {
       "name": "AWS CloudFormation Serverless Application Model (SAM)",
@@ -688,7 +696,7 @@
         "sam.yml",
         "sam.yaml"
       ],
-      "url": "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/sam.schema.json"
+      "url": "https://raw.githubusercontent.com/awslabs/goformation/v5.2.11/schema/sam.schema.json"
     },
     {
       "name": "Citation File Format",
@@ -2280,7 +2288,7 @@
       "url": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json"
     },
     {
-      "name": "Red-DiscordBot ��og Repo",
+      "name": "Red-DiscordBot Сog Repo",
       "description": "Red-DiscordBot Сog Repo metadata file",
       "fileMatch": [
         "info.json"
@@ -3547,7 +3555,11 @@
         "**/db/changelog/**/*.yml",
         "**/db/changelog/**/*.json"
       ],
-      "url": "https://json.schemastore.org/liquibase.json"
+      "url": "https://json.schemastore.org/liquibase-3.2.json",
+      "versions": {
+        "1.0": "https://json.schemastore.org/liquibase.json",
+        "3.2": "https://json.schemastore.org/liquibase-3.2.json"
+      }
     },
     {
       "name": "Pipeline component",
