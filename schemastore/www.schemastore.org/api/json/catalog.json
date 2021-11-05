@@ -27,6 +27,20 @@
       "url": "https://json.schemastore.org/aiproj.json"
     },
     {
+      "name": "Airlock Microgateway",
+      "description": "Airlock Microgateway configuration schema",
+      "url": "https://json.schemastore.org/airlock-microgateway-3.0.json",
+      "fileMatch": [
+        "microgateway-config.yaml",
+        "microgateway-config.yml",
+        "airlock-microgateway-config.yaml",
+        "airlock-microgateway-config.yml"
+      ],
+      "versions": {
+        "3.0": "https://json.schemastore.org/airlock-microgateway-3.0.json"
+      }
+    },
+    {
       "name": "angular.json",
       "description": "Angular configuration file",
       "fileMatch": [
@@ -1394,6 +1408,17 @@
       "url": "https://raw.githubusercontent.com/j2inn/hayson/master/hayson-json-schema.json"
     },
     {
+      "name": "Hazelcast 5 Configuration",
+      "description": "YAML schema for configuring Hazelcast 5 Platform (member and client)",
+      "fileMatch": [
+        "hazelcast*.yaml",
+        "hazelcast*.json",
+        "hz-*.yaml",
+        "hz-*.json"
+      ],
+      "url": "https://hazelcast.com/schema/config/hazelcast-config-5.0.json"
+    },
+    {
       "name": "host.json",
       "description": "JSON schema for Azure Functions host.json files",
       "fileMatch": [
@@ -2029,6 +2054,14 @@
         "kratos.toml"
       ],
       "url": "https://raw.githubusercontent.com/ory/kratos/master/.schema/version.schema.json"
+    },
+    {
+      "name": "OSS Review Toolkit repository configuration",
+      "description": "Schema for ORT's repository configuration file",
+      "fileMatch": [
+        "*.ort.yml"
+      ],
+      "url": "https://raw.githubusercontent.com/oss-review-toolkit/ort/master/integrations/schemas/repository-configuration-schema.json"
     },
     {
       "name": "package.json",
