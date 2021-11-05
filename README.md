@@ -68,13 +68,13 @@ This plugin provides configs:
 
 ### Running ESLint from the command line
 
-If you want to run `eslint` from the command line, make sure you include the `.json`, `.json5`, `.yaml`, `.yml` and `.toml` extension using [the `--ext` option](https://eslint.org/docs/user-guide/configuring#specifying-file-extensions-to-lint) or a glob pattern, because ESLint targets only `.js` files by default.
+If you want to run `eslint` from the command line, make sure you include the `.json`, `.jsonc`, `.json5`, `.yaml`, `.yml` and `.toml` extension using [the `--ext` option](https://eslint.org/docs/user-guide/configuring#specifying-file-extensions-to-lint) or a glob pattern, because ESLint targets only `.js` files by default.
 
 Examples:
 
 ```bash
-eslint --ext .js,.json,.json5,.yaml,.yml,.toml src
-eslint "src/**/*.{js,json,json5,yaml,yml,toml}"
+eslint --ext .js,.json,.jsonc,.json5,.yaml,.yml,.toml src
+eslint "src/**/*.{js,json,jsonc,json5,yaml,yml,toml}"
 ```
 
 ## :computer: Editor Integrations
@@ -83,7 +83,7 @@ eslint "src/**/*.{js,json,json5,yaml,yml,toml}"
 
 Use the [dbaeumer.vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension that Microsoft provides officially.
 
-You have to configure the `eslint.validate` option of the extension to check `.json`, `.json5`, `.yaml`, `.yml` and `.toml` files, because the extension targets only `*.js` or `*.jsx` files by default.
+You have to configure the `eslint.validate` option of the extension to check `.json`, `.jsonc`, `.json5`, `.yaml`, `.yml` and `.toml` files, because the extension targets only `*.js` or `*.jsx` files by default.
 
 Example **.vscode/settings.json**:
 
