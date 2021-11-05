@@ -2,7 +2,7 @@ export = {
     plugins: ["json-schema-validator"],
     overrides: [
         {
-            files: ["*.json", "*.json5"],
+            files: ["*.json", "*.json5", "*.jsonc"],
             parser: require.resolve("jsonc-eslint-parser"),
         },
         {
