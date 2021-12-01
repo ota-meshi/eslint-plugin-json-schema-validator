@@ -510,6 +510,14 @@
       }
     },
     {
+      "name": "Catalog Info Backstage",
+      "description": "Schema for Backstage Catalog Info",
+      "url": "https://json.schemastore.org/catalog-info.json",
+      "fileMatch": [
+        "catalog-info.yaml"
+      ]
+    },
+    {
       "name": "CityJSON",
       "description": "Schema for the representation of 3D city models",
       "url": "https://raw.githubusercontent.com/cityjson/specs/1.0.1/schemas/cityjson.min.schema.json"
@@ -3784,9 +3792,10 @@
         "*.mboats.yaml",
         "*.mboats.yml"
       ],
-      "url": "https://json.schemastore.org/mboats-config-0.1.json",
+      "url": "https://json.schemastore.org/mboats-config-0.2.json",
       "versions": {
-        "0.1": "https://json.schemastore.org/mboats-config-0.1.json"
+        "0.1": "https://json.schemastore.org/mboats-config-0.1.json",
+        "0.2": "https://json.schemastore.org/mboats-config-0.1.json"
       }
     }
   ]
