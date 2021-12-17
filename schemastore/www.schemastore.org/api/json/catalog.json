@@ -2030,6 +2030,17 @@
       ]
     },
     {
+      "name": "ntangle",
+      "description": "NTangle (https://github.com/Avanade/ntangle) CDC code-generation configuration.",
+      "url": "https://raw.githubusercontent.com/Avanade/NTangle/main/schemas/ntangle.json",
+      "fileMatch": [
+        "ntangle.yaml",
+        "ntangle.yml",
+        "ntangle.json",
+        "ntangle.jsn"
+      ]
+    },
+    {
       "name": "Ory Oathkeeper configuration",
       "description": "Schema for Ory Oathkeeper configuration file",
       "fileMatch": [
@@ -2410,6 +2421,17 @@
         "info.json"
       ],
       "url": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog_repo.schema.json"
+    },
+    {
+      "name": ".rehyperc",
+      "description": "A rehype configuration file",
+      "fileMatch": [
+        ".rehyperc",
+        ".rehyperc.json",
+        ".rehyperc.yaml",
+        ".rehyperc.yml"
+      ],
+      "url": "https://json.schemastore.org/rehyperc.json"
     },
     {
       "name": ".remarkrc",
@@ -3139,6 +3161,11 @@
       "url": "https://json-schema.org/draft/2019-09/schema"
     },
     {
+      "name": "JSON Schema Draft 2020-12",
+      "description": "Meta-validation schema for JSON Schema Draft 2020-12",
+      "url": "https://json-schema.org/draft/2020-12/schema"
+    },
+    {
       "name": "xunit.runner.json",
       "description": "xUnit.net runner configuration file",
       "fileMatch": [
@@ -3418,7 +3445,7 @@
     },
     {
       "name": "Žinoma",
-      "description": "Žinoma incremental build configuration",
+      "description": "��inoma incremental build configuration",
       "fileMatch": [
         "zinoma.yml"
       ],
@@ -3654,7 +3681,7 @@
         "*.clab.yaml",
         "*.clab.yml"
       ],
-      "url": "https://raw.githubusercontent.com/srl-labs/containerlab/master/schemas/clab.schema.json"
+      "url": "https://raw.githubusercontent.com/srl-labs/containerlab/main/schemas/clab.schema.json"
     },
     {
       "name": "User Journey Map YAML Schema",
