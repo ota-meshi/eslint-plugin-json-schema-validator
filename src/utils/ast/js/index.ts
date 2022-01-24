@@ -335,6 +335,9 @@ const VISITORS = {
         node: ESLintBinaryExpression,
         context: RuleContext,
     ): SubPathData {
+        if (node.left.type === "PrivateIdentifier") {
+            return UNKNOWN_PATH_DATA
+        }
         const leftData = getPathData(node.left, context)
         if (leftData.data === UNKNOWN) {
             return UNKNOWN_PATH_DATA
@@ -476,10 +479,11 @@ const VISITORS = {
             }
             expressions.push(data.data)
         }
-        let data = node.quasis[0].value.cooked
+        let data = node.quasis[0].value.cooked ?? node.quasis[0].value.raw
         for (let i = 0; i < expressions.length; ++i) {
             data += expressions[i]
-            data += node.quasis[i + 1].value.cooked
+            data +=
+                node.quasis[i + 1].value.cooked ?? node.quasis[i + 1].value.raw
         }
         return { data, children: EMPTY_MAP }
     },
@@ -535,6 +539,9 @@ const VISITORS = {
         return UNKNOWN_PATH_DATA
     },
     AwaitExpression() {
+        return UNKNOWN_PATH_DATA
+    },
+    ChainExpression() {
         return UNKNOWN_PATH_DATA
     },
 }
