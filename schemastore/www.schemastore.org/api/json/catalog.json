@@ -1142,13 +1142,13 @@
     {
       "name": "Error pages",
       "description": "Error-Pages configuration file",
-      "url": "https://raw.githubusercontent.com/tarampampam/error-pages/master/schemas/config/1.0.schema.json",
+      "url": "https://cdn.jsdelivr.net/gh/tarampampam/error-pages@latest/schemas/config/1.0.schema.json",
       "fileMatch": [
         "error-pages*.yml",
         "error-pages*.yaml"
       ],
       "versions": {
-        "1.0": "https://raw.githubusercontent.com/tarampampam/error-pages/master/schemas/config/1.0.schema.json"
+        "1.0": "https://cdn.jsdelivr.net/gh/tarampampam/error-pages@latest/schemas/config/1.0.schema.json"
       }
     },
     {
@@ -1770,11 +1770,7 @@
         "*.k3d.yaml",
         "*.k3d.yml"
       ],
-      "url": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha2/schema.json",
-      "versions": {
-        "v1alpha2": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha2/schema.json",
-        "v1alpha3": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/v1alpha3/schema.json"
-      }
+      "url": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/config.versions.schema.json"
     },
     {
       "name": "Ory Keto configuration",
@@ -2868,6 +2864,14 @@
         ".github/stale.yml"
       ],
       "url": "https://json.schemastore.org/stale.json"
+    },{
+      "name": "Statamic Blueprint",
+      "description": "A Statamic Blueprint Schema",
+      "fileMatch": [
+        "resources/blueprints/**/*.yml",
+        "resources/blueprints/**/*.yaml"
+      ],
+      "url": "https://raw.githubusercontent.com/Konafets/statamic-blueprint-validation/main/statamic.blueprint.schema.json"
     },
     {
       "name": "Stryker Mutator",
