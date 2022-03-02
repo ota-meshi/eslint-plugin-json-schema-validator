@@ -83,6 +83,7 @@ module.exports = {
             rules: {
                 "require-jsdoc": "off",
                 "no-console": "off",
+                "@typescript-eslint/no-misused-promises": "off",
             },
         },
         {
