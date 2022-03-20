@@ -1340,6 +1340,16 @@
       "url": "https://raw.githubusercontent.com/fossas/fossa-cli/master/docs/references/files/fossa-yml.v3.schema.json"
     },
     {
+      "name": "Fossa's fossa-deps file",
+      "description": "JSON schema for FOSSA CLI's fossa-deps file",
+      "fileMatch": [
+        "fossa-deps.yml",
+        "fossa-deps.yaml",
+        "fossa-deps.json"
+      ],
+      "url": "https://raw.githubusercontent.com/fossas/fossa-cli/master/docs/references/files/fossa-deps.schema.json"
+    },
+    {
       "name": "func.yaml",
       "description": "JSON schema for Knative Func Plugin func.yaml files",
       "fileMatch": [
@@ -1719,8 +1729,8 @@
       "url": "https://json.schemastore.org/io-package.json"
     },
     {
-      "name": "Jekyll configuration",
-      "description": "Schema for Jekyll _config.yml",
+      "name": "Jekyll",
+      "description": "Jekyll static site generator config file schema",
       "fileMatch": [
         "_config.yml"
       ],
@@ -3828,12 +3838,13 @@
         "*build-cache-node-config.yml",
         "*build-cache-node-config.yaml"
       ],
-      "url": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-4.json",
+      "url": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-5.json",
       "versions": {
         "1.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-1.json",
         "2.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-2.json",
         "3.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-3.json",
-        "4.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-4.json"
+        "4.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-4.json",
+        "5.0": "https://docs.gradle.com/build-cache-node/schema/build-cache-node-config-schema-5.json"
       }
     },
     {
