@@ -1,13 +1,13 @@
 [
     {
-        "message": "\"maxProperties\" must NOT have more than 2 items.",
+        "message": "\"maxProperties\" must NOT have more than 2 properties.",
         "line": 3,
         "column": 5,
         "endLine": 3,
         "endColumn": 20
     },
     {
-        "message": "\"minProperties\" must NOT have fewer than 2 items.",
+        "message": "\"minProperties\" must NOT have fewer than 2 properties.",
         "line": 4,
         "column": 5,
         "endLine": 4,
