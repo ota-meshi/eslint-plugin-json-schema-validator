@@ -3,6 +3,12 @@
   "version": 1.0,
   "schemas": [
     {
+      "name": "Common types for all schemas",
+      "description": "",
+      "fileMatch": [],
+      "url": "https://json.schemastore.org/base.json"
+    },
+    {
       "name": "AnyWork Automation Configuration",
       "description": "AnyWork Automation Configuration used to configure automation scripts on AnyWork",
       "fileMatch": [
@@ -61,6 +67,16 @@
         "3.0": "https://json.schemastore.org/airlock-microgateway-3.0.json",
         "3.1": "https://json.schemastore.org/airlock-microgateway-3.1.json"
       }
+    },
+    {
+      "name": "Airplane task",
+      "description": "Schema for building Airplane tasks",
+      "fileMatch": [
+        "*.task.json",
+        "*.task.yaml",
+        "*.task.yml"
+      ],
+      "url": "https://raw.githubusercontent.com/airplanedev/lib/main/pkg/deploy/taskdir/definitions/schema_0_3.json"
     },
     {
       "name": "angular.json",
@@ -523,6 +539,16 @@
         "bsconfig.json"
       ],
       "url": "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/master/docs/docson/build-schema.json"
+    },
+    {
+      "name": "Build Info",
+      "description": "Build Info is the metadata of a build. It includes all the details about the build broken down into segments that include version history, artifacts, project modules, dependencies, and everything that was required to create the build.",
+      "fileMatch": [
+        "*buildinfo*.json",
+        "*build-info*.json",
+        "*.buildinfo"
+      ],
+      "url": "https://raw.githubusercontent.com/jfrog/build-info-go/main/buildinfo-schema.json"
     },
     {
       "name": "Bukkit plugin.yml",
@@ -1013,6 +1039,12 @@
         "debugsettings.json"
       ],
       "url": "https://json.schemastore.org/debugsettings.json"
+    },
+    {
+      "name": "Deno",
+      "description": "A JSON representation of a Deno configuration file.",
+      "fileMatch": ["deno.json", "deno.jsonc"],
+      "url": "https://deno.land/x/deno/cli/schemas/config-file.v1.json"
     },
     {
       "name": "dependabot.json",
@@ -1634,7 +1666,7 @@
       "name": "Haystack Pipeline",
       "description": "Haystack Pipeline YAML file describing the nodes of the pipelines. For more info read the docs at: https://haystack.deepset.ai/components/pipelines#yaml-file-definitions",
       "fileMatch": [
-          "*.haystack-pipeline.yml"
+        "*.haystack-pipeline.yml"
       ],
       "url": "https://raw.githubusercontent.com/deepset-ai/haystack/master/haystack/json-schemas/haystack-pipeline.schema.json"
     },
@@ -1869,6 +1901,14 @@
         "*.k3d.yml"
       ],
       "url": "https://raw.githubusercontent.com/rancher/k3d/main/pkg/config/config.versions.schema.json"
+    },
+    {
+      "name": "service.datadog.yaml",
+      "description": "Datadog service catalog definition file",
+      "fileMatch": [
+        "service.datadog.yaml"
+      ],
+      "url": "https://raw.githubusercontent.com/DataDog/schema/main/service-catalog/version.schema.json"
     },
     {
       "name": "Ory Keto configuration",
@@ -2843,8 +2883,8 @@
       "name": "Settings.paf",
       "description": "Qualisys Project Automation Framework settings file",
       "fileMatch": [
-          "settings.paf",
-          "Settings.paf"
+        "settings.paf",
+        "Settings.paf"
       ],
       "url": "https://raw.githubusercontent.com/qualisys/qualisys-schemas/master/paf-module.schema.json"
     },
@@ -3629,7 +3669,7 @@
         "*zuul.d/*.yaml",
         "*/.zuul.yaml"
       ],
-      "url": "https://raw.githubusercontent.com/pycontribs/zuul-lint/master/zuul_lint/zuul-schema.json"
+      "url": "https://json.schemastore.org/zuul.json"
     },
     {
       "name": "Briefcase",
@@ -4134,6 +4174,15 @@
       "url": "https://raw.githubusercontent.com/lalcebo/json-schema/master/serverless/reference.json"
     },
     {
+      "name": "Shopware 6 Configuration",
+      "description": "Schema for Shopware 6 custom configurations",
+      "fileMatch": [
+        "shopware.yml",
+        "shopware.yaml"
+      ],
+      "url": "https://raw.githubusercontent.com/shopware/platform/trunk/config-schema.json"
+    },
+    {
       "name": "Shopware CLI Extension Store Configuration",
       "description": "Schema for Shopware CLI Extension Store Configuration",
       "fileMatch": [
@@ -4172,6 +4221,12 @@
       "description": "Schema for unist syntax trees",
       "fileMatch": [],
       "url": "https://json.schemastore.org/unist.json"
+    },
+    {
+      "name": "Hugo",
+      "description": "Hugo static site generator config file schema",
+      "fileMatch": [],
+      "url": "https://json.schemastore.org/hugo.json"
     },
     {
       "name": "Cheatsheets",
