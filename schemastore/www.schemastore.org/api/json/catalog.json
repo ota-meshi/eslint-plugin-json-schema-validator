@@ -1728,6 +1728,14 @@
       "url": "https://raw.githubusercontent.com/ory/hydra/master/.schema/version.schema.json"
     },
     {
+      "name": "ide.host.json",
+      "description": "JSON schema for IDE template host file",
+      "fileMatch": [
+        "ide.host.json"
+      ],
+      "url": "https://json.schemastore.org/ide.host.json"
+    },
+    {
       "name": "imageoptimizer.json",
       "description": "Schema for imageoptimizer.json files",
       "fileMatch": [
@@ -1989,6 +1997,14 @@
         "license-report-config.json"
       ],
       "url": "https://json.schemastore.org/license-report-config.json"
+    },
+    {
+      "name": "linkinator.config.json",
+      "description": "Linkinator config file",
+      "fileMatch": [
+        "linkinator.config.json"
+      ],
+      "url": "https://json.schemastore.org/linkinator-config.json"
     },
     {
       "name": "local.settings.json",
@@ -4277,6 +4293,11 @@
         "updatecli.yaml"
       ],
       "url": "https://www.updatecli.io/schema/latest/config.json"
+    },
+    {
+      "name": "GeoJSON.json latest",
+      "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org.",
+      "url": "https://geojson.org/schema/GeoJSON.json"
     }
   ]
 }
