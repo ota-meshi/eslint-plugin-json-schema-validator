@@ -1,5 +1,19 @@
 [
     {
+        "message": "\"extends\" must be string.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 14
+    },
+    {
+        "message": "\"extends\" must match exactly one schema in oneOf.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 14
+    },
+    {
         "message": "\"extends[0]\" must be string.",
         "line": 3,
         "column": 17,
@@ -40,6 +54,20 @@
         "column": 13,
         "endLine": 7,
         "endColumn": 20
+    },
+    {
+        "message": "\"overrides[0].extends\" must be string.",
+        "line": 8,
+        "column": 13,
+        "endLine": 8,
+        "endColumn": 22
+    },
+    {
+        "message": "\"overrides[0].extends\" must match exactly one schema in oneOf.",
+        "line": 8,
+        "column": 13,
+        "endLine": 8,
+        "endColumn": 22
     },
     {
         "message": "\"overrides[0].extends[1]\" must be string.",

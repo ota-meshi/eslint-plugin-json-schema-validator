@@ -1,5 +1,19 @@
 [
     {
+        "message": "\"extends\" must be string.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 14
+    },
+    {
+        "message": "\"extends\" must match exactly one schema in oneOf.",
+        "line": 3,
+        "column": 5,
+        "endLine": 3,
+        "endColumn": 14
+    },
+    {
         "message": "\"extends[0]\" must be string.",
         "line": 3,
         "column": 17,
