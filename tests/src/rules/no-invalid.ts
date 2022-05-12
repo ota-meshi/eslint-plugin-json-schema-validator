@@ -32,7 +32,11 @@ tester.run(
                             ],
                         },
                     ],
-                    errors: ['"extends[0]" must be string.'],
+                    errors: [
+                        '"extends" must be string.',
+                        '"extends" must match exactly one schema in oneOf.',
+                        '"extends[0]" must be string.',
+                    ],
                 },
                 {
                     filename: path.join(__dirname, ".eslintrc.js"),
@@ -48,7 +52,11 @@ tester.run(
                             useSchemastoreCatalog: false,
                         },
                     ],
-                    errors: ['"extends[0]" must be string.'],
+                    errors: [
+                        '"extends" must be string.',
+                        '"extends" must match exactly one schema in oneOf.',
+                        '"extends[0]" must be string.',
+                    ],
                 },
             ],
         },

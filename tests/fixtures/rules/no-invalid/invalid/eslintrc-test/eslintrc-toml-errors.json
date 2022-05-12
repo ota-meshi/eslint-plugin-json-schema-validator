@@ -28,6 +28,20 @@
         "endColumn": 6
     },
     {
+        "message": "\"overrides[0].extends\" must be string.",
+        "line": 11,
+        "column": 1,
+        "endLine": 11,
+        "endColumn": 8
+    },
+    {
+        "message": "\"overrides[0].extends\" must match exactly one schema in oneOf.",
+        "line": 11,
+        "column": 1,
+        "endLine": 11,
+        "endColumn": 8
+    },
+    {
         "message": "\"overrides[0].extends[1]\" must be string.",
         "line": 13,
         "column": 3,
