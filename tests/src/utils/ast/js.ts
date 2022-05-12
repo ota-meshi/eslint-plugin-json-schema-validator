@@ -12,7 +12,9 @@ const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures/utils/ast/js")
 describe("AST for JS.", () => {
     for (const filename of listupInput(FIXTURES_ROOT)) {
         it(filename.slice(FIXTURES_ROOT.length), () => {
-            const input = fs.readFileSync(filename, "utf8")
+            const input = fs
+                .readFileSync(filename, "utf8")
+                .replace(/\r\n/gu, "\n")
             const outputFile = filename.replace(/input.js$/, "output.json")
 
             const linter = new Linter()
@@ -53,7 +55,9 @@ describe("AST for JS.", () => {
                 )
             }
 
-            const output = JSON.parse(fs.readFileSync(outputFile, "utf8"))
+            const output = JSON.parse(
+                fs.readFileSync(outputFile, "utf8").replace(/\r\n/gu, "\n"),
+            )
 
             assert.deepStrictEqual(result, output)
         })
