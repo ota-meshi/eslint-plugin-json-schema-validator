@@ -34,6 +34,7 @@ module.exports = {
                     ),
                     [path.resolve(__dirname, "../../lib/utils/ajv")]:
                         path.resolve(__dirname, "../../node_modules/ajv"),
+                    synckit: require.resolve("./shim/synckit"),
                 },
             },
         }
