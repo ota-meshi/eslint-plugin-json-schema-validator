@@ -19,10 +19,20 @@ jobs:
             - name: Lint
               run: npm run lint
     test:
-        runs-on: ubuntu-latest
         strategy:
             matrix:
-                node-version: [12.x, 14.x, 16.x, 17.x]
+                node-version: [12.x, 14.x, 16.x, 17.x, 18.x]
+                os: [ubuntu-latest]
+                include:
+                    - node: 18.x
+                      os: windows-latest
+                    - node: 18.x
+                      os: macos-latest
+                    - node: 12.x
+                      os: windows-latest
+                    - node: 12.x
+                      os: macos-latest
+        runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@v3
             - name: Use Node.js ${{ matrix.node-version }}
