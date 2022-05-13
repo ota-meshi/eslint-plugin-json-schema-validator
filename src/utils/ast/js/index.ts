@@ -26,6 +26,10 @@ const UNKNOWN = Symbol("unknown value")
 type TUnknown = typeof UNKNOWN
 const EMPTY_MAP = Object.freeze(new Map())
 const UNKNOWN_PATH_DATA: SubPathData = { data: UNKNOWN, children: EMPTY_MAP }
+const UNKNOWN_STRING_PATH_DATA: SubPathData = {
+    data: "UNKNOWN",
+    children: EMPTY_MAP,
+}
 export type PathData = {
     key:
         | [number, number]
@@ -440,6 +444,14 @@ const VISITORS = {
     ): SubPathData {
         const evalData = getStaticValue(context, node)
         if (!evalData) {
+            if (
+                node.callee.type === "MemberExpression" &&
+                node.callee.object.type === "Identifier" &&
+                node.callee.object.name === "require" &&
+                getStaticPropertyName(node.callee, context) === "resolve"
+            ) {
+                return UNKNOWN_STRING_PATH_DATA
+            }
             return UNKNOWN_PATH_DATA
         }
         return {
@@ -475,7 +487,7 @@ const VISITORS = {
         for (const e of node.expressions) {
             const data = getPathData(e, context)
             if (data.data === UNKNOWN) {
-                return UNKNOWN_PATH_DATA
+                return UNKNOWN_STRING_PATH_DATA
             }
             expressions.push(data.data)
         }
