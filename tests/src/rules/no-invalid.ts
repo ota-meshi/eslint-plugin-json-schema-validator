@@ -18,6 +18,24 @@ tester.run(
         "no-invalid",
         {},
         {
+            valid: [
+                {
+                    filename: path.join(__dirname, ".eslintrc.js"),
+                    code: 'module.exports = { "extends": [ require.resolve("eslint-config-foo") ] }',
+                    parser: require.resolve("espree"),
+                    options: [
+                        {
+                            schemas: [
+                                {
+                                    fileMatch: ["tests/src/rules/.eslintrc.js"],
+                                    schema: "https://json.schemastore.org/eslintrc",
+                                },
+                            ],
+                            useSchemastoreCatalog: false,
+                        },
+                    ],
+                },
+            ],
             invalid: [
                 {
                     filename: ".eslintrc.json",
@@ -40,7 +58,8 @@ tester.run(
                 },
                 {
                     filename: path.join(__dirname, ".eslintrc.js"),
-                    code: '{ "extends": [ 42 ] }',
+                    code: 'module.exports = { "extends": [ 42 ] }',
+                    parser: require.resolve("espree"),
                     options: [
                         {
                             schemas: [
