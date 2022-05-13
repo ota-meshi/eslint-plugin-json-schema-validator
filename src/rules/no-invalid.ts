@@ -229,8 +229,6 @@ export default createRule("no-invalid", {
             }
             existsExports = true
 
-            if (sourceCode.text.includes('"eslint-config-foo"')) debugger
-
             const data = analyzeJsAST(node, rootRange, context)
             if (data == null) {
                 return
