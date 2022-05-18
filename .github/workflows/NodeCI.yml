@@ -21,16 +21,16 @@ jobs:
     test:
         strategy:
             matrix:
-                node-version: [12.x, 14.x, 16.x, 17.x, 18.x]
+                node-version: [14.x, 16.x, 17.x, 18.x]
                 os: [ubuntu-latest]
                 include:
                     - node: 18.x
                       os: windows-latest
                     - node: 18.x
                       os: macos-latest
-                    - node: 12.x
+                    - node: 14.x
                       os: windows-latest
-                    - node: 12.x
+                    - node: 14.x
                       os: macos-latest
         runs-on: ${{ matrix.os }}
         steps:
