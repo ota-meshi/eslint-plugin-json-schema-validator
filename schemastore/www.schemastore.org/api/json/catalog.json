@@ -3532,6 +3532,23 @@
         "gherking.js"
       ],
       "url": "https://raw.githubusercontent.com/gherking/gherking/master/schema/gherking.schema.json"
+    },
+    {
+      "name": "CICS TS resource overrides",
+      "description": "JSON schema for resource overrides in IBM CICS Transaction Server for z/OS",
+      "fileMatch": [
+        "**/resourceoverrides/*.yaml",
+        "**/resourceoverrides/*.yml",
+        "*.cicsoverrides.yaml",
+        "*.cicsoverrides.yml"
+      ],
+      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/resourceoverrides.json"
+    },
+    {
+      "name": "Webman package recipe",
+      "description": "YAML schema for a webman package",
+      "fileMatch": ["*.webman-pkg.yml"],
+      "url": "https://raw.githubusercontent.com/candrewlee14/webman/main/schema/pkg_schema.json"
     }
   ],
   "version": 1
