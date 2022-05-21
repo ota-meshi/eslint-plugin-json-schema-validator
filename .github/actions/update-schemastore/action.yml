@@ -6,5 +6,5 @@ outputs:
     version:
         description: package new version
 runs:
-    using: node18
+    using: node16
     main: index.js
