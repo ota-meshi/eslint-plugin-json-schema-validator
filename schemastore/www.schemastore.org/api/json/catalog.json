@@ -528,6 +528,12 @@
       "url": "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json"
     },
     {
+      "name": "Calqulus pipeline",
+      "description": "Schema for Qualisys Calqulus pipeline",
+      "fileMatch": ["*.calqulus.yaml", "*.calqulus.yml"],
+      "url": "https://raw.githubusercontent.com/qualisys/qualisys-schemas/master/calqulus-pipeline.schema.json"
+    },
+    {
       "name": "Camel YAML DSL",
       "description": "Schema for Camel YAML DSL",
       "fileMatch": ["*.camel.yaml", "*.camelk.yaml"],
@@ -3560,6 +3566,12 @@
       "description": "A configuration file for hint",
       "fileMatch": [".hintrc"],
       "url": "https://raw.githubusercontent.com/webhintio/hint/main/packages/hint/src/lib/config/config-schema.json"
+    },
+    {
+      "name": "AVA Configuration Schema",
+      "description": "Schema for configuring AVA, the Node.js test runner",
+      "fileMatch": ["ava.config.json"],
+      "url": "https://json.schemastore.org/ava.json"
     }
   ],
   "version": 1
