@@ -2000,6 +2000,12 @@
       "url": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/repository-configuration-schema.json"
     },
     {
+      "name": "OSS Review Toolkit resolutions",
+      "description": "Schema for ORT's resolutions file",
+      "fileMatch": ["resolutions.yml"],
+      "url": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/resolutions-schema.json"
+    },
+    {
       "name": "package.json",
       "description": "NPM configuration file",
       "fileMatch": ["package.json"],
@@ -2397,6 +2403,12 @@
       "description": "Scoop bucket app manifest",
       "fileMatch": ["bucket/**.json"],
       "url": "https://raw.githubusercontent.com/lukesampson/scoop/master/schema.json"
+    },
+    {
+      "name": "Semantic Release",
+      "description": "Schema for Semantic Seleases, a project for automated versioning and releases",
+      "fileMatch": [".releaserc.yaml", ".releaserc.yml", ".releaserc.json"],
+      "url": "https://json.schemastore.org/semantic-release.json"
     },
     {
       "name": "Semgrep Rule",
