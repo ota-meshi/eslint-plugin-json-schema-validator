@@ -14,7 +14,7 @@ describe("Integration with eslint-plugin-json-schema-validator", () => {
         const engine = new ESLint({
             cwd: TEST_CWD,
             extensions: [".js", ".json"],
-            plugins: { "eslint-plugin-json-schema-validator": plugin },
+            plugins: { "eslint-plugin-json-schema-validator": plugin as any },
         })
         const results = await engine.lintFiles(["test01/src"])
         assert.strictEqual(results.length, 2)
