@@ -2556,6 +2556,12 @@
       "url": "https://json.schemastore.org/stale.json"
     },
     {
+      "name": "Starship",
+      "description": "Configuration file for Starship. See https://starship.rs.",
+      "fileMatch": ["starship.toml"],
+      "url": "https://starship.rs/config-schema.json"
+    },
+    {
       "name": "Statamic Blueprint",
       "description": "A Statamic Blueprint Schema",
       "fileMatch": [
@@ -3654,6 +3660,12 @@
       "description": "Schema for Torque bluerpint",
       "fileMatch": ["blueprints/**.yaml"],
       "url": "https://raw.githubusercontent.com/QualiTorque/torque-vs-code-extensions/master/client/schemas/blueprint-spec2-schema.json"
+    },
+    {
+      "name": "jscpd Configuration Schema",
+      "description": "Copy/paste detector for programming source code",
+      "fileMatch": [".jscpd.json"],
+      "url": "https://json.schemastore.org/jscpd.json"
     }
   ],
   "version": 1
