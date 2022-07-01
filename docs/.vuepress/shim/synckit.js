@@ -1,7 +1,7 @@
-module.exports = { createSyncFn }
+module.exports = { createSyncFn };
 
 function createSyncFn() {
-    return function () {
-        // noop
-    }
+  return function () {
+    // noop
+  };
 }

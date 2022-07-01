@@ -1,18 +1,18 @@
-"use strict"
+"use strict";
 
-require("ts-node").register()
-const fs = require("fs")
-const core = require("@actions/core")
+require("esbuild-register");
+const fs = require("fs");
+const core = require("@actions/core");
 // eslint-disable-next-line node/no-missing-require -- ts
-const result = require("../../../tools/update-schemastore")
+const result = require("../../../tools/update-schemastore");
 
 result.default.then((res) => {
-    core.setOutput("updated", res ? 1 : 0)
-    const packageJson = fs.readFileSync(
-        require.resolve("../../../package.json"),
-        "utf8",
-    )
-    core.setOutput("version", JSON.parse(packageJson).version)
+  core.setOutput("updated", res ? 1 : 0);
+  const packageJson = fs.readFileSync(
+    require.resolve("../../../package.json"),
+    "utf8"
+  );
+  core.setOutput("version", JSON.parse(packageJson).version);
 
-    return new Promise((resolve) => setTimeout(resolve, 5000)) // wait
-})
+  return new Promise((resolve) => setTimeout(resolve, 5000)); // wait
+});
