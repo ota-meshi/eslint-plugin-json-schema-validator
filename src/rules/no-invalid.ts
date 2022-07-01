@@ -319,10 +319,6 @@ export default createRule("no-invalid", {
 
         return {
             Program(node) {
-                if (!validator) {
-                    // ignore
-                    return
-                }
                 if (context.parserServices.isJSON) {
                     const program = node as JSONAST.JSONProgram
                     validateData(getStaticJSONValue(program), (error) => {
