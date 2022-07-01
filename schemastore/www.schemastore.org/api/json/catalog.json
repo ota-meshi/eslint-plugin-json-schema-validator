@@ -933,6 +933,12 @@
       "url": "https://raw.githubusercontent.com/AxoCode/json-schema/master/discord/webhook.json"
     },
     {
+      "name": "dockerd.json",
+      "description": "Docker daemon configuration",
+      "fileMatch": ["dockerd.json", "docker.json"],
+      "url": "https://json.schemastore.org/dockerd.json"
+    },
+    {
       "name": "docfx.json",
       "description": "A JSON schema for DocFx configuration files",
       "fileMatch": ["docfx.json"],
@@ -3692,12 +3698,7 @@
     {
       "name": "Hardware Sentry Configuration",
       "description": "Hardware Sentry configuration file",
-      "fileMatch": [
-        "hws-config.yaml",
-        "hws-config.yml",
-        "hws*.yaml",
-        "hws*.yml"
-      ],
+      "fileMatch": ["*hws-config*.yaml", "*hws-config*.yml"],
       "url": "https://json.schemastore.org/hws-config.json"
     }
   ],
