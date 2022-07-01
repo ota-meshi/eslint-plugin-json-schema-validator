@@ -28,7 +28,7 @@
     "build": "yarn build:ts",
     "build:ts": "tsc --project ./tsconfig.build.json",
     "clean": "rimraf .nyc_output dist coverage",
-    "cover": "nyc --reporter=lcov yarn test:base",
+    "cover": "nyc --reporter=lcov yarn test",
     "docs:build": "yarn build:ts && vuepress build docs --no-cache",
     "docs:watch": "vuepress dev --debug docs",
     "lint": "eslint . --ext .js,.vue,.ts,.json,.md,.toml,.yaml,.yml",
