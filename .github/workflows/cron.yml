@@ -1,45 +1,45 @@
 name: CRON
 on:
-    schedule:
-        - cron: "0 0 * * *"
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
-    update-schemastore:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-            - name: Install Packages
-              run: npm install
-            - name: Build
-              run: npm run build
-            - name: Update SchemaStore
-              uses: ./.github/actions/update-schemastore
-              id: updateSchemastore
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: test and build
-              run: |
-                  npm run build
-                  npm run test
-              if: success() && steps.updateSchemastore.outputs.updated == 1
-            - name: check can npm-publish
-              run: npx can-npm-publish
-              if: success() && steps.updateSchemastore.outputs.updated == 1
-            - name: Release
-              run: |
-                  npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-                  npm publish
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-              if: success() && steps.updateSchemastore.outputs.updated == 1
-            - name: Create Release
-              id: create_release
-              uses: actions/create-release@v1
-              with:
-                  tag_name: v${{ steps.updateSchemastore.outputs.version }}
-                  body: Update schema store
-                  commitish: main
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              if: success() && steps.updateSchemastore.outputs.updated == 1
+  update-schemastore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install Packages
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Update SchemaStore
+        uses: ./.github/actions/update-schemastore
+        id: updateSchemastore
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: test and build
+        run: |
+          yarn build
+          yarn test
+        if: success() && steps.updateSchemastore.outputs.updated == 1
+      - name: check can npm-publish
+        run: npx can-npm-publish
+        if: success() && steps.updateSchemastore.outputs.updated == 1
+      - name: Release
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: success() && steps.updateSchemastore.outputs.updated == 1
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ steps.updateSchemastore.outputs.version }}
+          body: Update schema store
+          commitish: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: success() && steps.updateSchemastore.outputs.updated == 1

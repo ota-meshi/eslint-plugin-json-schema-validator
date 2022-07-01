@@ -1,35 +1,35 @@
 {
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "vue",
-        "typescript",
-        "json",
-        "jsonc",
-        "markdown",
-        "toml",
-        "yaml"
-    ],
-    "typescript.validate.enable": true,
-    "javascript.validate.enable": false,
-    "vetur.validation.script": false,
-    "vetur.validation.style": false,
-    "css.validate": false,
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-        "source.fixAll.stylelint": true
-    },
-    "stylelint.validate": [
-        "css",
-        "html",
-        "less",
-        "postcss",
-        "sass",
-        "scss",
-        "vue",
-        "vue-html",
-        "vue-postcss",
-        "stylus"
-    ]
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "typescript",
+    "json",
+    "jsonc",
+    "markdown",
+    "toml",
+    "yaml"
+  ],
+  "typescript.validate.enable": true,
+  "javascript.validate.enable": false,
+  "vetur.validation.script": false,
+  "vetur.validation.style": false,
+  "css.validate": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "stylelint.validate": [
+    "css",
+    "html",
+    "less",
+    "postcss",
+    "sass",
+    "scss",
+    "vue",
+    "vue-html",
+    "vue-postcss",
+    "stylus"
+  ]
 }

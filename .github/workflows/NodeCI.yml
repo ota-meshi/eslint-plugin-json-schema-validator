@@ -1,87 +1,85 @@
 name: CI
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 14
-            - name: Install Packages
-              run: npm install
-            - name: Lint
-              run: npm run lint
-    test:
-        strategy:
-            matrix:
-                node-version: [14.x, 16.x, 17.x, 18.x]
-                os: [ubuntu-latest]
-                include:
-                    - node: 18.x
-                      os: windows-latest
-                    - node: 18.x
-                      os: macos-latest
-                    - node: 14.x
-                      os: windows-latest
-                    - node: 14.x
-                      os: macos-latest
-        runs-on: ${{ matrix.os }}
-        steps:
-            - uses: actions/checkout@v3
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - name: Install Packages
-              run: npm install
-            - name: Test
-              run: npm test
-    test-with-eslint6:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 14.x
-            - name: Install Target Packages
-              run: |+
-                  npm i -D eslint@6
-                  npx rimraf node_modules
-                  npm install
-            - name: Test
-              run: npm test
-    test-with-eslint7:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 14.x
-            - name: Install Target Packages
-              run: |+
-                  npm i -D eslint@7
-                  npx rimraf node_modules
-                  npm install
-            - name: Test
-              run: npm test
-    test-and-coverage:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-            - name: Install Packages
-              run: npm install
-            - name: Test
-              run: |
-                  npm run cover
-            - name: Coveralls GitHub Action
-              uses: coverallsapp/github-action@1.1.3
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install Packages
+        run: yarn
+      - name: Lint
+        run: yarn lint
+  test:
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 17.x, 18.x]
+        os: [ubuntu-latest]
+        include:
+          - node: 18.x
+            os: windows-latest
+          - node: 18.x
+            os: macos-latest
+          - node: 14.x
+            os: windows-latest
+          - node: 14.x
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Packages
+        run: yarn
+      - name: Test
+        run: yarn
+  test-with-eslint6:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: Install Target Packages
+        run: |+
+          yarn add -D eslint@6
+          yarn
+      - name: Test
+        run: npm test
+  test-with-eslint7:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: Install Target Packages
+        run: |+
+          npm i -D eslint@7
+          npm install
+      - name: Test
+        run: npm test
+  test-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install Packages
+        run: npm install
+      - name: Test
+        run: |
+          yarn cover
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@1.1.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
