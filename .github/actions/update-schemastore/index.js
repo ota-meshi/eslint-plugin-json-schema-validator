@@ -1,6 +1,6 @@
 "use strict"
 
-require("ts-node").register()
+require("esbuild-register")
 const fs = require("fs")
 const core = require("@actions/core")
 // eslint-disable-next-line node/no-missing-require -- ts
