@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"compilerOptions\" must be object.",
+        "line": 3,
+        "column": 1,
+        "endLine": 3,
+        "endColumn": 16
+    }
+]
