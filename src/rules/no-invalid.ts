@@ -57,16 +57,7 @@ function parseOption(
     filename: string,
 ): Validator | null {
     if (typeof option === "string") {
-        return parseOption(
-            {
-                schemas: [
-                    { fileMatch: [path.basename(filename)], schema: option },
-                ],
-                useSchemastoreCatalog: false,
-            },
-            context,
-            filename,
-        )
+        return schemaPathToValidator(option, context)
     }
 
     const validators: Validator[] = []
@@ -75,26 +66,24 @@ function parseOption(
         if (!matchFile(filename, schemaData.fileMatch)) {
             continue
         }
-        const schema =
-            typeof schemaData.schema === "string"
-                ? loadSchema(schemaData.schema, context)
-                : schemaData.schema
-        if (!schema) {
-            context.report({
-                loc: { line: 1, column: 0 },
-                message: `Specified schema could not be resolved.${
-                    typeof schemaData.schema === "string"
-                        ? ` Path: "${schemaData.schema}"`
-                        : ""
-                }`,
-            })
-            continue
+        if (typeof schemaData.schema === "string") {
+            const validator = schemaPathToValidator(schemaData.schema, context)
+            if (validator) {
+                validators.push(validator)
+            } else {
+                reportCannotResolvedPath(schemaData.schema, context)
+            }
+        } else {
+            const validator = schemaObjectToValidator(
+                schemaData.schema,
+                context,
+            )
+            if (validator) {
+                validators.push(validator)
+            } else {
+                reportCannotResolvedObject(context)
+            }
         }
-        const schemaPath =
-            typeof schemaData.schema === "string"
-                ? schemaData.schema
-                : getCwd(context)
-        validators.push(compile(schema, schemaPath, context))
     }
     if (!validators.length) {
         // If it matches the user's definition, don't use `catalog.json`.
@@ -114,12 +103,8 @@ function parseOption(
                 if (!matchFile(filename, schemaData.fileMatch)) {
                     continue
                 }
-                const schema = loadSchema(schemaData.url, context)
-                if (!schema) {
-                    continue
-                }
-                const validator = compile(schema, schemaData.url, context)
-                validators.push(validator)
+                const validator = schemaPathToValidator(schemaData.url, context)
+                if (validator) validators.push(validator)
             }
         }
     }
@@ -133,6 +118,54 @@ function parseOption(
         }
         return errors
     }
+}
+
+/**
+ * Generate validator from schema path
+ */
+function schemaPathToValidator(
+    schemaPath: string,
+    context: RuleContext,
+): Validator | null {
+    const schema = loadSchema(schemaPath, context)
+    if (!schema) {
+        return null
+    }
+    return compile(schema, schemaPath, context)
+}
+
+/**
+ * Generate validator from schema object
+ */
+function schemaObjectToValidator(
+    schema: SchemaObject | null,
+    context: RuleContext,
+): Validator | null {
+    if (!schema) {
+        return null
+    }
+    const schemaPath = getCwd(context)
+    return compile(schema, schemaPath, context)
+}
+
+/**
+ * Report for cannot resolved schema path
+ */
+function reportCannotResolvedPath(schemaPath: string, context: RuleContext) {
+    context.report({
+        loc: { line: 1, column: 0 },
+        message: `Specified schema could not be resolved. Path: "${schemaPath}"`,
+    })
+}
+
+/**
+ * Report for cannot resolved schema object
+ */
+function reportCannotResolvedObject(context: RuleContext) {
+    context.report({
+        loc: { line: 1, column: 0 },
+        message: `Specified schema could not be resolved.`,
+    })
 }
 
 export default createRule("no-invalid", {
@@ -179,16 +212,28 @@ export default createRule("no-invalid", {
         type: "suggestion",
     },
     create(context, { filename }) {
-        const cwd = getCwd(context)
-        const validator = parseOption(
-            context.options[0] || {},
-            context,
-            filename.startsWith(cwd) ? path.relative(cwd, filename) : filename,
-        )
-
-        if (!validator) {
-            // ignore
-            return {}
+        const $schemaPath = findSchemaPath(context.getSourceCode().ast)
+        let validator: Validator
+        if ($schemaPath != null) {
+            const v = schemaPathToValidator($schemaPath, context)
+            if (!v) {
+                reportCannotResolvedPath($schemaPath, context)
+                return {}
+            }
+            validator = v
+        } else {
+            const cwd = getCwd(context)
+            const v = parseOption(
+                context.options[0] || {},
+                context,
+                filename.startsWith(cwd)
+                    ? path.relative(cwd, filename)
+                    : filename,
+            )
+            if (!v) {
+                return {}
+            }
+            validator = v
         }
 
         let existsExports = false
@@ -252,8 +297,32 @@ export default createRule("no-invalid", {
             })
         }
 
+        /** Find schema path from program */
+        function findSchemaPathFromJSON(node: JSONAST.JSONProgram) {
+            const rootExpr = node.body[0].expression
+            if (rootExpr.type !== "JSONObjectExpression") {
+                return null
+            }
+            for (const prop of rootExpr.properties) {
+                if (
+                    prop.computed ||
+                    (prop.key.type === "JSONIdentifier"
+                        ? prop.key.name
+                        : prop.key.value) !== "$schema"
+                ) {
+                    continue
+                }
+                return getStaticJSONValue(prop.value)
+            }
+            return null
+        }
+
         return {
             Program(node) {
+                if (!validator) {
+                    // ignore
+                    return
+                }
                 if (context.parserServices.isJSON) {
                     const program = node as JSONAST.JSONProgram
                     validateData(getStaticJSONValue(program), (error) => {
@@ -327,6 +396,63 @@ export default createRule("no-invalid", {
                 }
             }
             return errorData.value.loc
+        }
+
+        /** Find schema path from program */
+        function findSchemaPathFromYAML(node: YAML.YAMLProgram) {
+            const rootExpr = node.body[0]?.content
+            if (!rootExpr || rootExpr.type !== "YAMLMapping") {
+                return null
+            }
+            for (const pair of rootExpr.pairs) {
+                if (
+                    !pair.key ||
+                    !pair.value ||
+                    pair.key.type !== "YAMLScalar" ||
+                    pair.key.value !== "$schema"
+                ) {
+                    continue
+                }
+                return getStaticYAMLValue(pair.value)
+            }
+            return null
+        }
+
+        /** Find schema path from program */
+        function findSchemaPathFromTOML(node: TOML.TOMLProgram) {
+            const rootExpr = node.body[0]
+            for (const body of rootExpr.body) {
+                if (
+                    body.type !== "TOMLKeyValue" ||
+                    body.key.keys.length !== 1
+                ) {
+                    continue
+                }
+                const keyNode = body.key.keys[0]
+                const key =
+                    keyNode.type === "TOMLBare" ? keyNode.name : keyNode.value
+                if (key !== "$schema") {
+                    continue
+                }
+                return getStaticTOMLValue(body.value)
+            }
+            return null
+        }
+
+        /** Find schema path from program */
+        function findSchemaPath(node: unknown) {
+            let $schema = null
+            if (context.parserServices.isJSON) {
+                const program = node as JSONAST.JSONProgram
+                $schema = findSchemaPathFromJSON(program)
+            } else if (context.parserServices.isYAML) {
+                const program = node as YAML.YAMLProgram
+                $schema = findSchemaPathFromYAML(program)
+            } else if (context.parserServices.isTOML) {
+                const program = node as TOML.TOMLProgram
+                $schema = findSchemaPathFromTOML(program)
+            }
+            return typeof $schema === "string" ? $schema : null
         }
     },
 })
