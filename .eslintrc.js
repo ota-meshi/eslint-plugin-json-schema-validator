@@ -70,8 +70,10 @@ module.exports = {
       },
     },
     {
-      files: ["src/rules/**"],
-      rules: {},
+      files: ["tests/fixtures/**"],
+      rules: {
+        "json-schema-validator/no-invalid": "off",
+      },
     },
     {
       files: ["scripts/**/*.ts", "tests/**/*.ts"],
