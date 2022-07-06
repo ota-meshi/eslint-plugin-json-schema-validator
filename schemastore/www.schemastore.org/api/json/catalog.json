@@ -531,6 +531,15 @@
       "url": "https://blockprotocol.org/schemas/block-metadata.json"
     },
     {
+      "name": "BX CI",
+      "description": "CI configuration for Amdocs Bill Experience projects",
+      "url": "https://json.schemastore.org/bxci.schema-1.0.json",
+      "fileMatch": ["**/bxci.yaml", "**/bxci.yml"],
+      "versions": {
+        "1.0": "https://json.schemastore.org/bxci.schema-1.0.json"
+      }
+    },
+    {
       "name": "CMake Presets",
       "description": "Schema for CMake Presets",
       "fileMatch": ["CMakePresets.json", "CMakeUserPresets.json"],
@@ -1975,6 +1984,19 @@
         "3.0": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.0/schema.json",
         "3.1": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"
       }
+    },
+    {
+      "name": "openrpc.json",
+      "description": "A JSON schema for OpenRPC documents. See https://open-rpc.org for more information.",
+      "fileMatch": [
+        "openrpc.json",
+        "openrpc.yml",
+        "openrpc.yaml",
+        "open-rpc.json",
+        "open-rpc.yml",
+        "open-rpc.yaml"
+      ],
+      "url": "https://meta.open-rpc.org/"
     },
     {
       "name": "openfin.json",
