@@ -75,6 +75,7 @@ export interface RuleContext {
     }
     getAncestors(): Node[]
     getFilename(): string
+    getPhysicalFilename?: () => string
     getSourceCode(): SourceCode
     report(descriptor: ReportDescriptor): void
     // eslint@6 does not have this method.
@@ -211,26 +212,26 @@ type CursorWithSkipOptions =
     | number
     | FilterPredicate
     | {
-          includeComments?: boolean
-          filter?: FilterPredicate
-          skip?: number
-      }
+        includeComments?: boolean
+        filter?: FilterPredicate
+        skip?: number
+    }
 
 type CursorWithCountOptions =
     | number
     | FilterPredicate
     | {
-          includeComments?: boolean
-          filter?: FilterPredicate
-          count?: number
-      }
+        includeComments?: boolean
+        filter?: FilterPredicate
+        count?: number
+    }
 
 interface ReportDescriptorOptionsBase {
     data?: { [key: string]: string }
 
     fix?:
-        | null
-        | ((fixer: RuleFixer) => null | Fix | IterableIterator<Fix> | Fix[])
+    | null
+    | ((fixer: RuleFixer) => null | Fix | IterableIterator<Fix> | Fix[])
 }
 
 type SuggestionDescriptorMessage = { desc: string } | { messageId: string }
