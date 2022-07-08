@@ -453,7 +453,7 @@ export default createRule("no-invalid", {
                 ? $schema.startsWith(".")
                     ? path.resolve(
                         path.dirname(
-                            getPhysicalFilename(context.getFilename()),
+                            typeof context.getPhysicalFilename === 'function' ? context.getPhysicalFilename() : getPhysicalFilename(context.getFilename()),
                         ),
                         $schema,
                     )
