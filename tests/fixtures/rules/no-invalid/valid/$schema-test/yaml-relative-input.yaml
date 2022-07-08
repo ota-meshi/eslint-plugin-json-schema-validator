@@ -1,0 +1,2 @@
+$schema: "../../../../utils/test.schema.json"
+theAnswer: 42

@@ -27,6 +27,7 @@ import type {
 import type { ValidateError, Validator } from "../utils/validator-factory"
 import { compile } from "../utils/validator-factory"
 import type { SchemaObject } from "../utils/types"
+import fs from "node:fs"
 
 /**
  * Checks if match file
@@ -448,7 +449,16 @@ export default createRule("no-invalid", {
                 const program = node as TOML.TOMLProgram
                 $schema = findSchemaPathFromTOML(program)
             }
-            return typeof $schema === "string" ? $schema : null
+            return typeof $schema === "string"
+                ? $schema.startsWith(".")
+                    ? path.resolve(
+                        path.dirname(
+                            getPhysicalFilename(context.getFilename()),
+                        ),
+                        $schema,
+                    )
+                    : $schema
+                : null
         }
     },
 })
@@ -461,4 +471,27 @@ function getCwd(context: RuleContext) {
         return context.getCwd()
     }
     return path.resolve("")
+}
+
+/**
+ * ! copied from https://github.com/mdx-js/eslint-mdx/blob/b97db2e912a416d5d40ddb78ab6c9fa1ab150c17/packages/eslint-mdx/src/helpers.ts#L28-L50
+ *
+ * Given a filepath, get the nearest path that is a regular file.
+ * The filepath provided by eslint may be a virtual filepath rather than a file
+ * on disk. This attempts to transform a virtual path into an on-disk path
+ */
+function getPhysicalFilename(filename: string, child?: string): string {
+    try {
+        if (fs.statSync(filename).isDirectory()) {
+            return child || filename
+        }
+    } catch (err) {
+        const { code } = err as { code: string }
+        // https://github.com/eslint/eslint/issues/11989
+        // Additionally, it seems there is no `ENOTDIR` code on Windows...
+        if (code === "ENOTDIR" || code === "ENOENT") {
+            return getPhysicalFilename(path.dirname(filename), filename)
+        }
+    }
+    return filename
 }
