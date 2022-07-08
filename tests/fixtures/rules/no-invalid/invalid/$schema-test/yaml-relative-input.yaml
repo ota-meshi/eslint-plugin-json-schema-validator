@@ -1,2 +1,2 @@
-$schema: "../../../../utils/test.schema.json"
+$schema: ../../../../utils/test.schema.json
 theAnswer: {}

@@ -452,11 +452,13 @@ export default createRule("no-invalid", {
             return typeof $schema === "string"
                 ? $schema.startsWith(".")
                     ? path.resolve(
-                        path.dirname(
-                            typeof context.getPhysicalFilename === 'function' ? context.getPhysicalFilename() : getPhysicalFilename(context.getFilename()),
-                        ),
-                        $schema,
-                    )
+                          path.dirname(
+                              typeof context.getPhysicalFilename === "function"
+                                  ? context.getPhysicalFilename()
+                                  : getPhysicalFilename(context.getFilename()),
+                          ),
+                          $schema,
+                      )
                     : $schema
                 : null
         }
