@@ -1,0 +1,20 @@
+{
+    "$id": "https://example.com/test.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Test",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "description": "The schema's URI"
+        },
+        "theAnswer": {
+            "type": "number",
+            "description": "The Answer to the Ultimate Question of Life, the Universe, and Everything",
+            "minimum": 42,
+            "maximum": 42
+        }
+    },
+    "additionalProperties": false,
+    "required": ["$schema", "theAnswer"]
+}

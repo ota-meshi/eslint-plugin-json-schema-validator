@@ -268,7 +268,7 @@ function getConfig(ruleName: string, inputFile: string) {
         return Object.assign(
             { parser: require.resolve(getParserName(inputFile)) },
             config,
-            { code, filename },
+            { code, filename: inputFile },
         )
     }
     // inline config
@@ -296,7 +296,7 @@ function getConfig(ruleName: string, inputFile: string) {
     return Object.assign(
         { parser: require.resolve(getParserName(inputFile)) },
         config,
-        { code, filename },
+        { code, filename: inputFile },
     )
 }
 

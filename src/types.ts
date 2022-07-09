@@ -75,6 +75,7 @@ export interface RuleContext {
     }
     getAncestors(): Node[]
     getFilename(): string
+    getPhysicalFilename?: () => string
     getSourceCode(): SourceCode
     report(descriptor: ReportDescriptor): void
     // eslint@6 does not have this method.
