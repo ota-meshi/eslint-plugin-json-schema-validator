@@ -230,8 +230,6 @@ This plugin uses [jsonc-eslint-parser](https://github.com/ota-meshi/jsonc-eslint
 
 See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
 
-The JSON Schema included in this plugin release is copy from [SchemaStore]. Check [here](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/schemastore/README.md) for licenses and details.
-
 [SchemaStore]: https://github.com/SchemaStore/schemastore
 [JSON]: https://json.org/
 [JSONC]: https://github.com/microsoft/node-jsonc-parser

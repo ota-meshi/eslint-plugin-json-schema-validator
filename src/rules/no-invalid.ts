@@ -1,5 +1,3 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair -- ignore
-/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ignore */
 import type { AST as JSONAST } from "jsonc-eslint-parser"
 import { getStaticJSONValue } from "jsonc-eslint-parser"
 import type { AST as YAML } from "yaml-eslint-parser"
@@ -16,7 +14,7 @@ import {
     getTOMLNodeFromPath,
     analyzeJsAST,
 } from "../utils/ast"
-import { loadSchema } from "../utils/schema"
+import { loadJson, loadSchema } from "../utils/schema"
 import type { RuleContext } from "../types"
 import type { NodeData } from "../utils/ast/common"
 import type {
@@ -27,7 +25,9 @@ import type {
 import type { ValidateError, Validator } from "../utils/validator-factory"
 import { compile } from "../utils/validator-factory"
 import type { SchemaObject } from "../utils/types"
-import fs from "node:fs"
+import fs from "fs"
+
+const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json"
 
 /**
  * Checks if match file
@@ -89,7 +89,7 @@ function parseOption(
     if (!validators.length) {
         // If it matches the user's definition, don't use `catalog.json`.
         if (option.useSchemastoreCatalog !== false) {
-            const catalog = require("../../schemastore/www.schemastore.org/api/json/catalog.json")
+            const catalog = loadJson(CATALOG_URL, context)
             const schemas: {
                 name?: string
                 description?: string

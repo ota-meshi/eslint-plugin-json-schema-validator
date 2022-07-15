@@ -2,6 +2,12 @@ const path = require("path");
 // eslint-disable-next-line node/no-missing-require -- no build
 const { rules } = require("../../lib/utils/rules");
 
+const schema = require("../../lib/utils/schema");
+// Generate a schema store cache and include it in the bundle.
+schema.loadJson("https://www.schemastore.org/api/json/catalog.json", {});
+schema.loadSchema("https://json.schemastore.org/eslintrc.json", {});
+schema.loadSchema("https://json.schemastore.org/prettierrc.json", {});
+
 function ruleToLink({
   meta: {
     docs: { ruleId, ruleName },
@@ -15,14 +21,13 @@ module.exports = {
   title: "eslint-plugin-json-schema-validator",
   description: "ESLint plugin that validates data using JSON Schema Validator",
   serviceWorker: true,
-  evergreen: true,
+  // evergreen: true,
   configureWebpack(_config, _isServer) {
     return {
       resolve: {
         alias: {
           module: require.resolve("./shim/module"),
-          // eslint-disable-next-line camelcase -- ignore
-          child_process: require.resolve("./shim/empty"),
+          fs: require.resolve("./shim/fs"),
           http: require.resolve("./shim/empty"),
           https: require.resolve("./shim/empty"),
           "json-schema-migrate": require.resolve("./shim/empty"),
@@ -36,9 +41,34 @@ module.exports = {
             "../../node_modules/ajv"
           ),
           synckit: require.resolve("./shim/synckit"),
+          // Adjust the yaml path as it gets confusing.
+          yaml$: path.resolve(
+            __dirname,
+            "../../node_modules/yaml/dist/index.js"
+          ),
         },
       },
     };
+  },
+  chainWebpack(config) {
+    // In order to parse with webpack 4, the yaml package needs to be transpiled by babel.
+    const jsRule = config.module.rule("js");
+    const original = jsRule.exclude.values();
+    jsRule.exclude
+      .clear()
+      .add((filepath) => {
+        if (/node_modules\/yaml\//u.test(filepath)) {
+          return false;
+        }
+        for (const fn of original) {
+          if (fn(filepath)) {
+            return true;
+          }
+        }
+        return false;
+      })
+      .end()
+      .use("babel-loader");
   },
 
   // head: [["link", { rel: "icon", type: "image/png", href: "/logo.png" }]],

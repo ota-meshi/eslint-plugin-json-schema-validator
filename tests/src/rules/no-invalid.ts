@@ -77,6 +77,34 @@ tester.run(
                         '"extends[0]" must be string.',
                     ],
                 },
+                {
+                    filename: path.join(__dirname, ".prettierrc.toml"),
+                    code: `
+trailingComma = "es3"
+tabWidth = 4
+semi = false
+singleQuote = true`,
+                    parser: require.resolve("toml-eslint-parser"),
+                    options: [
+                        {
+                            schemas: [
+                                {
+                                    fileMatch: [".prettierrc.toml"],
+                                    schema: "https://json.schemastore.org/prettierrc",
+                                },
+                            ],
+                            useSchemastoreCatalog: false,
+                        },
+                    ],
+                    errors: [
+                        '"trailingComma" must be equal to "es5".',
+                        '"trailingComma" must be equal to "none".',
+                        '"trailingComma" must be equal to "all".',
+                        '"trailingComma" must match exactly one schema in oneOf.',
+                        "Root must be string.",
+                        "Root must match exactly one schema in oneOf.",
+                    ],
+                },
             ],
         },
     ),
