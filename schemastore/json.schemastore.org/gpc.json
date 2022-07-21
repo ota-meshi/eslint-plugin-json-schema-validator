@@ -1,1 +1,0 @@
-{"$comment":"https://globalprivacycontrol.github.io/gpc-spec/","$schema":"http://json-schema.org/draft-07/schema","properties":{"gpc":{"title":"Global Privacy Control","type":"boolean"},"version":{"title":"Version","type":"integer","default":1},"lastUpdate":{"title":"Last Update","type":"string"}},"required":["gpc"],"title":"Global Privacy Control","type":"object"}

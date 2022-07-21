@@ -1,1 +1,0 @@
-{"$comment":"https://minecraft.fandom.com/wiki/Data_Pack","$schema":"http://json-schema.org/draft-07/schema#","properties":{"pack":{"title":"Pack","type":"object","properties":{"pack_format":{"title":"Pack Format","type":"number"},"description":{"title":"Description","type":"string"}}}},"title":"Minecraft Data Pack Metadata","type":"object"}

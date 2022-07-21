@@ -1,1 +1,0 @@
-{"$schema":"http://json-schema.org/draft-07/schema","additionalProperties":true,"properties":{"strictSSL":{"type":"boolean","default":true},"proxy":{"type":"string","format":"uri"},"token":{"type":"string"}},"title":"JSON schema for .tsdrc files","type":"object"}

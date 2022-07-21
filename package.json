@@ -12,8 +12,7 @@
   },
   "main": "lib/index.js",
   "files": [
-    "lib",
-    "schemastore"
+    "lib"
   ],
   "keywords": [
     "eslint",
@@ -38,12 +37,9 @@
     "prebuild": "yarn -s clean",
     "predocs:watch": "yarn build:ts",
     "preversion": "yarn test && git add .",
-    "re-migrate": "yarn ts tools/update-schemastore/re-migrate",
     "test": "env-cmd -e test yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
     "ts": "node -r esbuild-register",
     "update": "yarn ts ./tools/update && yarn lint-fix",
-    "update:schemastore": "yarn ts tools/update-schemastore",
-    "update:schemastore-only": "yarn ts tools/update-schemastore/only",
     "version": "env-cmd -e version yarn update && git add ."
   },
   "peerDependencies": {
@@ -109,6 +105,7 @@
     "typescript": "^4.0.0",
     "vue-eslint-editor": "^1.1.0",
     "vue-eslint-parser": "^9.0.0",
-    "vuepress": "^1.5.2"
+    "vuepress": "^1.5.2",
+    "yaml": "^2.1.1"
   }
 }
