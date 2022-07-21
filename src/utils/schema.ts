@@ -94,7 +94,7 @@ function loadJsonFromURL<T>(
             if (!RELOADING.has(jsonFilePath)) {
                 RELOADING.add(jsonFilePath)
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises -- ignore
-                get(jsonFilePath, httpRequestOptions, httpGetModulePath).then(
+                get(jsonPath, httpRequestOptions, httpGetModulePath).then(
                     (json) => {
                         postProcess(jsonPath, jsonFilePath, json, context, edit)
                         RELOADING.delete(jsonFilePath)

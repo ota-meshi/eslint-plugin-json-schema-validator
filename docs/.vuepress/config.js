@@ -31,7 +31,7 @@ module.exports = {
           http: require.resolve("./shim/empty"),
           https: require.resolve("./shim/empty"),
           "json-schema-migrate": require.resolve("./shim/empty"),
-          eslint: path.resolve(__dirname, "./shim/eslint"),
+          eslint$: path.resolve(__dirname, "./shim/eslint"),
           ajv: path.resolve(
             require.resolve("eslint/package.json"),
             "../node_modules/ajv"
@@ -45,6 +45,16 @@ module.exports = {
           yaml$: path.resolve(
             __dirname,
             "../../node_modules/yaml/dist/index.js"
+          ),
+          // Adjust the esquery path as it gets confusing.
+          esquery: path.resolve(
+            __dirname,
+            "../../node_modules/esquery/dist/esquery.min.js"
+          ),
+          // Adjust the @eslint/eslintrc path as it gets confusing.
+          "@eslint/eslintrc/universal": path.resolve(
+            __dirname,
+            "../../node_modules/@eslint/eslintrc/dist/eslintrc-universal.cjs"
           ),
         },
       },

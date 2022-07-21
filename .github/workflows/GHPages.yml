@@ -6,14 +6,18 @@ on:
 
 jobs:
   deploy-docs:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
       - name: Install Packages
         run: yarn
       - name: Build docs
-        run: yarn docs:build
+        run: |+
+          export NODE_OPTIONS=--openssl-legacy-provider
+          yarn docs:build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

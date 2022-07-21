@@ -34,7 +34,7 @@
               class="message"
             >
               [{{ msg.line }}:{{ msg.column }}]: {{ msg.message }} (<a
-                :href="getURL(msg.ruleId)"
+                :href="getRule(msg.ruleId).url"
                 target="_blank"
               >
                 {{ msg.ruleId }} </a
@@ -48,13 +48,11 @@
 </template>
 
 <script>
-import * as coreRules from "../../../node_modules/eslint4b/dist/core-rules";
-import plugin from "../../..";
 import PgEditor from "./components/PgEditor.vue";
 import RulesSettings from "./components/RulesSettings.vue";
 import SnsBar from "./components/SnsBar.vue";
 import { deserializeState, serializeState } from "./state";
-import { DEFAULT_RULES_CONFIG } from "./rules";
+import { DEFAULT_RULES_CONFIG, getRule } from "./rules";
 
 const DEFAULT_CODE = `{
     "extends": [ 42 ],
@@ -130,16 +128,6 @@ const VUE_CODE = `<i18n>
 ${scriptEnd}
 `;
 
-const ruleURLs = {};
-for (const k of Object.keys(plugin.rules)) {
-  const rule = plugin.rules[k];
-  ruleURLs[rule.meta.docs.ruleId] = rule.meta.docs.url;
-}
-for (const k of Object.keys(coreRules)) {
-  const rule = coreRules[k];
-  ruleURLs[k] = rule.meta.docs.url;
-}
-
 export default {
   name: "PlaygroundBlock",
   components: { PgEditor, RulesSettings, SnsBar },
@@ -193,8 +181,8 @@ export default {
     onChange({ messages }) {
       this.messages = messages;
     },
-    getURL(ruleId) {
-      return ruleURLs[ruleId] || "";
+    getRule(ruleId) {
+      return getRule(ruleId);
     },
     onUrlHashChange() {
       const serializedString =

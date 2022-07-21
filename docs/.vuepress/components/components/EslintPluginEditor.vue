@@ -17,6 +17,7 @@
 
 <script>
 import EslintEditor from "vue-eslint-editor";
+import { Linter } from "eslint/lib/linter";
 import plugin from "../../../..";
 
 export default {
@@ -58,7 +59,6 @@ export default {
 
   data() {
     return {
-      eslint4b: null,
       jsoncESLintParser: null,
       yamlESLintParser: null,
       tomlESLintParser: null,
@@ -108,7 +108,6 @@ export default {
     },
     linter() {
       if (
-        !this.eslint4b ||
         !this.jsoncESLintParser ||
         !this.yamlESLintParser ||
         !this.tomlESLintParser ||
@@ -116,7 +115,6 @@ export default {
       ) {
         return null;
       }
-      const Linter = this.eslint4b;
 
       const linter = new Linter();
       linter.defineParser("jsonc-eslint-parser", this.jsoncESLintParser);
@@ -136,19 +134,16 @@ export default {
   async mounted() {
     // Load linter asynchronously.
     const [
-      { default: eslint4b },
       jsoncESLintParser,
       yamlESLintParser,
       tomlESLintParser,
       vueESLintParser,
     ] = await Promise.all([
-      import("eslint4b"),
       import("jsonc-eslint-parser"),
       import("yaml-eslint-parser"),
       import("toml-eslint-parser"),
       import("espree").then(() => import("vue-eslint-parser")),
     ]);
-    this.eslint4b = eslint4b;
     this.jsoncESLintParser = jsoncESLintParser;
     this.yamlESLintParser = yamlESLintParser;
     this.tomlESLintParser = tomlESLintParser;

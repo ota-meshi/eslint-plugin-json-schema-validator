@@ -1,31 +1,27 @@
 /* eslint node/no-unsupported-features/es-syntax: off -- not node */
-import * as coreRules from "../../../../node_modules/eslint4b/dist/core-rules";
+import { Linter } from "eslint/lib/linter";
 // eslint-disable-next-line node/no-missing-import -- no build
 import plugin from "../../../../";
 
+const coreRules = Object.fromEntries(new Linter().getRules());
+
 const CATEGORY_TITLES = {
   recommended: "eslint-plugin-json-schema-validator",
-  "eslint-core-rules@Possible Errors": "ESLint core rules(Possible Errors)",
-  "eslint-core-rules@Best Practices": "ESLint core rules(Best Practices)",
-  "eslint-core-rules@Strict Mode": "ESLint core rules(Strict Mode)",
-  "eslint-core-rules@Variables": "ESLint core rules(Variables)",
-  "eslint-core-rules@Node.js and CommonJS":
-    "ESLint core rules(Node.js and CommonJS)",
-  "eslint-core-rules@Stylistic Issues": "ESLint core rules(Stylistic Issues)",
-  "eslint-core-rules@ECMAScript 6": "ESLint core rules(ECMAScript 6)",
+  "eslint-core-rules@problem": "ESLint core rules(Possible Errors)",
+  "eslint-core-rules@suggestion": "ESLint core rules(Suggestions)",
+  "eslint-core-rules@layout": "ESLint core rules(Layout & Formatting)",
 };
 const CATEGORY_INDEX = {
   recommended: 2,
-  "eslint-core-rules@Possible Errors": 6,
-  "eslint-core-rules@Best Practices": 7,
-  "eslint-core-rules@Strict Mode": 8,
-  "eslint-core-rules@Variables": 9,
-  "eslint-core-rules@Node.js and CommonJS": 10,
-  "eslint-core-rules@Stylistic Issues": 11,
-  "eslint-core-rules@ECMAScript 6": 12,
+  "eslint-core-rules@problem": 20,
+  "eslint-core-rules@suggestion": 21,
+  "eslint-core-rules@layout": 22,
 };
 const CATEGORY_CLASSES = {
   recommended: "eslint-plugin-json-schema-validator__category",
+  "eslint-core-rules@problem": "eslint-core-category",
+  "eslint-core-rules@suggestion": "eslint-core-category",
+  "eslint-core-rules@layout": "eslint-core-category",
 };
 
 const allRules = [];
@@ -43,11 +39,12 @@ for (const k of Object.keys(plugin.rules)) {
       rule.meta.docs.categories.includes("recommended"),
   });
 }
+
 for (const k of Object.keys(coreRules)) {
   const rule = coreRules[k];
   allRules.push({
-    category: `eslint-core-rules@${rule.meta.docs.category}`,
-    fallbackTitle: `ESLint core rules(${rule.meta.docs.category})`,
+    classes: "eslint-core-rule",
+    category: `eslint-core-rules@${rule.meta.type}`,
     ruleId: k,
     url: rule.meta.docs.url,
     initChecked: false, // rule.meta.docs.recommended,
@@ -104,3 +101,21 @@ export const DEFAULT_RULES_CONFIG = allRules.reduce((c, r) => {
 }, {});
 
 export const rules = allRules;
+
+export function getRule(ruleId) {
+  if (!ruleId) {
+    return { url: "" };
+  }
+  for (const category of categories) {
+    for (const rule of category.rules) {
+      if (rule.ruleId === ruleId) {
+        return rule;
+      }
+    }
+  }
+  return {
+    ruleId,
+    url: "",
+    classes: "",
+  };
+}
