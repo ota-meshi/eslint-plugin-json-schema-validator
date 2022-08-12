@@ -1,0 +1,45 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/array*.yaml"],
+                    "schema": {
+                        "type": "array",
+                        "items": { "type": "number" }
+                    }
+                },
+                {
+                    "fileMatch": ["**/test*.yaml"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "a": {
+                                "type": "object",
+                                "properties": {
+                                    "a": {
+                                        "type": "object",
+                                        "properties": {
+                                            "null": { "type": "number" }
+                                        }
+                                    }
+                                }
+                            },
+                            "b": {
+                                "type": "object",
+                                "properties": {
+                                    "b": {
+                                        "type": "object",
+                                        "properties": {
+                                            "b": { "type": "number" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
