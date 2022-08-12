@@ -2,16 +2,16 @@
     {
         "message": "\"plugins[1]\" must be string.",
         "line": 6,
-        "column": 6,
-        "endLine": 7,
-        "endColumn": 5
+        "column": 5,
+        "endLine": 6,
+        "endColumn": 6
     },
     {
         "message": "\"plugins[2]\" must be string.",
         "line": 7,
-        "column": 6,
-        "endLine": 8,
-        "endColumn": 5
+        "column": 5,
+        "endLine": 7,
+        "endColumn": 6
     },
     {
         "message": "\"overrides[0].files\" must be string.",
@@ -51,9 +51,9 @@
     {
         "message": "\"overrides[0].extends[1]\" must be string.",
         "line": 13,
-        "column": 12,
-        "endLine": 14,
-        "endColumn": 11
+        "column": 11,
+        "endLine": 13,
+        "endColumn": 12
     },
     {
         "message": "Unexpected property \"overrides[0].unknown\"",

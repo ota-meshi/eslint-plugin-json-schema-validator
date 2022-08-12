@@ -1,5 +1,6 @@
 import type { AST as YAML } from "yaml-eslint-parser"
 import { getStaticYAMLValue } from "yaml-eslint-parser"
+import type { Token } from "../../types"
 import type { GetNodeFromPath, NodeData } from "./common"
 
 type TraverseTarget =
@@ -87,19 +88,22 @@ const GET_YAML_NODES: Record<
                         .slice(0, index)
                         .reverse()
                         .find((n) => n != null)
-                    let tokenIndex = before ? node.entries.indexOf(before) : -1
-                    let token = before
-                        ? sourceCode.getTokenAfter(before)!
-                        : sourceCode.getFirstToken(node)
-                    while (tokenIndex < index) {
-                        tokenIndex++
-                        token = sourceCode.getTokenAfter(token)!
+                    let hyphenTokenElementIndex: number
+                    let hyphenToken: Token
+                    if (!before) {
+                        hyphenTokenElementIndex = 0
+                        hyphenToken = sourceCode.getFirstToken(node)
+                    } else {
+                        hyphenTokenElementIndex =
+                            node.entries.indexOf(before) + 1
+                        hyphenToken = sourceCode.getTokenAfter(before)!
                     }
-
-                    return [
-                        sourceCode.getTokenBefore(token)!.range![1],
-                        token.range![0],
-                    ]
+                    // If it is preceded by consecutive blank elements, it must be moved to the target.
+                    while (hyphenTokenElementIndex < index) {
+                        hyphenTokenElementIndex++
+                        hyphenToken = sourceCode.getTokenAfter(hyphenToken)!
+                    }
+                    return hyphenToken.range!
                 },
                 value: null,
             }
