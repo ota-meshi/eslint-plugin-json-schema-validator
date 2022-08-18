@@ -92,7 +92,7 @@
     "monaco-editor": "^0.34.0",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
-    "prettier-plugin-pkg": "^0.16.0",
+    "prettier-plugin-pkg": "^0.17.0",
     "raw-loader": "^4.0.1",
     "request": "^2.88.2",
     "semver": "^7.3.2",
