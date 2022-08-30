@@ -90,6 +90,10 @@ function parseOption(
         // If it matches the user's definition, don't use `catalog.json`.
         if (option.useSchemastoreCatalog !== false) {
             const catalog = loadJson(CATALOG_URL, context)
+            if (!catalog) {
+                return null
+            }
+
             const schemas: {
                 name?: string
                 description?: string
