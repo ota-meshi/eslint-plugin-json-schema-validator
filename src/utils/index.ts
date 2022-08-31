@@ -1,16 +1,16 @@
 /* eslint @typescript-eslint/no-explicit-any: off -- util */
 import type {
-    RuleListener,
-    RuleModule,
-    PartialRuleModule,
-    RuleContext,
-} from "../types"
-import type { Rule } from "eslint"
-import type { AST as VueAST } from "vue-eslint-parser"
-import * as jsoncESLintParser from "jsonc-eslint-parser"
-import * as yamlESLintParser from "yaml-eslint-parser"
-import * as tomlESLintParser from "toml-eslint-parser"
-import path from "path"
+  RuleListener,
+  RuleModule,
+  PartialRuleModule,
+  RuleContext,
+} from "../types";
+import type { Rule } from "eslint";
+import type { AST as VueAST } from "vue-eslint-parser";
+import * as jsoncESLintParser from "jsonc-eslint-parser";
+import * as yamlESLintParser from "yaml-eslint-parser";
+import * as tomlESLintParser from "toml-eslint-parser";
+import path from "path";
 
 /**
  * Define the rule.
@@ -18,150 +18,141 @@ import path from "path"
  * @param rule rule module
  */
 export function createRule(
-    ruleName: string,
-    rule: PartialRuleModule,
+  ruleName: string,
+  rule: PartialRuleModule
 ): RuleModule {
-    return {
-        meta: {
-            ...rule.meta,
-            docs: {
-                ...rule.meta.docs,
-                url: `https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/${ruleName}.html`,
-                ruleId: `json-schema-validator/${ruleName}`,
-                ruleName,
+  return {
+    meta: {
+      ...rule.meta,
+      docs: {
+        ...rule.meta.docs,
+        url: `https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/${ruleName}.html`,
+        ruleId: `json-schema-validator/${ruleName}`,
+        ruleName,
+      },
+    },
+    create(context: Rule.RuleContext): any {
+      const filename = context.getFilename();
+      const visitor = rule.create(context as any, {
+        customBlock: false,
+        filename,
+      });
+      if (
+        typeof context.parserServices.defineCustomBlocksVisitor ===
+          "function" &&
+        path.extname(filename) === ".vue"
+      ) {
+        const jsonVisitor = context.parserServices.defineCustomBlocksVisitor(
+          context,
+          jsoncESLintParser,
+          {
+            target(lang: string | null, block: VueAST.VElement) {
+              if (lang) {
+                return /^json[5c]?$/i.test(lang);
+              }
+              return block.name === "i18n";
             },
-        },
-        create(context: Rule.RuleContext): any {
-            const filename = context.getFilename()
-            const visitor = rule.create(context as any, {
-                customBlock: false,
-                filename,
-            })
-            if (
-                typeof context.parserServices.defineCustomBlocksVisitor ===
-                    "function" &&
-                path.extname(filename) === ".vue"
-            ) {
-                const jsonVisitor =
-                    context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        jsoncESLintParser,
-                        {
-                            target(
-                                lang: string | null,
-                                block: VueAST.VElement,
-                            ) {
-                                if (lang) {
-                                    return /^json[5c]?$/i.test(lang)
-                                }
-                                return block.name === "i18n"
-                            },
-                            create(blockContext: RuleContext) {
-                                return rule.create(blockContext, {
-                                    customBlock: true,
-                                    filename: getBlockFileName(
-                                        blockContext.parserServices
-                                            .customBlock!,
-                                        "json",
-                                    ),
-                                })
-                            },
-                        },
-                    )
-                const yamlVisitor =
-                    context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        yamlESLintParser,
-                        {
-                            target: ["yaml", "yml"],
-                            create(blockContext: RuleContext) {
-                                return rule.create(blockContext, {
-                                    customBlock: true,
-                                    filename: getBlockFileName(
-                                        blockContext.parserServices
-                                            .customBlock!,
-                                        "yaml",
-                                    ),
-                                })
-                            },
-                        },
-                    )
-                const tomlVisitor =
-                    context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        tomlESLintParser,
-                        {
-                            target: ["toml"],
-                            create(blockContext: RuleContext) {
-                                return rule.create(blockContext, {
-                                    customBlock: true,
-                                    filename: getBlockFileName(
-                                        blockContext.parserServices
-                                            .customBlock!,
-                                        "toml",
-                                    ),
-                                })
-                            },
-                        },
-                    )
+            create(blockContext: RuleContext) {
+              return rule.create(blockContext, {
+                customBlock: true,
+                filename: getBlockFileName(
+                  blockContext.parserServices.customBlock!,
+                  "json"
+                ),
+              });
+            },
+          }
+        );
+        const yamlVisitor = context.parserServices.defineCustomBlocksVisitor(
+          context,
+          yamlESLintParser,
+          {
+            target: ["yaml", "yml"],
+            create(blockContext: RuleContext) {
+              return rule.create(blockContext, {
+                customBlock: true,
+                filename: getBlockFileName(
+                  blockContext.parserServices.customBlock!,
+                  "yaml"
+                ),
+              });
+            },
+          }
+        );
+        const tomlVisitor = context.parserServices.defineCustomBlocksVisitor(
+          context,
+          tomlESLintParser,
+          {
+            target: ["toml"],
+            create(blockContext: RuleContext) {
+              return rule.create(blockContext, {
+                customBlock: true,
+                filename: getBlockFileName(
+                  blockContext.parserServices.customBlock!,
+                  "toml"
+                ),
+              });
+            },
+          }
+        );
 
-                return compositingVisitors(
-                    visitor,
-                    jsonVisitor,
-                    yamlVisitor,
-                    tomlVisitor,
-                )
-            }
+        return compositingVisitors(
+          visitor,
+          jsonVisitor,
+          yamlVisitor,
+          tomlVisitor
+        );
+      }
 
-            return visitor
+      return visitor;
 
-            /** Get file name of block */
-            function getBlockFileName(
-                customBlock: VueAST.VElement,
-                langFallback: string,
-            ): string {
-                const attrs: Record<string, string | null> = {}
-                for (const attr of customBlock.startTag.attributes) {
-                    if (!attr.directive) {
-                        attrs[attr.key.name] = attr.value?.value ?? null
-                    }
-                }
-                const ext = attrs.lang || langFallback
+      /** Get file name of block */
+      function getBlockFileName(
+        customBlock: VueAST.VElement,
+        langFallback: string
+      ): string {
+        const attrs: Record<string, string | null> = {};
+        for (const attr of customBlock.startTag.attributes) {
+          if (!attr.directive) {
+            attrs[attr.key.name] = attr.value?.value ?? null;
+          }
+        }
+        const ext = attrs.lang || langFallback;
 
-                let attrQuery = ""
-                for (const [key, val] of Object.entries(attrs)) {
-                    if (["id", "index", "src", "type"].includes(key)) {
-                        continue
-                    }
-                    attrQuery += `&${key}=${val}`
-                }
+        let attrQuery = "";
+        for (const [key, val] of Object.entries(attrs)) {
+          if (["id", "index", "src", "type"].includes(key)) {
+            continue;
+          }
+          attrQuery += `&${key}=${val}`;
+        }
 
-                const result = `${customBlock.name}.${ext}`
-                return `${filename}/${result}?vue&type=custom&blockType=${customBlock.name}${attrQuery}`
-            }
-        },
-    }
+        const result = `${customBlock.name}.${ext}`;
+        return `${filename}/${result}?vue&type=custom&blockType=${customBlock.name}${attrQuery}`;
+      }
+    },
+  };
 }
 
 /**
  * Compositing visitors
  */
 function compositingVisitors(
-    visitor: RuleListener,
-    ...visitors: RuleListener[]
+  visitor: RuleListener,
+  ...visitors: RuleListener[]
 ): RuleListener {
-    for (const v of visitors) {
-        for (const key in v) {
-            if (visitor[key]) {
-                const o = visitor[key]!
-                visitor[key] = (...args) => {
-                    o(...args)
-                    v[key]!(...args)
-                }
-            } else {
-                visitor[key] = v[key]
-            }
-        }
+  for (const v of visitors) {
+    for (const key in v) {
+      if (visitor[key]) {
+        const o = visitor[key]!;
+        visitor[key] = (...args) => {
+          o(...args);
+          v[key]!(...args);
+        };
+      } else {
+        visitor[key] = v[key];
+      }
     }
-    return visitor
+  }
+  return visitor;
 }
