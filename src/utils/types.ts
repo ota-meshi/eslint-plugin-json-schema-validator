@@ -1,6 +1,6 @@
 export type SchemaObject = {
-    $id?: string
-    $schema?: string
-    $async?: false
-    [x: string]: unknown
-}
+  $id?: string;
+  $schema?: string;
+  $async?: false;
+  [x: string]: unknown;
+};
