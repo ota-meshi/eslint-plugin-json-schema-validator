@@ -65,7 +65,7 @@
     "@types/eslint-scope": "^3.7.0",
     "@types/eslint-visitor-keys": "^1.0.0",
     "@types/estree": "^1.0.0",
-    "@types/mocha": "^9.0.0",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^18.0.0",
     "@types/request": "^2.48.5",
     "@types/semver": "^7.3.1",
