@@ -95,7 +95,7 @@ export function loadTestCases(
     try {
       // writeFixtures(ruleName, inputFile, { force: true })
       errors = fs.readFileSync(errorFile, "utf8");
-    } catch (e) {
+    } catch (_e) {
       writeFixtures(ruleName, inputFile);
       errors = fs.readFileSync(errorFile, "utf8");
     }
