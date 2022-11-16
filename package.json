@@ -37,7 +37,7 @@
     "prebuild": "yarn -s clean",
     "predocs:watch": "yarn build:ts",
     "preversion": "yarn test && git add .",
-    "test": "env-cmd -e test yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
+    "test": "env-cmd -e test yarn mocha \"tests/src/**/http.ts\" --reporter dot --timeout 60000",
     "ts": "env-cmd -e base node -r esbuild-register",
     "update": "yarn ts ./tools/update && yarn lint-fix",
     "version": "env-cmd -e version yarn update && git add ."

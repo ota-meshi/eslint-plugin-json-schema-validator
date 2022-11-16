@@ -39,8 +39,13 @@ function get0(
           res.statusCode < 400 &&
           redirectCount < 3 // max redirect
         ) {
-          const redirectUrl = res.headers.location!;
-          resolve(get0(redirectUrl, options, redirectCount + 1));
+          const location = res.headers.location!;
+          try {
+            const redirectUrl = new URL(location, url).toString();
+            resolve(get0(redirectUrl, options, redirectCount + 1));
+          } catch (e) {
+            reject(e);
+          }
           return;
         }
         resolve(result);
