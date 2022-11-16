@@ -22,4 +22,22 @@ describe("HTTP GET.", () => {
       "eslint-plugin-json-schema-validator"
     );
   });
+  it("Should to receive a request with a redirect.", async () => {
+    const res = await get(
+      "https://unpkg.com/eslint-plugin-json-schema-validator/package.json"
+    );
+    assert.deepStrictEqual(
+      JSON.parse(res).name,
+      "eslint-plugin-json-schema-validator"
+    );
+  });
+  it("Should to receive a request with a redirect (2).", async () => {
+    const res = await get(
+      "https://raw.github.com/ota-meshi/eslint-plugin-json-schema-validator/main/package.json"
+    );
+    assert.deepStrictEqual(
+      JSON.parse(res).name,
+      "eslint-plugin-json-schema-validator"
+    );
+  });
 });
