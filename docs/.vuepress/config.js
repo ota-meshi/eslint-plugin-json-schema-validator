@@ -67,7 +67,7 @@ module.exports = {
     jsRule.exclude
       .clear()
       .add((filepath) => {
-        if (/node_modules\/yaml\//u.test(filepath)) {
+        if (/node_modules\/(?:yaml|minimatch)\//u.test(filepath)) {
           return false;
         }
         for (const fn of original) {
