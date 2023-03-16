@@ -114,7 +114,8 @@ function resolveError(
     let schemaId = "";
     if (
       error.missingRef.startsWith("http://") ||
-      error.missingRef.startsWith("https://")
+      error.missingRef.startsWith("https://") ||
+      error.missingRef.startsWith("vscode://")
     ) {
       const uri = new URL(error.missingRef);
       uri.hash = "";
