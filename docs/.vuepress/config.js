@@ -32,6 +32,10 @@ module.exports = {
           https: require.resolve("./shim/empty"),
           "json-schema-migrate": require.resolve("./shim/empty"),
           eslint$: path.resolve(__dirname, "./shim/eslint"),
+          "eslint-visitor-keys$": path.resolve(
+            __dirname,
+            "./shim/eslint-visitor-keys"
+          ),
           ajv: path.resolve(
             require.resolve("eslint/package.json"),
             "../node_modules/ajv"
