@@ -43,12 +43,65 @@ function loadJsonInternal<T>(
   if (jsonPath.startsWith("http://") || jsonPath.startsWith("https://")) {
     return loadJsonFromURL(jsonPath, context, edit);
   }
+  if (jsonPath.startsWith("vscode://")) {
+    let url = `https://raw.githubusercontent.com/ota-meshi/extract-vscode-schemas/main/resources/vscode/${jsonPath.slice(
+      9
+    )}`;
+    if (!url.endsWith(".json")) {
+      url = `${url}.json`;
+    }
+    return loadJsonFromURL(url, context, (orig) => {
+      const result = edit?.(orig) ?? orig;
+      if (jsonPath === "vscode://schemas/settings/machine") {
+        // Adjust `vscode://schemas/settings/machine` resource to avoid bugs.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+        const target = (result as any)?.properties?.[
+          "workbench.externalUriOpeners"
+        ]?.additionalProperties?.anyOf;
+        removeEmptyEnum(target);
+      } else if (jsonPath === "vscode://schemas/launch") {
+        // Adjust `vscode://schemas/launch` resource to avoid bugs.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+        const target = (result as any)?.properties?.compounds?.items?.properties
+          ?.configurations?.items?.oneOf;
+        removeEmptyEnum(target);
+      }
+      return result;
+    });
+  }
   const json = fs.readFileSync(
     path.resolve(getCwd(context), jsonPath),
     "utf-8"
   );
   const data = JSON.parse(json);
   return edit ? edit(data) : data;
+}
+
+/** remove empty `enum:` schema */
+function removeEmptyEnum(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
+  target: any
+) {
+  if (!target) return;
+  if (Array.isArray(target)) {
+    for (const e of target) {
+      removeEmptyEnum(e);
+    }
+    return;
+  }
+  if (Array.isArray(target.enum) && target.enum.length === 0) {
+    delete target.enum;
+    return;
+  }
+  if (
+    target.type === "object" &&
+    target.properties &&
+    typeof target.properties === "object"
+  ) {
+    for (const key of Object.keys(target.properties)) {
+      removeEmptyEnum(target.properties[key]);
+    }
+  }
 }
 
 /**
