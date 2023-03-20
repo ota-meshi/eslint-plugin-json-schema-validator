@@ -5,6 +5,7 @@ title: "json-schema-validator/no-invalid"
 description: "validate object with JSON Schema."
 since: "v0.1.0"
 ---
+
 # json-schema-validator/no-invalid
 
 > validate object with JSON Schema.
