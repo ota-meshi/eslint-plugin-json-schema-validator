@@ -36,11 +36,14 @@
     "new": "yarn ts ./tools/new-rule",
     "prebuild": "yarn -s clean",
     "predocs:watch": "yarn build:ts",
+    "prerelease": "yarn test && yarn build",
     "preversion": "yarn test && git add .",
+    "release": "changeset publish",
     "test": "env-cmd -e test yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
     "ts": "env-cmd -e base node -r esbuild-register",
     "update": "yarn ts ./tools/update && yarn lint-fix",
-    "version": "env-cmd -e version yarn update && git add ."
+    "version": "env-cmd -e version yarn update && git add .",
+    "version:ci": "env-cmd -e version-ci yarn update && changeset version"
   },
   "peerDependencies": {
     "eslint": ">=6.0.0"
@@ -59,6 +62,8 @@
   },
   "devDependencies": {
     "@actions/core": "^1.2.6",
+    "@changesets/changelog-github": "^0.4.6",
+    "@changesets/cli": "^2.24.2",
     "@ota-meshi/eslint-plugin": "^0.13.0",
     "@types/debug": "^4.1.5",
     "@types/eslint": "^8.0.0",
@@ -105,5 +110,8 @@
     "vue-eslint-parser": "^9.0.0",
     "vuepress": "^1.5.2",
     "yaml": "^2.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
