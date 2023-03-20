@@ -11,7 +11,7 @@ import type {
 } from "vue-eslint-parser/ast";
 import type { RuleContext } from "../../../types";
 // @ts-expect-error -- no type def
-import * as eslintUtils from "eslint-utils";
+import * as eslintUtils from "@eslint-community/eslint-utils";
 import type { Variable } from "eslint-scope";
 
 /**
