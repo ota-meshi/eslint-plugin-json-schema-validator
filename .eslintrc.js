@@ -29,6 +29,23 @@ module.exports = {
     "no-lonely-if": "off",
     "new-cap": "off",
     "no-shadow": "off",
+
+    // Repo rule
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: [
+          {
+            group: ["/regexpp", "/regexpp/*"],
+            message: "Please use `@eslint-community/regexpp` instead.",
+          },
+          {
+            group: ["/eslint-utils", "/eslint-utils/*"],
+            message: "Please use `@eslint-community/eslint-utils` instead.",
+          },
+        ],
+      },
+    ],
   },
   overrides: [
     {
