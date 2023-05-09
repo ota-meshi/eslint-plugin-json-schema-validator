@@ -1,5 +1,13 @@
 # eslint-plugin-json-schema-validator
 
+## 4.5.0
+
+### Minor Changes
+
+- [#217](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/217) [`0791e40`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/0791e400d26964175958cd6bbbf7ce2e494faf9b) Thanks [@ota-meshi](https://github.com/ota-meshi)! - feat: export meta object
+
+- [#215](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/215) [`82b48ee`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/82b48eed4abe913ae6ffa3be6b6897be957ebfbd) Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update dependency toml-eslint-parser to ^0.6.0
+
 ## 4.4.0
 
 ### Minor Changes
