@@ -1,5 +1,5 @@
 import assert from "assert";
-import plugin from "../../src";
+import * as plugin from "../../src";
 import { version } from "../../package.json";
 const expectedMeta = {
   name: "eslint-plugin-json-schema-validator",
