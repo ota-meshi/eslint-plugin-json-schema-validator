@@ -43,7 +43,7 @@ describe("Check if the strict of all rules is correct", () => {
       allRules.length === Object.keys(dirRules).length,
       `Did not equal the number of rules. expect:${
         Object.keys(dirRules).length
-      } actual:${allRules.length}`
+      } actual:${allRules.length}`,
     );
   });
 
@@ -64,7 +64,7 @@ describe("Check if the strict of all rules is correct", () => {
             const message = rule.meta.messages[messageId];
             assert.ok(
               message.endsWith(".") || message.endsWith("}}"),
-              "Doesn't end with a dot."
+              "Doesn't end with a dot.",
             );
           });
         }

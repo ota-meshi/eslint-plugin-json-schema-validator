@@ -122,7 +122,7 @@ const GET_YAML_NODES: Record<
  */
 export function getYAMLNodeFromPath(
   node: YAML.YAMLProgram,
-  [...paths]: string[]
+  [...paths]: string[],
 ): NodeData<YAML.YAMLNode> {
   let data: NodeData<YAML.YAMLNode> = {
     key: (sourceCode) => {

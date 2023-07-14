@@ -9,7 +9,7 @@ const getSync = createSyncFn(require.resolve("./worker"));
 export function syncGet(
   url: string,
   options?: RequestOptions,
-  httpModulePath?: string
+  httpModulePath?: string,
 ): string {
   return getSync(url, options, httpModulePath);
 }

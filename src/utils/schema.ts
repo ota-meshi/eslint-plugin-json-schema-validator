@@ -15,7 +15,7 @@ const RELOADING = new Set<string>();
  */
 export function loadSchema(
   schemaPath: string,
-  context: RuleContext
+  context: RuleContext,
 ): null | SchemaObject {
   return loadJsonInternal(schemaPath, context, (schema) => {
     migrateToDraft7(schema as SchemaObject);
@@ -27,7 +27,7 @@ export function loadSchema(
  */
 export function loadJson<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-  T = any
+  T = any,
 >(jsonPath: string, context: RuleContext): null | T {
   return loadJsonInternal(jsonPath, context);
 }
@@ -38,14 +38,14 @@ export function loadJson<
 function loadJsonInternal<T>(
   jsonPath: string,
   context: RuleContext,
-  edit?: (json: unknown) => unknown
+  edit?: (json: unknown) => unknown,
 ): null | T {
   if (jsonPath.startsWith("http://") || jsonPath.startsWith("https://")) {
     return loadJsonFromURL(jsonPath, context, edit);
   }
   if (jsonPath.startsWith("vscode://")) {
     let url = `https://raw.githubusercontent.com/ota-meshi/extract-vscode-schemas/main/resources/vscode/${jsonPath.slice(
-      9
+      9,
     )}`;
     if (!url.endsWith(".json")) {
       url = `${url}.json`;
@@ -71,7 +71,7 @@ function loadJsonInternal<T>(
   }
   const json = fs.readFileSync(
     path.resolve(getCwd(context), jsonPath),
-    "utf-8"
+    "utf-8",
   );
   const data = JSON.parse(json);
   return edit ? edit(data) : data;
@@ -80,7 +80,7 @@ function loadJsonInternal<T>(
 /** remove empty `enum:` schema */
 function removeEmptyEnum(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-  target: any
+  target: any,
 ) {
   if (!target) return;
   if (Array.isArray(target)) {
@@ -110,7 +110,7 @@ function removeEmptyEnum(
 function loadJsonFromURL<T>(
   jsonPath: string,
   context: RuleContext,
-  edit?: (json: unknown) => unknown
+  edit?: (json: unknown) => unknown,
 ): null | T {
   let jsonFileName = jsonPath.replace(/^https?:\/\//u, "");
   if (!jsonFileName.endsWith(".json")) {
@@ -118,7 +118,7 @@ function loadJsonFromURL<T>(
   }
   const jsonFilePath = path.join(
     __dirname,
-    `../../.cached_schemastore/${jsonFileName}`
+    `../../.cached_schemastore/${jsonFileName}`,
   );
 
   const options = context.settings?.["json-schema-validator"]?.http;
@@ -179,7 +179,7 @@ function postProcess<T>(
   jsonFilePath: string,
   json: string,
   context: RuleContext,
-  edit: ((json: unknown) => unknown) | undefined
+  edit: ((json: unknown) => unknown) | undefined,
 ): T | null {
   let data;
   try {
@@ -203,7 +203,7 @@ function postProcess<T>(
       timestamp: Date.now(),
       // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
       v: require("../../package.json").version,
-    })
+    }),
   );
   delete require.cache[jsonFilePath];
 

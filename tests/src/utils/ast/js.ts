@@ -26,9 +26,9 @@ describe("AST for JS.", () => {
                 analyzeJsAST(
                   node.declaration as never,
                   node.declaration.range,
-                  context as never
+                  context as never,
                 )!,
-                context.getSourceCode() as never
+                context.getSourceCode() as never,
               );
             },
           };
@@ -47,12 +47,12 @@ describe("AST for JS.", () => {
         fs.writeFileSync(
           outputFile,
           `${JSON.stringify(result, null, 4)}\n`,
-          "utf8"
+          "utf8",
         );
       }
 
       const output = JSON.parse(
-        fs.readFileSync(outputFile, "utf8").replace(/\r\n/gu, "\n")
+        fs.readFileSync(outputFile, "utf8").replace(/\r\n/gu, "\n"),
       );
 
       assert.deepStrictEqual(result, output);
@@ -80,8 +80,8 @@ function toOutput(result: AnalyzedJsAST, sourceCode: SourceCode) {
   return {
     object: JSON.parse(
       JSON.stringify(result.object, (_k, v) =>
-        typeof v === "symbol" ? "$UNKNOWN$" : v
-      )
+        typeof v === "symbol" ? "$UNKNOWN$" : v,
+      ),
     ),
     paths: normalizePathData(result.pathData),
   };

@@ -34,31 +34,31 @@ module.exports = {
           eslint$: path.resolve(__dirname, "./shim/eslint"),
           "eslint-visitor-keys$": path.resolve(
             __dirname,
-            "./shim/eslint-visitor-keys"
+            "./shim/eslint-visitor-keys",
           ),
           ajv: path.resolve(
             require.resolve("eslint/package.json"),
-            "../node_modules/ajv"
+            "../node_modules/ajv",
           ),
           [path.resolve(__dirname, "../../lib/utils/ajv")]: path.resolve(
             __dirname,
-            "../../node_modules/ajv"
+            "../../node_modules/ajv",
           ),
           synckit: require.resolve("./shim/synckit"),
           // Adjust the yaml path as it gets confusing.
           yaml$: path.resolve(
             __dirname,
-            "../../node_modules/yaml/dist/index.js"
+            "../../node_modules/yaml/dist/index.js",
           ),
           // Adjust the esquery path as it gets confusing.
           esquery: path.resolve(
             __dirname,
-            "../../node_modules/esquery/dist/esquery.min.js"
+            "../../node_modules/esquery/dist/esquery.min.js",
           ),
           // Adjust the @eslint/eslintrc path as it gets confusing.
           "@eslint/eslintrc/universal": path.resolve(
             __dirname,
-            "../../node_modules/@eslint/eslintrc/dist/eslintrc-universal.cjs"
+            "../../node_modules/@eslint/eslintrc/dist/eslintrc-universal.cjs",
           ),
         },
       },

@@ -5,5 +5,5 @@ import { get } from "./http";
 runAsWorker(
   async (url: string, options?: RequestOptions, httpModulePath?: string) => {
     return get(url, options, httpModulePath);
-  }
+  },
 );

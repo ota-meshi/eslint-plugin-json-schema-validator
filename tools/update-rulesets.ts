@@ -25,7 +25,7 @@ export = {
             (rule) =>
               rule.meta.docs.categories &&
               !rule.meta.deprecated &&
-              rule.meta.docs.categories.includes(rec)
+              rule.meta.docs.categories.includes(rec),
           )
           .map((rule) => {
             const conf = rule.meta.docs.default || "error";

@@ -38,7 +38,7 @@ export interface PartialRuleModule {
   meta: PartialRuleMetaData;
   create(
     context: RuleContext,
-    params: { customBlock: boolean; filename: string }
+    params: { customBlock: boolean; filename: string },
   ): RuleListener;
 }
 
@@ -109,7 +109,7 @@ export interface SourceCode {
   getText(
     node?: NodeOrToken,
     beforeCount?: number,
-    afterCount?: number
+    afterCount?: number,
   ): string;
 
   getLines(): string[];
@@ -131,7 +131,7 @@ export interface SourceCode {
 
   getTokenByRangeStart(
     offset: number,
-    options?: { includeComments?: boolean }
+    options?: { includeComments?: boolean },
   ): Token | null;
 
   getFirstToken(node: Node): Token;
@@ -147,7 +147,7 @@ export interface SourceCode {
   // getTokenBefore(node: NodeOrToken): Token | null
   getTokenBefore(
     node: NodeOrToken,
-    options?: CursorWithSkipOptions
+    options?: CursorWithSkipOptions,
   ): Token | null;
 
   getTokensBefore(node: NodeOrToken, options?: CursorWithCountOptions): Token[];
@@ -155,7 +155,7 @@ export interface SourceCode {
   // getTokenAfter(node: NodeOrToken): Token | null
   getTokenAfter(
     node: NodeOrToken,
-    options?: CursorWithSkipOptions
+    options?: CursorWithSkipOptions,
   ): Token | null;
 
   getTokensAfter(node: NodeOrToken, options?: CursorWithCountOptions): Token[];
@@ -163,37 +163,37 @@ export interface SourceCode {
   getFirstTokenBetween(
     left: NodeOrToken,
     right: NodeOrToken,
-    options?: CursorWithSkipOptions
+    options?: CursorWithSkipOptions,
   ): Token | null;
 
   getFirstTokensBetween(
     left: NodeOrToken,
     right: NodeOrToken,
-    options?: CursorWithCountOptions
+    options?: CursorWithCountOptions,
   ): Token[];
 
   getLastTokenBetween(
     left: NodeOrToken,
     right: NodeOrToken,
-    options?: CursorWithSkipOptions
+    options?: CursorWithSkipOptions,
   ): Token | null;
 
   getLastTokensBetween(
     left: NodeOrToken,
     right: NodeOrToken,
-    options?: CursorWithCountOptions
+    options?: CursorWithCountOptions,
   ): Token[];
 
   getTokensBetween(
     left: NodeOrToken,
     right: NodeOrToken,
-    padding?: number | FilterPredicate | CursorWithCountOptions
+    padding?: number | FilterPredicate | CursorWithCountOptions,
   ): Token[];
 
   getTokens(node: Node, beforeCount?: number, afterCount?: number): Token[];
   getTokens(
     node: Node,
-    options: FilterPredicate | CursorWithCountOptions
+    options: FilterPredicate | CursorWithCountOptions,
   ): Token[];
 
   commentsExistBetween(left: NodeOrToken, right: NodeOrToken): boolean;

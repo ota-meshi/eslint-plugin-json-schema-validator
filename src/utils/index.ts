@@ -19,7 +19,7 @@ import path from "path";
  */
 export function createRule(
   ruleName: string,
-  rule: PartialRuleModule
+  rule: PartialRuleModule,
 ): RuleModule {
   return {
     meta: {
@@ -57,11 +57,11 @@ export function createRule(
                 customBlock: true,
                 filename: getBlockFileName(
                   blockContext.parserServices.customBlock!,
-                  "json"
+                  "json",
                 ),
               });
             },
-          }
+          },
         );
         const yamlVisitor = context.parserServices.defineCustomBlocksVisitor(
           context,
@@ -73,11 +73,11 @@ export function createRule(
                 customBlock: true,
                 filename: getBlockFileName(
                   blockContext.parserServices.customBlock!,
-                  "yaml"
+                  "yaml",
                 ),
               });
             },
-          }
+          },
         );
         const tomlVisitor = context.parserServices.defineCustomBlocksVisitor(
           context,
@@ -89,18 +89,18 @@ export function createRule(
                 customBlock: true,
                 filename: getBlockFileName(
                   blockContext.parserServices.customBlock!,
-                  "toml"
+                  "toml",
                 ),
               });
             },
-          }
+          },
         );
 
         return compositingVisitors(
           visitor,
           jsonVisitor,
           yamlVisitor,
-          tomlVisitor
+          tomlVisitor,
         );
       }
 
@@ -109,7 +109,7 @@ export function createRule(
       /** Get file name of block */
       function getBlockFileName(
         customBlock: VueAST.VElement,
-        langFallback: string
+        langFallback: string,
       ): string {
         const attrs: Record<string, string | null> = {};
         for (const attr of customBlock.startTag.attributes) {

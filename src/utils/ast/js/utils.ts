@@ -19,7 +19,7 @@ import type { Variable } from "eslint-scope";
  */
 export function getStaticPropertyName(
   node: ESLintProperty | ESLintMemberExpression,
-  context: RuleContext
+  context: RuleContext,
 ): string | null {
   let key;
   if (node.type === "Property") {
@@ -61,7 +61,7 @@ export function getStaticPropertyName(
  * Gets the string of a given node.
  */
 export function getStringLiteralValue(
-  node: ESLintLiteral | ESLintTemplateLiteral
+  node: ESLintLiteral | ESLintTemplateLiteral,
 ): string | null {
   if (node.type === "Literal") {
     if (node.value == null) {
@@ -84,7 +84,7 @@ export function getStringLiteralValue(
  */
 function findVariable(
   context: RuleContext,
-  node: ESLintIdentifier
+  node: ESLintIdentifier,
 ): Variable | null {
   return eslintUtils.findVariable(getScope(context, node), node);
 }
@@ -94,7 +94,7 @@ function findVariable(
  */
 export function getStaticValue(
   context: RuleContext,
-  node: ESLintNode
+  node: ESLintNode,
 ): { value: any } | null {
   return eslintUtils.getStaticValue(node, getScope(context, node));
 }
@@ -104,7 +104,7 @@ export function getStaticValue(
  */
 export function findInitNode(
   context: RuleContext,
-  node: ESLintIdentifier
+  node: ESLintIdentifier,
 ): { node: ESLintExpression; reads: ESLintIdentifier[] } | null {
   const variable = findVariable(context, node);
   if (!variable) {

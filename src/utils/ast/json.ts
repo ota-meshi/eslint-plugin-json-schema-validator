@@ -23,7 +23,7 @@ const GET_JSON_NODES: Record<
   },
   JSONExpressionStatement(
     node: JSON.JSONExpressionStatement,
-    _paths: string[]
+    _paths: string[],
   ) {
     return { value: node.expression };
   },
@@ -81,7 +81,7 @@ const GET_JSON_NODES: Record<
  */
 export function getJSONNodeFromPath(
   node: JSON.JSONProgram,
-  [...paths]: string[]
+  [...paths]: string[],
 ): NodeData<JSON.JSONNode> {
   let data: NodeData<JSON.JSONNode> = {
     key: (sourceCode) => {

@@ -29,7 +29,7 @@ function pickSince(content: string): string | null | Promise<string> {
   const fileIntro = /^---\n(?<content>.*\n)+---\n*/u.exec(content);
   if (fileIntro) {
     const since = /since: "?(?<version>v\d+\.\d+\.\d+)"?/u.exec(
-      fileIntro.groups!.content
+      fileIntro.groups!.content,
     );
     if (since) {
       return since.groups!.version;
@@ -83,12 +83,12 @@ class DocFile {
     if (deprecated) {
       if (replacedBy) {
         const replacedRules = replacedBy.map(
-          (name) => `[json-schema-validator/${name}](${name}.md) rule`
+          (name) => `[json-schema-validator/${name}](${name}.md) rule`,
         );
         notes.push(
           `- :warning: This rule was **deprecated** and replaced by ${formatItems(
-            replacedRules
-          )}.`
+            replacedRules,
+          )}.`,
         );
       } else {
         notes.push("- :warning: This rule was **deprecated**.");
@@ -101,23 +101,23 @@ class DocFile {
           presets.push(`\`"plugin:json-schema-validator/${cat}"\``);
         }
         notes.push(
-          `- :gear: This rule is included in ${formatItems(presets)}.`
+          `- :gear: This rule is included in ${formatItems(presets)}.`,
         );
       }
     }
     if (fixable) {
       notes.push(
-        "- :wrench: The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) can automatically fix some of the problems reported by this rule."
+        "- :wrench: The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) can automatically fix some of the problems reported by this rule.",
       );
     }
     if (hasSuggestions) {
       notes.push(
-        "- :bulb: Some problems reported by this rule are manually fixable by editor [suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions)."
+        "- :bulb: Some problems reported by this rule are manually fixable by editor [suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).",
       );
     }
     if (!this.since) {
       notes.unshift(
-        `- :exclamation: <badge text="This rule has not been released yet." vertical="middle" type="error"> **_This rule has not been released yet._** </badge>`
+        `- :exclamation: <badge text="This rule has not been released yet." vertical="middle" type="error"> **_This rule has not been released yet._** </badge>`,
       );
     }
 
@@ -132,7 +132,7 @@ class DocFile {
     if (headerPattern.test(this.content)) {
       this.content = this.content.replace(
         headerPattern,
-        header.replace(/\$/gu, "$$$$")
+        header.replace(/\$/gu, "$$$$"),
       );
     } else {
       this.content = `${header}${this.content.trim()}\n`;
@@ -163,7 +163,7 @@ This rule was introduced in eslint-plugin-json-schema-validator ${await this
     if (footerPattern.test(this.content)) {
       this.content = this.content.replace(
         footerPattern,
-        footer.replace(/\$/gu, "$$$$")
+        footer.replace(/\$/gu, "$$$$"),
       );
     } else {
       this.content = `${this.content.trim()}\n\n${footer}`;
@@ -187,7 +187,7 @@ This rule was introduced in eslint-plugin-json-schema-validator ${await this
         }
         ps.unshift("<eslint-code-block");
         return `${ps.join(" ")}>`;
-      }
+      },
     );
     return this;
   }
@@ -196,11 +196,11 @@ This rule was introduced in eslint-plugin-json-schema-validator ${await this
     // Adjust the necessary blank lines before and after the code block so that GitHub can recognize `.md`.
     this.content = this.content.replace(
       /(?<startTag><eslint-code-block[\s\S]*?>)\n+```/gu,
-      "$<startTag>\n\n```"
+      "$<startTag>\n\n```",
     );
     this.content = this.content.replace(
       /```\n+<\/eslint-code-block>/gu,
-      "```\n\n</eslint-code-block>"
+      "```\n\n</eslint-code-block>",
     );
     return this;
   }
@@ -225,7 +225,7 @@ This rule was introduced in eslint-plugin-json-schema-validator ${await this
     if (fileIntroPattern.test(this.content)) {
       this.content = this.content.replace(
         fileIntroPattern,
-        computed.replace(/\$/gu, "$$$$")
+        computed.replace(/\$/gu, "$$$$"),
       );
     } else {
       this.content = `${computed}${this.content.trim()}\n`;
