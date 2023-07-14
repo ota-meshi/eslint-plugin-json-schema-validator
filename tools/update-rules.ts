@@ -19,7 +19,7 @@ ${rules
     (rule) =>
       `import ${camelCase(rule.meta.docs.ruleName)} from "../rules/${
         rule.meta.docs.ruleName
-      }"`
+      }"`,
   )
   .join("\n")}
 

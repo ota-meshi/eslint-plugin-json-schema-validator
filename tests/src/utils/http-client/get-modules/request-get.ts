@@ -5,7 +5,7 @@ import request from "request";
  */
 export default function get(
   url: string,
-  options?: request.CoreOptions
+  options?: request.CoreOptions,
 ): Promise<string> {
   const proxy: string =
     (options as any)?.proxy ||

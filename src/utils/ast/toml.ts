@@ -59,7 +59,7 @@ const GET_TOML_NODES: Record<
  */
 export function getTOMLNodeFromPath(
   node: TOML.TOMLProgram,
-  paths: string[]
+  paths: string[],
 ): NodeData<TOML.TOMLNode> {
   const topLevelTable = node.body[0];
   if (!paths.length) {
@@ -104,7 +104,7 @@ export function getTOMLNodeFromPath(
  */
 function getTOMLNodeFromPathForKeyValue(
   node: TOML.TOMLKeyValue,
-  paths: string[]
+  paths: string[],
 ): NodeData<TOML.TOMLNode> | null {
   const keys = getStaticTOMLValue(node.key);
   const m = getMatchType(paths, keys);
@@ -126,7 +126,7 @@ function getTOMLNodeFromPathForKeyValue(
  */
 function getTOMLNodeFromPathForContent(
   node: TOML.TOMLContentNode,
-  [...paths]: string[]
+  [...paths]: string[],
 ): NodeData<TOML.TOMLNode> {
   let data: NodeData<TOML.TOMLNode> = {
     value: node,

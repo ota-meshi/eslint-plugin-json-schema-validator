@@ -26,7 +26,7 @@ export function unIndent(strings: readonly string[]): string {
  * for `code` and `output`
  */
 export function unIndentCodeAndOutput([code]: readonly string[]): (
-  args: readonly string[]
+  args: readonly string[],
 ) => {
   code: string;
   output: string;
@@ -38,7 +38,7 @@ export function unIndentCodeAndOutput([code]: readonly string[]): (
     const outputLines = output.split("\n");
     const minLineIndent = Math.min(
       getMinIndent(outputLines),
-      codeMinLineIndent
+      codeMinLineIndent,
     );
 
     return {
@@ -67,29 +67,29 @@ export function loadTestCases(
   additionals?: {
     valid?: (RuleTester.ValidTestCase | string)[];
     invalid?: RuleTester.InvalidTestCase[];
-  }
+  },
 ): {
   valid: RuleTester.ValidTestCase[];
   invalid: RuleTester.InvalidTestCase[];
 } {
   const validFixtureRoot = path.resolve(
     __dirname,
-    `../fixtures/rules/${ruleName}/valid/`
+    `../fixtures/rules/${ruleName}/valid/`,
   );
   const invalidFixtureRoot = path.resolve(
     __dirname,
-    `../fixtures/rules/${ruleName}/invalid/`
+    `../fixtures/rules/${ruleName}/invalid/`,
   );
 
   const valid = listupInput(validFixtureRoot).map((inputFile) =>
-    getConfig(ruleName, inputFile)
+    getConfig(ruleName, inputFile),
   );
 
   const invalid = listupInput(invalidFixtureRoot).map((inputFile) => {
     const config = getConfig(ruleName, inputFile);
     const errorFile = inputFile.replace(
       /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
-      "errors.json"
+      "errors.json",
     );
     let errors;
     try {
@@ -150,7 +150,7 @@ function* itrListupInput(rootDir: string): IterableIterator<string> {
     ) {
       const requirementsPath = path.join(
         rootDir,
-        filename.replace(/input\.\w+$/, "requirements.json")
+        filename.replace(/input\.\w+$/, "requirements.json"),
       );
       const requirements = fs.existsSync(requirementsPath)
         ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
@@ -178,12 +178,12 @@ function* itrListupInput(rootDir: string): IterableIterator<string> {
 function writeFixtures(
   ruleName: string,
   inputFile: string,
-  { force }: { force?: boolean } = {}
+  { force }: { force?: boolean } = {},
 ) {
   const linter = getLinter(ruleName);
   const errorFile = inputFile.replace(
     /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
-    "errors.json"
+    "errors.json",
   );
 
   const config = getConfig(ruleName, inputFile);
@@ -200,7 +200,7 @@ function writeFixtures(
         sourceType: "module",
       },
     },
-    config.filename
+    config.filename,
   );
   if (force || !fs.existsSync(errorFile)) {
     fs.writeFileSync(
@@ -214,9 +214,9 @@ function writeFixtures(
           endColumn: m.endColumn,
         })),
         null,
-        4
+        4,
       )}\n`,
-      "utf8"
+      "utf8",
     );
   }
 }
@@ -241,7 +241,7 @@ function getConfig(ruleName: string, inputFile: string) {
   let code, config;
   let configFile: string = inputFile.replace(
     /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
-    "config.json"
+    "config.json",
   );
   const hashComment =
     inputFile.endsWith(".yaml") ||
@@ -266,7 +266,7 @@ function getConfig(ruleName: string, inputFile: string) {
     return Object.assign(
       { parser: require.resolve(getParserName(inputFile)) },
       config,
-      { code, filename: inputFile }
+      { code, filename: inputFile },
     );
   }
   // inline config
@@ -294,7 +294,7 @@ function getConfig(ruleName: string, inputFile: string) {
   return Object.assign(
     { parser: require.resolve(getParserName(inputFile)) },
     config,
-    { code, filename: inputFile }
+    { code, filename: inputFile },
   );
 }
 

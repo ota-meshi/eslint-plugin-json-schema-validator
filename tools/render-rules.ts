@@ -4,7 +4,7 @@ import { rules } from "../src/utils/rules";
 //eslint-disable-next-line require-jsdoc -- tool
 export default function renderRulesTableContent(
   categoryLevel: number,
-  buildRulePath = (ruleName: string) => `./${ruleName}.md`
+  buildRulePath = (ruleName: string) => `./${ruleName}.md`,
 ): string {
   const pluginRules = rules.filter((rule) => !rule.meta.deprecated);
 
@@ -21,7 +21,7 @@ export default function renderRulesTableContent(
         ? ":star:"
         : "";
     const link = `[${rule.meta.docs.ruleId}](${buildRulePath(
-      rule.meta.docs.ruleName || ""
+      rule.meta.docs.ruleName || "",
     )})`;
     const description = rule.meta.docs.description || "(no description)";
 
@@ -31,12 +31,12 @@ export default function renderRulesTableContent(
   //eslint-disable-next-line require-jsdoc -- tool
   function toDeprecatedRuleRow(rule: RuleModule) {
     const link = `[${rule.meta.docs.ruleId}](${buildRulePath(
-      rule.meta.docs.ruleName || ""
+      rule.meta.docs.ruleName || "",
     )})`;
     const replacedRules = rule.meta.docs.replacedBy || [];
     const replacedBy = replacedRules
       .map(
-        (name) => `[json-schema-validator/${name}](${buildRulePath(name)}.md)`
+        (name) => `[json-schema-validator/${name}](${buildRulePath(name)}.md)`,
       )
       .join(", ");
 

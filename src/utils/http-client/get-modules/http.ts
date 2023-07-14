@@ -12,7 +12,7 @@ const TIMEOUT = 10000;
  */
 export default function get(
   url: string,
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<string> {
   return get0(url, options, 0);
 }
@@ -21,7 +21,7 @@ export default function get(
 function get0(
   url: string,
   options: RequestOptions | undefined,
-  redirectCount: number
+  redirectCount: number,
 ): Promise<string> {
   const client = url.startsWith("https") ? https : http;
   const parsedOptions = parseUrlAndOptions(url, options || {});

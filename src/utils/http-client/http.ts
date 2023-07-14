@@ -6,7 +6,7 @@ import type { RequestOptions } from "https";
 export function get(
   url: string,
   options?: RequestOptions,
-  httpModulePath?: string
+  httpModulePath?: string,
 ): Promise<string> {
   const client = httpModulePath
     ? // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore

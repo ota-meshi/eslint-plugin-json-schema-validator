@@ -20,7 +20,7 @@ describe("Integration with eslint-plugin-json-schema-validator", () => {
     assert.strictEqual(results.length, 2);
     assert.strictEqual(
       results.reduce((s, r) => s + r.errorCount, 0),
-      0
+      0,
     );
   });
 });

@@ -20,7 +20,7 @@ const logger = console;
   const testFile = path.resolve(__dirname, `../tests/src/rules/${ruleId}.ts`);
   const fixturesRoot = path.resolve(
     __dirname,
-    `../tests/fixtures/rules/${ruleId}/`
+    `../tests/fixtures/rules/${ruleId}/`,
   );
   const docFile = path.resolve(__dirname, `../docs/rules/${ruleId}.md`);
   try {
@@ -61,7 +61,7 @@ export default createRule("${ruleId}", {
         }
     },
 })
-`
+`,
   );
   fs.writeFileSync(
     testFile,
@@ -78,7 +78,7 @@ const tester = new RuleTester({
 })
 
 tester.run("${ruleId}", rule as any, loadTestCases("${ruleId}"))
-`
+`,
   );
   fs.writeFileSync(
     docFile,
@@ -135,7 +135,7 @@ Same as [${ruleId}] rule option. See [here](https://eslint.org/docs/rules/${rule
 
 [${ruleId}]: https://eslint.org/docs/rules/${ruleId}
 
-`
+`,
   );
 
   cp.execSync(`code "${ruleFile}"`);

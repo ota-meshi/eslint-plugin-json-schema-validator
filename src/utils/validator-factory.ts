@@ -43,7 +43,7 @@ export type ValidateError = { message: string; path: string[] };
 export function compile(
   schema: SchemaObject,
   schemaPath: string,
-  context: RuleContext
+  context: RuleContext,
 ): Validator {
   return schemaToValidator(schema, schemaPath, context);
 }
@@ -54,7 +54,7 @@ export function compile(
 function schemaToValidator(
   schema: SchemaObject,
   schemaPath: string,
-  context: RuleContext
+  context: RuleContext,
 ): Validator {
   let validateSchema: ValidateFunction;
 
@@ -74,7 +74,7 @@ function schemaToValidator(
         ((e as Error).message ===
           'NOT SUPPORTED: keyword "id", use "$id" for schema ID' ||
           /exclusive(?:Maximum|Minimum) value must be .*"number".*/u.test(
-            (e as Error).message
+            (e as Error).message,
           )) &&
         schema === schemaObject
       ) {
@@ -107,7 +107,7 @@ function resolveError(
   error: any,
   baseSchemaPath: string,
   baseSchema: SchemaObject,
-  context: RuleContext
+  context: RuleContext,
 ): boolean {
   if (error.missingRef) {
     let schemaPath = "";
@@ -164,7 +164,7 @@ function resolveError(
  */
 function errorToValidateError(
   /* eslint-enable complexity -- X( */
-  errorObject: ErrorObject
+  errorObject: ErrorObject,
 ): ValidateError {
   const error: DefinedError = errorObject as DefinedError;
 
@@ -186,7 +186,7 @@ function errorToValidateError(
   if (error.keyword === "propertyNames") {
     return {
       message: `${joinPath(path)} property name ${JSON.stringify(
-        error.params.propertyName
+        error.params.propertyName,
       )} is invalid.`,
       path: [...path, error.params.propertyName],
     };
@@ -203,7 +203,7 @@ function errorToValidateError(
     baseMessage = `must be equal to ${joinEnums(error.params.allowedValues)}`;
   } else if (error.keyword === "const") {
     baseMessage = `must be equal to ${JSON.stringify(
-      error.params.allowedValue
+      error.params.allowedValue,
     )}`;
   } else if (error.keyword === "not") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
@@ -256,7 +256,7 @@ function errorToValidateError(
   if (error.propertyName) {
     return {
       message: `${joinPath(path)} property name ${JSON.stringify(
-        error.propertyName
+        error.propertyName,
       )} ${baseMessage}.`,
       path: [...path, error.propertyName],
     };

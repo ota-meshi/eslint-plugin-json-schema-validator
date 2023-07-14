@@ -18,10 +18,10 @@ export async function getNewVersion(): Promise<string> {
     changesets,
     packages,
     config,
-    preState
+    preState,
   );
 
   return releasePlan.releases.find(
-    ({ name }) => name === "eslint-plugin-json-schema-validator"
+    ({ name }) => name === "eslint-plugin-json-schema-validator",
   )!.newVersion;
 }

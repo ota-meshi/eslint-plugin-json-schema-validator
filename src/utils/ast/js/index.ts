@@ -51,7 +51,7 @@ export type AnalyzedJsAST = {
 export function analyzeJsAST(
   node: ESLintExpression,
   rootRange: [number, number],
-  context: RuleContext
+  context: RuleContext,
 ): AnalyzedJsAST | null {
   const data = getPathData(node, context);
   if (data.data === UNKNOWN) {
@@ -136,7 +136,7 @@ const CALC_BINARY: Record<
 const VISITORS = {
   ObjectExpression(
     node: ESLintObjectExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const data: Record<string, any> = {};
     const children: SubPathData["children"] = new Map();
@@ -172,7 +172,7 @@ const VISITORS = {
   },
   ArrayExpression(
     node: ESLintArrayExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const data: any[] = [];
     const children: SubPathData["children"] = new Map();
@@ -313,7 +313,7 @@ const VISITORS = {
   },
   UnaryExpression(
     node: ESLintUnaryExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const argData = getPathData(node.argument, context);
     if (argData.data === UNKNOWN) {
@@ -332,7 +332,7 @@ const VISITORS = {
   },
   BinaryExpression(
     node: ESLintBinaryExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     if (node.left.type === "PrivateIdentifier") {
       return UNKNOWN_PATH_DATA;
@@ -358,7 +358,7 @@ const VISITORS = {
   },
   LogicalExpression(
     node: ESLintLogicalExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const leftData = getPathData(node.left, context);
     if (leftData.data === UNKNOWN) {
@@ -385,14 +385,14 @@ const VISITORS = {
   },
   AssignmentExpression(
     node: ESLintAssignmentExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const rightData = getPathData(node.right, context);
     return rightData;
   },
   MemberExpression(
     node: ESLintMemberExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     if (node.object.type === "Super") {
       return UNKNOWN_PATH_DATA;
@@ -422,7 +422,7 @@ const VISITORS = {
   },
   ConditionalExpression(
     node: ESLintConditionalExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const testData = getPathData(node.test, context);
     if (testData.data === UNKNOWN) {
@@ -435,7 +435,7 @@ const VISITORS = {
   },
   CallExpression(
     node: ESLintCallExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const evalData = getStaticValue(context, node);
     if (!evalData) {
@@ -466,14 +466,14 @@ const VISITORS = {
   },
   SequenceExpression(
     node: ESLintSequenceExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const last = node.expressions[node.expressions.length - 1];
     return getPathData(last, context);
   },
   TemplateLiteral(
     node: ESLintTemplateLiteral,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const expressions = [];
     for (const e of node.expressions) {
@@ -492,7 +492,7 @@ const VISITORS = {
   },
   TaggedTemplateExpression(
     node: ESLintTaggedTemplateExpression,
-    context: RuleContext
+    context: RuleContext,
   ): SubPathData {
     const tag = getPathData(node.tag, context);
     if (tag.data === UNKNOWN) {
@@ -554,7 +554,7 @@ const VISITORS = {
  */
 function getPathData(
   node: ESLintExpression,
-  context: RuleContext
+  context: RuleContext,
 ): SubPathData {
   const visitor = VISITORS[node.type];
   if (visitor) {

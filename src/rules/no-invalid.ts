@@ -55,7 +55,7 @@ function parseOption(
       }
     | string,
   context: RuleContext,
-  filename: string
+  filename: string,
 ): Validator | null {
   if (typeof option === "string") {
     return schemaPathToValidator(option, context);
@@ -127,7 +127,7 @@ function parseOption(
  */
 function schemaPathToValidator(
   schemaPath: string,
-  context: RuleContext
+  context: RuleContext,
 ): Validator | null {
   const schema = loadSchema(schemaPath, context);
   if (!schema) {
@@ -141,7 +141,7 @@ function schemaPathToValidator(
  */
 function schemaObjectToValidator(
   schema: SchemaObject | null,
-  context: RuleContext
+  context: RuleContext,
 ): Validator | null {
   if (!schema) {
     return null;
@@ -228,7 +228,7 @@ export default createRule("no-invalid", {
       const v = parseOption(
         context.options[0] || {},
         context,
-        filename.startsWith(cwd) ? path.relative(cwd, filename) : filename
+        filename.startsWith(cwd) ? path.relative(cwd, filename) : filename,
       );
       if (!v) {
         return {};
@@ -244,7 +244,7 @@ export default createRule("no-invalid", {
      */
     function validateData(
       data: unknown,
-      resolveLoc: (error: ValidateError) => JSONAST.SourceLocation | null
+      resolveLoc: (error: ValidateError) => JSONAST.SourceLocation | null,
     ) {
       const errors = validator!(data);
       for (const error of errors) {
@@ -267,7 +267,7 @@ export default createRule("no-invalid", {
      */
     function validateJSExport(
       node: ESLintExpression,
-      rootRange: [number, number]
+      rootRange: [number, number],
     ) {
       if (existsExports) {
         return;
@@ -371,7 +371,7 @@ export default createRule("no-invalid", {
      * ErrorData to report location.
      */
     function errorDataToLoc(
-      errorData: NodeData<JSONAST.JSONNode | YAML.YAMLNode | TOML.TOMLNode>
+      errorData: NodeData<JSONAST.JSONNode | YAML.YAMLNode | TOML.TOMLNode>,
     ) {
       if (errorData.key) {
         const range = errorData.key(sourceCode);
@@ -439,9 +439,9 @@ export default createRule("no-invalid", {
               path.dirname(
                 typeof context.getPhysicalFilename === "function"
                   ? context.getPhysicalFilename()
-                  : getPhysicalFilename(context.getFilename())
+                  : getPhysicalFilename(context.getFilename()),
               ),
-              $schema
+              $schema,
             )
           : $schema
         : null;
