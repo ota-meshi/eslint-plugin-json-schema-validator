@@ -1,7 +1,7 @@
 const path = require("path");
-// eslint-disable-next-line node/no-missing-require -- no build
+// eslint-disable-next-line n/no-missing-require -- no build
 const { rules } = require("../../lib/utils/rules");
-// eslint-disable-next-line node/no-missing-require -- no build
+// eslint-disable-next-line n/no-missing-require -- no build
 const schema = require("../../lib/utils/schema");
 // Generate a schema store cache and include it in the bundle.
 schema.loadJson("https://www.schemastore.org/api/json/catalog.json", {});

@@ -1,6 +1,6 @@
-/* eslint node/no-unsupported-features/es-syntax: off -- not node */
+// eslint-disable-next-line n/no-missing-import -- no build
 import { Linter } from "eslint/lib/linter";
-// eslint-disable-next-line node/no-missing-import -- no build
+// eslint-disable-next-line n/no-missing-import -- no build
 import plugin from "../../../../";
 
 const coreRules = Object.fromEntries(new Linter().getRules());
