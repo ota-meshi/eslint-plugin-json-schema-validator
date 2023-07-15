@@ -1,3 +1,2 @@
-/* eslint node/no-unsupported-features/es-syntax: off -- not node */
-export * from "./deserialize";
-export * from "./serialize";
+export * from "./deserialize.js";
+export * from "./serialize.js";

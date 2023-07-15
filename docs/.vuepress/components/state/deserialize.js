@@ -1,5 +1,5 @@
-/* eslint node/no-unsupported-features/es-syntax: off -- not node */
-import pako from "../../../../node_modules/pako";
+// eslint-disable-next-line n/no-extraneous-import -- Demo
+import pako from "pako";
 
 /**
  * Deserialize a given serialized string then update this object.
