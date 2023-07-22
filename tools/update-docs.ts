@@ -96,7 +96,6 @@ class DocFile {
     } else {
       if (categories) {
         const presets = [];
-        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare -- ignore
         for (const cat of categories.sort()) {
           presets.push(`\`"plugin:json-schema-validator/${cat}"\``);
         }

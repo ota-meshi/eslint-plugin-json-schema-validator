@@ -119,7 +119,6 @@ const CALC_BINARY: Record<
   "<<": (v1, v2) => v1 << v2,
   ">>": (v1, v2) => v1 >> v2,
   ">>>": (v1, v2) => v1 >>> v2,
-  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- ignore
   "+": (v1, v2) => v1 + v2,
   "-": (v1, v2) => v1 - v2,
   "*": (v1, v2) => v1 * v2,
@@ -485,7 +484,7 @@ const VISITORS = {
     }
     let data = node.quasis[0].value.cooked ?? node.quasis[0].value.raw;
     for (let i = 0; i < expressions.length; ++i) {
-      data += expressions[i];
+      data += String(expressions[i]);
       data += node.quasis[i + 1].value.cooked ?? node.quasis[i + 1].value.raw;
     }
     return { data, children: EMPTY_MAP };
