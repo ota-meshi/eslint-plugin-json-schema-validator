@@ -54,7 +54,8 @@ This rule validates the file with JSON Schema and reports errors.
                     "schema": {/* JSON Schema Definition */} // or string
                 }
             ],
-            "useSchemastoreCatalog": true
+            "useSchemastoreCatalog": true,
+            "mergeSchemas": true // or ["$schema", "options", "catalog"]
         }
     ]
 }
@@ -64,6 +65,7 @@ This rule validates the file with JSON Schema and reports errors.
   - `fileMatch` ... A list of known file names (or globs) that match the schema.
   - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file or URL.
 - `useSchemastoreCatalog` ... If `true`, it will automatically configure some schemas defined in [https://www.schemastore.org/api/json/catalog.json](https://www.schemastore.org/api/json/catalog.json). Default `true`
+- `mergeSchemas` ... If `true`, it will merge all schemas defined in `schemas`, at the `$schema` field within files, and the catalogue. If an array is given, it will merge only schemas from the given sources. Default `false`
 
 This option can also be given a JSON schema file or URL. This is useful for configuring with the `/* eslint */` directive comments.
 

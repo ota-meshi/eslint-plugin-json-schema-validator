@@ -40,89 +40,6 @@ function matchFile(filename: string, fileMatch: string[]) {
 }
 
 /**
- * Parse option
- */
-function parseOption(
-  option:
-    | {
-        schemas?: {
-          name?: string;
-          description?: string;
-          fileMatch: string[];
-          schema: SchemaObject | string;
-        }[];
-        useSchemastoreCatalog?: boolean;
-      }
-    | string,
-  context: RuleContext,
-  filename: string,
-): Validator | null {
-  if (typeof option === "string") {
-    return schemaPathToValidator(option, context);
-  }
-
-  const validators: Validator[] = [];
-
-  for (const schemaData of option.schemas || []) {
-    if (!matchFile(filename, schemaData.fileMatch)) {
-      continue;
-    }
-    if (typeof schemaData.schema === "string") {
-      const validator = schemaPathToValidator(schemaData.schema, context);
-      if (validator) {
-        validators.push(validator);
-      } else {
-        reportCannotResolvedPath(schemaData.schema, context);
-      }
-    } else {
-      const validator = schemaObjectToValidator(schemaData.schema, context);
-      if (validator) {
-        validators.push(validator);
-      } else {
-        reportCannotResolvedObject(context);
-      }
-    }
-  }
-  if (!validators.length) {
-    // If it matches the user's definition, don't use `catalog.json`.
-    if (option.useSchemastoreCatalog !== false) {
-      const catalog = loadJson(CATALOG_URL, context);
-      if (!catalog) {
-        return null;
-      }
-
-      const schemas: {
-        name?: string;
-        description?: string;
-        fileMatch: string[];
-        url: string;
-      }[] = catalog.schemas;
-
-      for (const schemaData of schemas) {
-        if (!schemaData.fileMatch) {
-          continue;
-        }
-        if (!matchFile(filename, schemaData.fileMatch)) {
-          continue;
-        }
-        const validator = schemaPathToValidator(schemaData.url, context);
-        if (validator) validators.push(validator);
-      }
-    }
-  }
-  if (!validators.length) {
-    return null;
-  }
-  return (data) => {
-    const errors: ValidateError[] = [];
-    for (const validator of validators) {
-      errors.push(...validator(data));
-    }
-    return errors;
-  };
-}
-
-/**
  * Generate validator from schema path
  */
 function schemaPathToValidator(
@@ -170,6 +87,13 @@ function reportCannotResolvedObject(context: RuleContext) {
   });
 }
 
+/** Get mergeSchemas option */
+function parseMergeSchemasOption(
+  option: boolean | string[] | undefined,
+): string[] | null {
+  return option === true ? ["$schema", "catalog", "options"] : option || null;
+}
+
 export default createRule("no-invalid", {
   meta: {
     docs: {
@@ -204,6 +128,18 @@ export default createRule("no-invalid", {
                 },
               },
               useSchemastoreCatalog: { type: "boolean" },
+              mergeSchemas: {
+                oneOf: [
+                  { type: "boolean" },
+                  {
+                    type: "array",
+                    items: {
+                      type: "string",
+                      enum: ["$schema", "catalog", "options"],
+                    },
+                  },
+                ],
+              },
             },
             additionalProperties: false,
           },
@@ -214,27 +150,12 @@ export default createRule("no-invalid", {
     type: "suggestion",
   },
   create(context, { filename }) {
-    const $schemaPath = findSchemaPath(context.getSourceCode().ast);
-    let validator: Validator;
-    if ($schemaPath != null) {
-      const v = schemaPathToValidator($schemaPath, context);
-      if (!v) {
-        reportCannotResolvedPath($schemaPath, context);
-        return {};
-      }
-      validator = v;
-    } else {
-      const cwd = getCwd(context);
-      const v = parseOption(
-        context.options[0] || {},
-        context,
-        filename.startsWith(cwd) ? path.relative(cwd, filename) : filename,
-      );
-      if (!v) {
-        return {};
-      }
-      validator = v;
-    }
+    const cwd = getCwd(context);
+    const relativeFilename = filename.startsWith(cwd)
+      ? path.relative(cwd, filename)
+      : filename;
+
+    const validator = createValidator(context, relativeFilename);
 
     let existsExports = false;
     const sourceCode = context.getSourceCode();
@@ -246,7 +167,7 @@ export default createRule("no-invalid", {
       data: unknown,
       resolveLoc: (error: ValidateError) => JSONAST.SourceLocation | null,
     ) {
-      const errors = validator!(data);
+      const errors = validator(data);
       for (const error of errors) {
         const loc = resolveLoc(error);
 
@@ -445,6 +366,128 @@ export default createRule("no-invalid", {
             )
           : $schema
         : null;
+    }
+
+    /** Validator from $schema */
+    function get$SchemaValidators(context: RuleContext): Validator[] | null {
+      const $schemaPath = findSchemaPath(context.getSourceCode().ast);
+      if (!$schemaPath) return null;
+
+      const validator = schemaPathToValidator($schemaPath, context);
+      if (!validator) {
+        reportCannotResolvedPath($schemaPath, context);
+        return null;
+      }
+
+      return [validator];
+    }
+
+    /** Validator from catalog.json */
+    function getCatalogValidators(
+      context: RuleContext,
+      relativeFilename: string,
+    ): Validator[] | null {
+      const option = context.options[0] || {};
+      if (!option.useSchemastoreCatalog) {
+        return null;
+      }
+
+      interface ISchema {
+        name?: string;
+        description?: string;
+        fileMatch: string[];
+        url: string;
+      }
+      const catalog = loadJson<{ schemas: ISchema[] }>(CATALOG_URL, context);
+      if (!catalog) {
+        return null;
+      }
+
+      const validators: Validator[] = [];
+      for (const schemaData of catalog.schemas) {
+        if (!schemaData.fileMatch) {
+          continue;
+        }
+        if (!matchFile(relativeFilename, schemaData.fileMatch)) {
+          continue;
+        }
+        const validator = schemaPathToValidator(schemaData.url, context);
+        if (validator) validators.push(validator);
+      }
+      return validators.length ? validators : null;
+    }
+
+    /** Validator from options.schemas */
+    function getOptionsValidators(
+      context: RuleContext,
+      filename: string,
+    ): Validator[] | null {
+      const option = context.options[0];
+      if (typeof option === "string") {
+        const validator = schemaPathToValidator(option, context);
+        return validator ? [validator] : null;
+      }
+
+      if (typeof option !== "object" || !Array.isArray(option.schemas)) {
+        return null;
+      }
+
+      const validators: Validator[] = [];
+      for (const schemaData of option.schemas) {
+        if (!matchFile(filename, schemaData.fileMatch)) {
+          continue;
+        }
+
+        if (typeof schemaData.schema === "string") {
+          const validator = schemaPathToValidator(schemaData.schema, context);
+          if (validator) {
+            validators.push(validator);
+          } else {
+            reportCannotResolvedPath(schemaData.schema, context);
+          }
+        } else {
+          const validator = schemaObjectToValidator(schemaData.schema, context);
+          if (validator) {
+            validators.push(validator);
+          } else {
+            reportCannotResolvedObject(context);
+          }
+        }
+      }
+      return validators.length ? validators : null;
+    }
+
+    /** Create combined validator */
+    function createValidator(context: RuleContext, filename: string) {
+      const mergeSchemas = parseMergeSchemasOption(
+        context.options[0]?.mergeSchemas,
+      );
+
+      const validators: Validator[] = [];
+      if (mergeSchemas) {
+        if (mergeSchemas.includes("$schema")) {
+          validators.push(...(get$SchemaValidators(context) || []));
+        }
+        if (mergeSchemas.includes("options")) {
+          validators.push(...(getOptionsValidators(context, filename) || []));
+        }
+        if (mergeSchemas.includes("catalog")) {
+          validators.push(...(getCatalogValidators(context, filename) || []));
+        }
+      } else {
+        validators.push(
+          ...(get$SchemaValidators(context) ||
+            getOptionsValidators(context, filename) ||
+            getCatalogValidators(context, filename) ||
+            []),
+        );
+      }
+
+      return (data: unknown) =>
+        validators.reduce(
+          (errors, validator) => [...errors, ...validator(data)],
+          [] as ValidateError[],
+        );
     }
   },
 });
