@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 4.6.0
+
+### Minor Changes
+
+- [#237](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/237) [`c5ddb60`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/c5ddb600ed8c9a32949a904992ee241636aa9ad5) Thanks [@MarcRoemmelt](https://github.com/MarcRoemmelt)! - feat: support schema merging
+
 ## 4.5.0
 
 ### Minor Changes
