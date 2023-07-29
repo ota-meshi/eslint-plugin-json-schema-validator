@@ -88,15 +88,18 @@ function reportCannotResolvedObject(context: RuleContext) {
 }
 
 type SchemaKind = "$schema" | "catalog" | "options";
+const SCHEMA_KINDS: SchemaKind[] = ["$schema", "options", "catalog"];
 
 /** Get mergeSchemas option */
 function parseMergeSchemasOption(
   option: boolean | string[] | undefined,
 ): SchemaKind[] | null {
   return option === true
-    ? ["$schema", "catalog", "options"]
+    ? SCHEMA_KINDS
     : Array.isArray(option)
-    ? (option as SchemaKind[])
+    ? [...(option as SchemaKind[])].sort(
+        (a, b) => SCHEMA_KINDS.indexOf(a) - SCHEMA_KINDS.indexOf(b),
+      )
     : null;
 }
 

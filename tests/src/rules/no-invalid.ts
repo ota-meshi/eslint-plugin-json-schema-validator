@@ -129,10 +129,10 @@ tester.run(
             },
           ],
           errors: [
+            "Root must have required property 'foo'.",
             "Root must have required property 'version'.",
             "Root must have required property 'inherit'.",
             "Root must match a schema in anyOf.",
-            "Root must have required property 'foo'.",
             '"extends" must be string.',
             '"extends" must match exactly one schema in oneOf.',
             '"extends[0]" must be string.',
@@ -161,10 +161,10 @@ tester.run(
             },
           ],
           errors: [
+            "Root must have required property 'foo'.",
             "Root must have required property 'version'.",
             "Root must have required property 'inherit'.",
             "Root must match a schema in anyOf.",
-            "Root must have required property 'foo'.",
           ],
         },
         {
