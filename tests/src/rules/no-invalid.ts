@@ -78,6 +78,67 @@ tester.run(
           ],
         },
         {
+          filename: path.join(__dirname, ".eslintrc.json"),
+          code: '{ "extends": [ 42 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["tests/src/rules/.eslintrc.json"],
+                  schema: {
+                    properties: {
+                      foo: {
+                        type: "number",
+                      },
+                    },
+                    required: ["foo"],
+                  },
+                },
+              ],
+              mergeSchemas: true,
+              useSchemastoreCatalog: false,
+            },
+          ],
+          errors: [
+            "Root must have required property 'foo'.",
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        {
+          filename: path.join(__dirname, "version.json"),
+          code: '{ "extends": [ 42 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["tests/src/rules/version.json"],
+                  schema: {
+                    properties: {
+                      foo: {
+                        type: "number",
+                      },
+                    },
+                    required: ["foo"],
+                  },
+                },
+              ],
+              mergeSchemas: true,
+              useSchemastoreCatalog: true,
+            },
+          ],
+          errors: [
+            "Root must have required property 'foo'.",
+            "Root must have required property 'version'.",
+            "Root must have required property 'inherit'.",
+            "Root must match a schema in anyOf.",
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        {
           filename: path.join(__dirname, ".prettierrc.toml"),
           code: `
 trailingComma = "es3"
