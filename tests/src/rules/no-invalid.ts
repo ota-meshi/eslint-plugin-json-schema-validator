@@ -79,7 +79,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, ".eslintrc.json"),
-          code: '{ "extends": [ 42 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 98 ], "$schema": "https://json.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -108,7 +108,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 42 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 99 ], "$schema": "https://json.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -133,6 +133,131 @@ tester.run(
             "Root must have required property 'version'.",
             "Root must have required property 'inherit'.",
             "Root must match a schema in anyOf.",
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        {
+          filename: path.join(__dirname, "version.json"),
+          code: '{ "extends": [ 100 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["tests/src/rules/version.json"],
+                  schema: {
+                    properties: {
+                      foo: {
+                        type: "number",
+                      },
+                    },
+                    required: ["foo"],
+                  },
+                },
+              ],
+              mergeSchemas: ["catalog", "options"],
+              useSchemastoreCatalog: true,
+            },
+          ],
+          errors: [
+            "Root must have required property 'foo'.",
+            "Root must have required property 'version'.",
+            "Root must have required property 'inherit'.",
+            "Root must match a schema in anyOf.",
+          ],
+        },
+        {
+          filename: path.join(__dirname, "version.json"),
+          code: '{ "extends": [ 101 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["tests/src/rules/version.json"],
+                  schema: {
+                    properties: {
+                      foo: {
+                        type: "number",
+                      },
+                    },
+                    required: ["foo"],
+                  },
+                },
+              ],
+              mergeSchemas: ["$schema", "options"],
+              useSchemastoreCatalog: true,
+            },
+          ],
+          errors: [
+            "Root must have required property 'foo'.",
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        {
+          filename: path.join(__dirname, "version.json"),
+          code: '{ "extends": [ 102 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["tests/src/rules/version.json"],
+                  schema: {
+                    properties: {
+                      foo: {
+                        type: "number",
+                      },
+                    },
+                    required: ["foo"],
+                  },
+                },
+              ],
+              mergeSchemas: ["$schema", "catalog"],
+              useSchemastoreCatalog: false,
+            },
+          ],
+          errors: [
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        {
+          filename: path.join(__dirname, "version.json"),
+          code: '{ "extends": [ 103 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["tests/src/rules/version.json"],
+                  schema: {
+                    properties: {
+                      foo: {
+                        type: "number",
+                      },
+                    },
+                    required: ["foo"],
+                  },
+                },
+              ],
+              mergeSchemas: ["options", "catalog"],
+              useSchemastoreCatalog: false,
+            },
+          ],
+          errors: ["Root must have required property 'foo'."],
+        },
+        {
+          filename: path.join(__dirname, "version.json"),
+          code: '{ "extends": [ 104 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          options: [
+            {
+              mergeSchemas: ["options", "catalog"],
+              useSchemastoreCatalog: false,
+            },
+          ],
+          errors: [
             '"extends" must be string.',
             '"extends" must match exactly one schema in oneOf.',
             '"extends[0]" must be string.',

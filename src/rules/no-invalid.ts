@@ -87,11 +87,20 @@ function reportCannotResolvedObject(context: RuleContext) {
   });
 }
 
+type SchemaKind = "$schema" | "catalog" | "options";
+const SCHEMA_KINDS: SchemaKind[] = ["$schema", "options", "catalog"];
+
 /** Get mergeSchemas option */
 function parseMergeSchemasOption(
   option: boolean | string[] | undefined,
-): string[] | null {
-  return option === true ? ["$schema", "catalog", "options"] : option || null;
+): SchemaKind[] | null {
+  return option === true
+    ? SCHEMA_KINDS
+    : Array.isArray(option)
+    ? [...(option as SchemaKind[])].sort(
+        (a, b) => SCHEMA_KINDS.indexOf(a) - SCHEMA_KINDS.indexOf(b),
+      )
+    : null;
 }
 
 export default createRule("no-invalid", {
@@ -137,6 +146,8 @@ export default createRule("no-invalid", {
                       type: "string",
                       enum: ["$schema", "catalog", "options"],
                     },
+                    minItems: 2,
+                    uniqueItems: true,
                   },
                 ],
               },
@@ -156,6 +167,9 @@ export default createRule("no-invalid", {
       : filename;
 
     const validator = createValidator(context, relativeFilename);
+    if (!validator) {
+      return {};
+    }
 
     let existsExports = false;
     const sourceCode = context.getSourceCode();
@@ -167,7 +181,7 @@ export default createRule("no-invalid", {
       data: unknown,
       resolveLoc: (error: ValidateError) => JSONAST.SourceLocation | null,
     ) {
-      const errors = validator(data);
+      const errors = validator!(data);
       for (const error of errors) {
         const loc = resolveLoc(error);
 
@@ -463,31 +477,80 @@ export default createRule("no-invalid", {
         context.options[0]?.mergeSchemas,
       );
 
-      const validators: Validator[] = [];
-      if (mergeSchemas) {
-        if (mergeSchemas.includes("$schema")) {
-          validators.push(...(get$SchemaValidators(context) || []));
+      const validatorsCtx = createValidatorsContext(context, filename);
+      if (mergeSchemas && mergeSchemas.some((kind) => validatorsCtx[kind])) {
+        const validators: Validator[] = [];
+        for (const kind of mergeSchemas) {
+          const v = validatorsCtx[kind];
+          if (v) validators.push(...v);
         }
-        if (mergeSchemas.includes("options")) {
-          validators.push(...(getOptionsValidators(context, filename) || []));
-        }
-        if (mergeSchemas.includes("catalog")) {
-          validators.push(...(getCatalogValidators(context, filename) || []));
-        }
-      } else {
-        validators.push(
-          ...(get$SchemaValidators(context) ||
-            getOptionsValidators(context, filename) ||
-            getCatalogValidators(context, filename) ||
-            []),
-        );
+        return margeValidators(validators);
       }
 
-      return (data: unknown) =>
-        validators.reduce(
-          (errors, validator) => [...errors, ...validator(data)],
-          [] as ValidateError[],
-        );
+      const validators =
+        validatorsCtx.$schema || validatorsCtx.options || validatorsCtx.catalog;
+      if (!validators) {
+        return null;
+      }
+      return margeValidators(validators);
+
+      /** Marge validators */
+      function margeValidators(validators: Validator[]) {
+        return (data: unknown) =>
+          validators.reduce(
+            (errors, validator) => [...errors, ...validator(data)],
+            [] as ValidateError[],
+          );
+      }
+    }
+
+    /** Creates validators context */
+    function createValidatorsContext(context: RuleContext, filename: string) {
+      type Cache = { validators: Validator[] | null };
+      let $schema: Cache | null = null;
+      let options: Cache | null = null;
+      let catalog: Cache | null = null;
+
+      /**
+       * Get a validator. Returns the value of the cache if there is one.
+       * If there is no cache, cache and return the value obtained from the supplier function
+       */
+      function get(
+        cache: Cache | null,
+        setCache: (c: Cache) => void,
+        supplier: () => Validator[] | null,
+      ) {
+        if (cache) {
+          return cache.validators;
+        }
+        const v = supplier();
+        setCache({ validators: v });
+        return v;
+      }
+
+      return {
+        get $schema() {
+          return get(
+            $schema,
+            (c) => ($schema = c),
+            () => get$SchemaValidators(context),
+          );
+        },
+        get options() {
+          return get(
+            options,
+            (c) => (options = c),
+            () => getOptionsValidators(context, filename),
+          );
+        },
+        get catalog() {
+          return get(
+            catalog,
+            (c) => (catalog = c),
+            () => getCatalogValidators(context, filename),
+          );
+        },
+      };
     }
   },
 });
