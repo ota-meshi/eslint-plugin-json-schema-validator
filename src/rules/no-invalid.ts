@@ -422,6 +422,11 @@ export default createRule("no-invalid", {
         if (!schemaData.fileMatch) {
           continue;
         }
+        // Exclude schemas with patterns that match all json files.
+        // https://github.com/SchemaStore/schemastore/pull/3291
+        if (schemaData.fileMatch.some((s) => /^\*\.json$/u.test(s))) {
+          continue;
+        }
         if (!matchFile(relativeFilename, schemaData.fileMatch)) {
           continue;
         }
