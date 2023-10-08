@@ -4,7 +4,7 @@ import type { Rule } from "eslint";
 import type { AST as JSON } from "jsonc-eslint-parser";
 import type { AST as YAML } from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
-import type { AST as ES } from "eslint";
+import type { AST as ES, Scope } from "eslint";
 import type { Comment as ESTreeComment } from "estree";
 import type { ESLintNode, VElement } from "vue-eslint-parser/ast";
 export interface RuleListener {
@@ -105,6 +105,7 @@ export interface SourceCode {
   visitorKeys: {
     [nodeType: string]: string[];
   };
+  scopeManager: Scope.ScopeManager;
 
   getText(
     node?: NodeOrToken,

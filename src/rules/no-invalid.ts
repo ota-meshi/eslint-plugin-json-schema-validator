@@ -26,6 +26,7 @@ import type { ValidateError, Validator } from "../utils/validator-factory";
 import { compile } from "../utils/validator-factory";
 import type { SchemaObject } from "../utils/types";
 import fs from "fs";
+import { getCwd, getFilename, getSourceCode } from "../utils/compat";
 
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
 
@@ -161,6 +162,7 @@ export default createRule("no-invalid", {
     type: "suggestion",
   },
   create(context, { filename }) {
+    const sourceCode = getSourceCode(context);
     const cwd = getCwd(context);
     const relativeFilename = filename.startsWith(cwd)
       ? path.relative(cwd, filename)
@@ -172,7 +174,6 @@ export default createRule("no-invalid", {
     }
 
     let existsExports = false;
-    const sourceCode = context.getSourceCode();
 
     /**
      * Validate JSON Schema
@@ -254,17 +255,17 @@ export default createRule("no-invalid", {
 
     return {
       Program(node) {
-        if (context.parserServices.isJSON) {
+        if (sourceCode.parserServices.isJSON) {
           const program = node as JSONAST.JSONProgram;
           validateData(getStaticJSONValue(program), (error) => {
             return errorDataToLoc(getJSONNodeFromPath(program, error.path));
           });
-        } else if (context.parserServices.isYAML) {
+        } else if (sourceCode.parserServices.isYAML) {
           const program = node as YAML.YAMLProgram;
           validateData(getStaticYAMLValue(program), (error) => {
             return errorDataToLoc(getYAMLNodeFromPath(program, error.path));
           });
-        } else if (context.parserServices.isTOML) {
+        } else if (sourceCode.parserServices.isTOML) {
           const program = node as TOML.TOMLProgram;
           validateData(getStaticTOMLValue(program), (error) => {
             return errorDataToLoc(getTOMLNodeFromPath(program, error.path));
@@ -358,13 +359,13 @@ export default createRule("no-invalid", {
     /** Find schema path from program */
     function findSchemaPath(node: unknown) {
       let $schema = null;
-      if (context.parserServices.isJSON) {
+      if (sourceCode.parserServices.isJSON) {
         const program = node as JSONAST.JSONProgram;
         $schema = findSchemaPathFromJSON(program);
-      } else if (context.parserServices.isYAML) {
+      } else if (sourceCode.parserServices.isYAML) {
         const program = node as YAML.YAMLProgram;
         $schema = findSchemaPathFromYAML(program);
-      } else if (context.parserServices.isTOML) {
+      } else if (sourceCode.parserServices.isTOML) {
         const program = node as TOML.TOMLProgram;
         $schema = findSchemaPathFromTOML(program);
       }
@@ -374,7 +375,7 @@ export default createRule("no-invalid", {
               path.dirname(
                 typeof context.getPhysicalFilename === "function"
                   ? context.getPhysicalFilename()
-                  : getPhysicalFilename(context.getFilename()),
+                  : getPhysicalFilename(getFilename(context)),
               ),
               $schema,
             )
@@ -384,7 +385,7 @@ export default createRule("no-invalid", {
 
     /** Validator from $schema */
     function get$SchemaValidators(context: RuleContext): Validator[] | null {
-      const $schemaPath = findSchemaPath(context.getSourceCode().ast);
+      const $schemaPath = findSchemaPath(sourceCode.ast);
       if (!$schemaPath) return null;
 
       const validator = schemaPathToValidator($schemaPath, context);
@@ -559,16 +560,6 @@ export default createRule("no-invalid", {
     }
   },
 });
-
-/**
- * Get cwd
- */
-function getCwd(context: RuleContext) {
-  if (context.getCwd) {
-    return context.getCwd();
-  }
-  return path.resolve("");
-}
 
 /**
  * ! copied from https://github.com/mdx-js/eslint-mdx/blob/b97db2e912a416d5d40ddb78ab6c9fa1ab150c17/packages/eslint-mdx/src/helpers.ts#L28-L50

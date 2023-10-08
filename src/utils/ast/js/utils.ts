@@ -13,6 +13,7 @@ import type { RuleContext } from "../../../types";
 // @ts-expect-error -- no type def
 import * as eslintUtils from "@eslint-community/eslint-utils";
 import type { Variable } from "eslint-scope";
+import { getSourceCode } from "../../compat";
 
 /**
  * Gets the property name of a given node.
@@ -145,7 +146,7 @@ export function findInitNode(
 function getScope(context: RuleContext, currentNode: ESLintNode) {
   // On Program node, get the outermost scope to avoid return Node.js special function scope or ES modules scope.
   const inner = currentNode.type !== "Program";
-  const scopeManager = (context.getSourceCode() as any).scopeManager;
+  const scopeManager = getSourceCode(context).scopeManager;
 
   let node: any = currentNode;
   for (; node; node = node.parent || null) {

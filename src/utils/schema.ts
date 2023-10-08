@@ -5,6 +5,7 @@ import { syncGet, get } from "./http-client";
 import debugBuilder from "debug";
 import type { SchemaObject } from "./types";
 import { draft7 as migrateToDraft7 } from "json-schema-migrate";
+import { getCwd } from "./compat";
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
 const TTL = 1000 * 60 * 60 * 24;
@@ -247,14 +248,4 @@ function resolvePath(modulePath: string | void, context: RuleContext) {
     return path.join(getCwd(context), modulePath);
   }
   return modulePath;
-}
-
-/**
- * Get cwd
- */
-function getCwd(context: RuleContext) {
-  if (context.getCwd) {
-    return context.getCwd();
-  }
-  return path.resolve("");
 }
