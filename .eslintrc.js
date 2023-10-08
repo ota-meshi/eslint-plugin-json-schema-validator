@@ -22,7 +22,6 @@ module.exports = {
     "plugin:@ota-meshi/+prettier",
   ],
   rules: {
-    "json-schema-validator/no-invalid": "off",
     "one-var": "off",
     "eslint-comments/no-unused-disable": "error",
     "require-jsdoc": "error",
