@@ -1,7 +1,9 @@
 import path from "path";
 import assert from "assert";
-import { ESLint } from "./eslint-compat";
 import plugin from "../../src/index";
+import { getESLint } from "eslint-compat-utils";
+// eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
+const ESLint = getESLint();
 
 // -----------------------------------------------------------------------------
 // Tests
