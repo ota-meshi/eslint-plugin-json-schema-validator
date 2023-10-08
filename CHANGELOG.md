@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 4.6.1
+
+### Patch Changes
+
+- [#248](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/248) [`8a1d986`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/8a1d98655b5dfe030ac910f2df6dcc4dc9e8afbf) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: ignore invalid fileMatch schema
+
 ## 4.6.0
 
 ### Minor Changes
