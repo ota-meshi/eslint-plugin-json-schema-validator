@@ -6,6 +6,7 @@ import type { AnalyzedJsAST, PathData } from "../../../../src/utils/ast/js";
 import { analyzeJsAST } from "../../../../src/utils/ast/js";
 import type { ESLintExportDefaultDeclaration } from "vue-eslint-parser/ast";
 import type { SourceCode } from "../../../../src/types";
+import { getSourceCode } from "../../../../src/utils/compat";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures/utils/ast/js");
 
@@ -28,7 +29,7 @@ describe("AST for JS.", () => {
                   node.declaration.range,
                   context as never,
                 )!,
-                context.getSourceCode() as never,
+                getSourceCode(context) as never,
               );
             },
           };

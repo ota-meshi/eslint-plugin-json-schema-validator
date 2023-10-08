@@ -11,6 +11,7 @@ import * as jsoncESLintParser from "jsonc-eslint-parser";
 import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
 import path from "path";
+import { getFilename, getSourceCode } from "./compat";
 
 /**
  * Define the rule.
@@ -32,17 +33,18 @@ export function createRule(
       },
     },
     create(context: Rule.RuleContext): any {
-      const filename = context.getFilename();
+      const sourceCode = getSourceCode(context);
+      const filename = getFilename(context);
       const visitor = rule.create(context as any, {
         customBlock: false,
         filename,
       });
       if (
-        typeof context.parserServices.defineCustomBlocksVisitor ===
+        typeof sourceCode.parserServices.defineCustomBlocksVisitor ===
           "function" &&
         path.extname(filename) === ".vue"
       ) {
-        const jsonVisitor = context.parserServices.defineCustomBlocksVisitor(
+        const jsonVisitor = sourceCode.parserServices.defineCustomBlocksVisitor(
           context,
           jsoncESLintParser,
           {
@@ -63,7 +65,7 @@ export function createRule(
             },
           },
         );
-        const yamlVisitor = context.parserServices.defineCustomBlocksVisitor(
+        const yamlVisitor = sourceCode.parserServices.defineCustomBlocksVisitor(
           context,
           yamlESLintParser,
           {
@@ -79,7 +81,7 @@ export function createRule(
             },
           },
         );
-        const tomlVisitor = context.parserServices.defineCustomBlocksVisitor(
+        const tomlVisitor = sourceCode.parserServices.defineCustomBlocksVisitor(
           context,
           tomlESLintParser,
           {
