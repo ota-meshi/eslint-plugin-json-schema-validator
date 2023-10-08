@@ -60,6 +60,11 @@ module.exports = {
             __dirname,
             "../../node_modules/@eslint/eslintrc/dist/eslintrc-universal.cjs",
           ),
+          // Adjust the eslint-compat-utils path as it gets confusing.
+          "eslint-compat-utils": path.resolve(
+            __dirname,
+            "../../node_modules/eslint-compat-utils/dist/index.cjs",
+          ),
         },
       },
     };
