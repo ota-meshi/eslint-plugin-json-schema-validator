@@ -58,7 +58,7 @@
     "jsonc-eslint-parser": "^2.0.0",
     "minimatch": "^8.0.0",
     "synckit": "^0.8.0",
-    "toml-eslint-parser": "^0.7.0",
+    "toml-eslint-parser": "^0.8.0",
     "tunnel-agent": "^0.6.0",
     "yaml-eslint-parser": "^1.0.0"
   },
