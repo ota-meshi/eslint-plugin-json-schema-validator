@@ -261,8 +261,8 @@ function getConfig(ruleName: string, inputFile: string) {
     code = hashComment
       ? `# ${filename}\n${code0}`
       : blockComment
-      ? `/* ${filename} */\n${code0}`
-      : `<!--${filename}-->\n${code0}`;
+        ? `/* ${filename} */\n${code0}`
+        : `<!--${filename}-->\n${code0}`;
     return Object.assign(
       { parser: require.resolve(getParserName(inputFile)) },
       config,
@@ -273,8 +273,8 @@ function getConfig(ruleName: string, inputFile: string) {
   const configStr = hashComment
     ? /^#([^\n]+)\n/u.exec(code0)
     : blockComment
-    ? /^\/\*(.*?)\*\//u.exec(code0)
-    : /^<!--(.*?)-->/u.exec(code0);
+      ? /^\/\*(.*?)\*\//u.exec(code0)
+      : /^<!--(.*?)-->/u.exec(code0);
   if (!configStr) {
     fs.writeFileSync(inputFile, `/* {} */\n${code0}`, "utf8");
     throw new Error("missing config");
@@ -282,8 +282,8 @@ function getConfig(ruleName: string, inputFile: string) {
     code = hashComment
       ? code0.replace(/^#([^\n]+)\n/u, `# ${filename}\n`)
       : blockComment
-      ? code0.replace(/^\/\*(.*?)\*\//u, `# ${filename}\n`)
-      : code0.replace(/^<!--(.*?)-->/u, `<!--${filename}-->`);
+        ? code0.replace(/^\/\*(.*?)\*\//u, `# ${filename}\n`)
+        : code0.replace(/^<!--(.*?)-->/u, `<!--${filename}-->`);
     try {
       config = configStr ? JSON.parse(configStr[1]) : {};
     } catch (e: any) {

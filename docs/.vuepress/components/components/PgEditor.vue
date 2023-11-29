@@ -7,12 +7,12 @@
       language === 'yaml'
         ? 'yaml-eslint-parser'
         : language === 'toml'
-        ? 'toml-eslint-parser'
-        : language === 'html'
-        ? 'vue-eslint-parser'
-        : language === 'json'
-        ? 'jsonc-eslint-parser'
-        : 'espree'
+          ? 'toml-eslint-parser'
+          : language === 'html'
+            ? 'vue-eslint-parser'
+            : language === 'json'
+              ? 'jsonc-eslint-parser'
+              : 'espree'
     "
     :code="value"
     :rules="rules"

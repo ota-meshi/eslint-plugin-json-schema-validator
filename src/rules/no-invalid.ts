@@ -98,10 +98,10 @@ function parseMergeSchemasOption(
   return option === true
     ? SCHEMA_KINDS
     : Array.isArray(option)
-    ? [...(option as SchemaKind[])].sort(
-        (a, b) => SCHEMA_KINDS.indexOf(a) - SCHEMA_KINDS.indexOf(b),
-      )
-    : null;
+      ? [...(option as SchemaKind[])].sort(
+          (a, b) => SCHEMA_KINDS.indexOf(a) - SCHEMA_KINDS.indexOf(b),
+        )
+      : null;
 }
 
 export default createRule("no-invalid", {
