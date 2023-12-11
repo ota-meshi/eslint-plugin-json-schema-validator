@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 4.7.4
+
+### Patch Changes
+
+- [#274](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/274) [`296b9d1`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/296b9d173edd8e22dbd7b85261e622184ffd87d9) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: crash for regex without unicode in schema
+
 ## 4.7.3
 
 ### Patch Changes
