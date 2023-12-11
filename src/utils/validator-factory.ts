@@ -3,12 +3,28 @@ import type {
   ErrorObject,
   SchemaObject,
   ValidateFunction,
+  RegExpEngine,
 } from "./ajv";
 import { URL } from "url";
 import type { RuleContext } from "../types";
 import Ajv from "./ajv";
 import { draft7 as migrateToDraft7 } from "json-schema-migrate";
 import { loadSchema } from "./schema";
+
+// eslint-disable-next-line func-style -- ignore
+const lazyRegExpEngine: RegExpEngine = (str, flags) => {
+  let error: Error;
+  try {
+    return new RegExp(str, flags);
+  } catch (e) {
+    error = e as never;
+  }
+  if (flags.includes("u")) {
+    return new RegExp(str, flags.replace("u", ""));
+  }
+  throw error;
+};
+lazyRegExpEngine.code = "new RegExp";
 
 const ajv = new Ajv({
   // schemaId: "auto",
@@ -19,6 +35,9 @@ const ajv = new Ajv({
   // extendRefs: "ignore",
   logger: false,
   strict: false,
+  code: {
+    regExp: lazyRegExpEngine,
+  },
 });
 // ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
 // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
@@ -85,6 +104,7 @@ function schemaToValidator(
       if (resolveError(e, schemaPath, schemaObject, context)) {
         continue;
       }
+      console.error(schemaPath);
       throw e;
     }
     break;
