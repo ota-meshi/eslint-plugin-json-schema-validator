@@ -43,6 +43,17 @@ jobs:
         run: yarn install --ignore-engines
       - name: Test
         run: yarn test
+  test-with-eslint9:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Install Target Packages
+        run: |+
+          yarn add -D eslint@^9.0.0-0 --ignore-engines
+          yarn --ignore-engines
+      - name: Test
+        run: yarn test
   test-with-eslint6:
     runs-on: ubuntu-latest
     steps:

@@ -1,12 +1,14 @@
 import assert from "assert";
 import path from "path";
 import fs from "fs";
-import { Linter } from "eslint";
+import { getLinter } from "eslint-compat-utils/linter";
 import type { AnalyzedJsAST, PathData } from "../../../../src/utils/ast/js";
 import { analyzeJsAST } from "../../../../src/utils/ast/js";
 import type { ESLintExportDefaultDeclaration } from "vue-eslint-parser/ast";
 import type { SourceCode } from "../../../../src/types";
 import { getSourceCode } from "../../../../src/utils/compat";
+// eslint-disable-next-line @typescript-eslint/naming-convention -- class name
+const Linter = getLinter();
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures/utils/ast/js");
 
@@ -18,28 +20,40 @@ describe("AST for JS.", () => {
 
       const linter = new Linter();
       let result: any;
-      linter.defineRule("test", {
-        // @ts-expect-error -- ignore
-        create(context) {
-          return {
-            ExportDefaultDeclaration(node: ESLintExportDefaultDeclaration) {
-              result = toOutput(
-                analyzeJsAST(
-                  node.declaration as never,
-                  node.declaration.range,
-                  context as never,
-                )!,
-                getSourceCode(context) as never,
-              );
-            },
-          };
-        },
-      });
       const err = linter.verify(input, {
-        rules: { test: "error" },
-        parser: "espree",
-        parserOptions: { ecmaVersion: 2020, sourceType: "module" },
-      });
+        plugins: {
+          test: {
+            rules: {
+              test: {
+                // @ts-expect-error -- ignore
+                create(context) {
+                  return {
+                    ExportDefaultDeclaration(
+                      node: ESLintExportDefaultDeclaration,
+                    ) {
+                      result = toOutput(
+                        analyzeJsAST(
+                          node.declaration as never,
+                          node.declaration.range,
+                          context as never,
+                        )!,
+                        getSourceCode(context) as never,
+                      );
+                    },
+                  };
+                },
+              },
+            },
+          },
+        },
+        rules: { "test/test": "error" },
+        languageOptions: {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
+          parser: require("espree"),
+          ecmaVersion: 2020,
+          sourceType: "module",
+        },
+      } as any);
       if (err.length > 0) {
         throw new Error(err[0].message);
       }

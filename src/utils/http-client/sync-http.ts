@@ -11,5 +11,5 @@ export function syncGet(
   options?: RequestOptions,
   httpModulePath?: string,
 ): string {
-  return getSync(url, options, httpModulePath);
+  return getSync(url, options, httpModulePath) as string;
 }
