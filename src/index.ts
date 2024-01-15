@@ -17,7 +17,8 @@ const rules = ruleList.reduce(
   {} as { [key: string]: RuleModule },
 );
 
-// @ts-expect-error -- ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore
+// @ts-ignore
 export = {
   meta,
   configs,
