@@ -18,6 +18,7 @@ if (semver.lt(Linter.version, "9.0.0-0"))
     it("should lint without errors", async () => {
       const engine = new ESLint({
         cwd: TEST_CWD,
+        extensions: [".js", ".json"],
         overrideConfig: {
           files: ["**/*.js", "**/*.json", "*.js", "*.json"],
           plugins: { "json-schema-validator": plugin },
