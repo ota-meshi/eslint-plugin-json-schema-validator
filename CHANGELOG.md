@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 4.8.1
+
+### Patch Changes
+
+- [#287](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/287) [`3814173`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/38141731c18dbd7ba07436f80388ea794d9c6845) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: breaking config
+
 ## 4.8.0
 
 ### Minor Changes
