@@ -1,11 +1,13 @@
 import path from "path";
-import { RuleTester } from "eslint";
+import { getRuleTester } from "eslint-compat-utils/rule-tester";
 import rule from "../../../src/rules/no-invalid";
 import { loadTestCases } from "../../utils/utils";
-
+// eslint-disable-next-line @typescript-eslint/naming-convention -- class name
+const RuleTester = getRuleTester();
 const tester = new RuleTester({
-  parser: require.resolve("jsonc-eslint-parser"),
-  parserOptions: {
+  languageOptions: {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
+    parser: require("jsonc-eslint-parser"),
     ecmaVersion: 2020,
     sourceType: "module",
   },
