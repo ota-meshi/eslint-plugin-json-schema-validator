@@ -192,6 +192,7 @@ function writeFixtures(
   const result = linter.verify(
     config.code,
     {
+      files: [`**/*${path.extname(config.filename)}`],
       plugins: {
         "my-eslint-plugin": plugin,
       },
