@@ -1,4 +1,6 @@
-export default {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore
+// @ts-ignore -- backward compatibility
+export = {
   plugins: ["json-schema-validator"],
   overrides: [
     {
