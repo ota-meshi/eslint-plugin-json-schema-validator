@@ -6,7 +6,7 @@ import { loadTestCases } from "../../utils/utils";
 const RuleTester = getRuleTester();
 const tester = new RuleTester({
   languageOptions: {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
+    /* eslint @typescript-eslint/no-require-imports: 0 -- ignore */
     parser: require("jsonc-eslint-parser"),
     ecmaVersion: 2020,
     sourceType: "module",
@@ -24,7 +24,10 @@ tester.run(
         {
           filename: path.join(__dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ require.resolve("eslint-config-foo") ] }',
-          parser: require.resolve("espree"),
+          // @ts-expect-error -- typeerror
+          languageOptions: {
+            parser: require("espree"),
+          },
           options: [
             {
               schemas: [
@@ -61,7 +64,10 @@ tester.run(
         {
           filename: path.join(__dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ 42 ] }',
-          parser: require.resolve("espree"),
+          // @ts-expect-error -- typeerror
+          languageOptions: {
+            parser: require("espree"),
+          },
           options: [
             {
               schemas: [
@@ -272,7 +278,10 @@ trailingComma = "es3"
 tabWidth = 4
 semi = false
 singleQuote = true`,
-          parser: require.resolve("toml-eslint-parser"),
+          // @ts-expect-error -- typeerror
+          languageOptions: {
+            parser: require("toml-eslint-parser"),
+          },
           options: [
             {
               schemas: [

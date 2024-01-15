@@ -17,6 +17,7 @@ const rules = ruleList.reduce(
   {} as { [key: string]: RuleModule },
 );
 
+// @ts-expect-error -- ignore
 export = {
   meta,
   configs,

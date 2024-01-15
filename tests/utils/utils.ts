@@ -2,14 +2,15 @@
 import fs from "fs";
 import path from "path";
 import type { RuleTester } from "eslint";
-import { Linter } from "eslint";
+import { getLinter as getCompatLinter } from "eslint-compat-utils/linter";
 import * as jsoncESLintParser from "jsonc-eslint-parser";
 import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
 import * as vueESLintParser from "vue-eslint-parser";
 import semver from "semver";
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- tests
-import plugin = require("../../src/index");
+import plugin from "../../src/index";
+// eslint-disable-next-line @typescript-eslint/naming-convention -- class name
+const Linter = getCompatLinter();
 
 /**
  * Prevents leading spaces in a multiline template literal from appearing in the resulting string
@@ -180,7 +181,7 @@ function writeFixtures(
   inputFile: string,
   { force }: { force?: boolean } = {},
 ) {
-  const linter = getLinter(ruleName);
+  const linter = new Linter();
   const errorFile = inputFile.replace(
     /input\.(?:js|json5?|ya?ml|toml|vue)$/u,
     "errors.json",
@@ -191,15 +192,18 @@ function writeFixtures(
   const result = linter.verify(
     config.code,
     {
-      rules: {
-        [ruleName]: ["error", ...(config.options || [])],
+      plugins: {
+        "my-eslint-plugin": plugin,
       },
-      parser: getParserName(inputFile),
-      parserOptions: {
+      rules: {
+        [`my-eslint-plugin/${ruleName}`]: ["error", ...(config.options || [])],
+      },
+      languageOptions: {
+        parser: getParser(inputFile),
         ecmaVersion: 2020,
         sourceType: "module",
       },
-    },
+    } as any,
     config.filename,
   );
   if (force || !fs.existsSync(errorFile)) {
@@ -215,23 +219,10 @@ function writeFixtures(
         })),
         null,
         4,
-      )}\n`,
+      )}\n`.replace(/my-eslint-plugin\//gu, ""),
       "utf8",
     );
   }
-}
-
-function getLinter(ruleName: string) {
-  const linter = new Linter();
-  // @ts-expect-error for test
-  linter.defineParser("jsonc-eslint-parser", jsoncESLintParser);
-  linter.defineParser("yaml-eslint-parser", yamlESLintParser as any);
-  linter.defineParser("toml-eslint-parser", tomlESLintParser as any);
-  linter.defineParser("vue-eslint-parser", vueESLintParser as any);
-  // @ts-expect-error for test
-  linter.defineRule(ruleName, plugin.rules[ruleName]);
-
-  return linter;
 }
 
 // eslint-disable-next-line complexity -- ignore
@@ -264,7 +255,7 @@ function getConfig(ruleName: string, inputFile: string) {
         ? `/* ${filename} */\n${code0}`
         : `<!--${filename}-->\n${code0}`;
     return Object.assign(
-      { parser: require.resolve(getParserName(inputFile)) },
+      { languageOptions: { parser: getParser(inputFile) } },
       config,
       { code, filename: inputFile },
     );
@@ -292,24 +283,28 @@ function getConfig(ruleName: string, inputFile: string) {
   }
 
   return Object.assign(
-    { parser: require.resolve(getParserName(inputFile)) },
+    { languageOptions: { parser: getParser(inputFile) } },
     config,
-    { code, filename: inputFile },
+    {
+      code,
+      filename: inputFile,
+    },
   );
 }
 
-function getParserName(fileName: string): string {
+function getParser(fileName: string) {
   if (fileName.endsWith(".vue")) {
-    return "vue-eslint-parser";
+    return vueESLintParser;
   }
   if (fileName.endsWith(".yaml") || fileName.endsWith(".yml")) {
-    return "yaml-eslint-parser";
+    return yamlESLintParser;
   }
   if (fileName.endsWith(".toml")) {
-    return "toml-eslint-parser";
+    return tomlESLintParser;
   }
   if (fileName.endsWith(".js")) {
-    return "espree";
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
+    return require("espree");
   }
-  return "jsonc-eslint-parser";
+  return jsoncESLintParser;
 }
