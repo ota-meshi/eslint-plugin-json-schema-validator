@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 4.8.3
+
+### Patch Changes
+
+- [#292](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/292) [`e83c3a1`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/e83c3a149a88cb6f62d5edb60029961c57951efc) Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update dependency eslint-compat-utils to ^0.4.0
+
 ## 4.8.2
 
 ### Patch Changes
