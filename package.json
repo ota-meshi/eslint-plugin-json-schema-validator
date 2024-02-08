@@ -96,7 +96,7 @@
     "eslint-plugin-yml": "^1.0.0",
     "espree": "^9.0.0",
     "mocha": "^10.0.0",
-    "monaco-editor": "^0.45.0",
+    "monaco-editor": "^0.46.0",
     "nyc": "^15.1.0",
     "prettier": "^3.0.0",
     "prettier-plugin-pkg": "^0.18.0",
