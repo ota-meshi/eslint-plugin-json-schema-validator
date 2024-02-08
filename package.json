@@ -94,7 +94,7 @@
     "eslint-plugin-toml": "^0.9.0",
     "eslint-plugin-vue": "^9.0.0",
     "eslint-plugin-yml": "^1.0.0",
-    "espree": "^9.0.0",
+    "espree": "^10.0.0",
     "mocha": "^10.0.0",
     "monaco-editor": "^0.46.0",
     "nyc": "^15.1.0",
