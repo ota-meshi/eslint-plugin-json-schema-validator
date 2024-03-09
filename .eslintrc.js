@@ -180,6 +180,12 @@ module.exports = {
       },
       rules: {
         "require-jsdoc": "off",
+        "eslint-plugin/require-meta-docs-description": "off",
+        "eslint-plugin/require-meta-docs-url": "off",
+        "eslint-plugin/require-meta-type": "off",
+        "eslint-plugin/prefer-message-ids": "off",
+        "eslint-plugin/prefer-object-rule": "off",
+        "eslint-plugin/require-meta-schema": "off",
       },
     },
   ],
