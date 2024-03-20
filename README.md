@@ -43,7 +43,35 @@ npm install --save-dev eslint eslint-plugin-jsonc eslint-plugin-json-schema-vali
 
 ### Configuration
 
-Use `.eslintrc.*` file to configure rules. See also: [https://eslint.org/docs/user-guide/configuring](https://eslint.org/docs/user-guide/configuring).
+#### New (ESLint>=v9) Config (Flat Config)
+
+Use `eslint.config.js` file to configure rules. See also: <https://eslint.org/docs/latest/use/configure/configuration-files-new>.
+
+Example **eslint.config.js**:
+
+```mjs
+import eslintPluginJsonSchemaValidator from 'eslint-plugin-json-schema-validator';
+export default [
+  // add more generic rule sets here, such as:
+  // js.configs.recommended,
+  ...eslintPluginJsonSchemaValidator.configs['flat/recommended'],
+  {
+    rules: {
+      // override/add rules settings here, such as:
+      // 'json-schema-validator/no-invalid': 'warn'
+    }
+  }
+];
+```
+
+This plugin provides configs:
+
+- `*.configs['flat/base']` ... Configuration to enable correct JSON, YAML and TOML parsing.
+- `*.configs['flat/recommended']` ... Above, plus rule to validate with JSON Schema.
+
+#### Legacy Config (ESLint<v9)
+
+Use `.eslintrc.*` file to configure rules. See also: <https://eslint.org/docs/latest/use/configure/>.
 
 Example **.eslintrc.js**:
 
