@@ -1,24 +1,46 @@
 import path from "path";
 import assert from "assert";
 import plugin from "../../src/index";
-import { getLegacyESLint } from "eslint-compat-utils/eslint";
+import semver from "semver";
+import { getLegacyESLint, getESLint } from "eslint-compat-utils/eslint";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
-const ESLint = getLegacyESLint();
 // -----------------------------------------------------------------------------
 // Tests
 // -----------------------------------------------------------------------------
 
-const TEST_CWD = path.join(__dirname, "../fixtures/integrations/eslint-plugin");
+const TEST_FIXTURES_ROOT = path.join(
+  __dirname,
+  "../fixtures/integrations/eslint-plugin",
+);
 
 describe("Integration with eslint-plugin-json-schema-validator", () => {
-  it("should lint without errors", async () => {
+  it("should lint without errors with legacy-config", async () => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
+    const ESLint = getLegacyESLint();
     const engine = new ESLint({
-      cwd: TEST_CWD,
+      cwd: path.join(TEST_FIXTURES_ROOT, "legacy-config-test01"),
       extensions: [".js", ".json"],
       plugins: { "json-schema-validator": plugin as any },
     });
-    const results = await engine.lintFiles(["test01/src"]);
+    const results = await engine.lintFiles(["src"]);
+    assert.strictEqual(results.length, 2);
+    assert.strictEqual(
+      results.reduce((s, r) => s + r.errorCount, 0),
+      0,
+    );
+  });
+  it("should lint without errors with flat-config", async () => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
+    const ESLint = getESLint();
+    if (semver.satisfies(ESLint.version, "<7.0.0")) return;
+    const engine = new ESLint({
+      cwd: path.join(TEST_FIXTURES_ROOT, "flat-config-test01"),
+      // @ts-expect-error -- typing bug
+      overrideConfigFile: true,
+      // @ts-expect-error -- typing bug
+      overrideConfig: plugin.configs["flat/recommended"],
+    });
+    const results = await engine.lintFiles(["src"]);
     assert.strictEqual(results.length, 2);
     assert.strictEqual(
       results.reduce((s, r) => s + r.errorCount, 0),

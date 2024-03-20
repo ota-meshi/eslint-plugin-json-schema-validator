@@ -188,5 +188,17 @@ module.exports = {
         "eslint-plugin/require-meta-schema": "off",
       },
     },
+    {
+      files: ["*.mjs"],
+      parserOptions: {
+        sourceType: "module",
+      },
+    },
+    {
+      files: ["*.md/**", "**/*.md/**"],
+      rules: {
+        "n/no-missing-import": "off",
+      },
+    },
   ],
 };
