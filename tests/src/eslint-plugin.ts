@@ -1,7 +1,6 @@
 import path from "path";
 import assert from "assert";
 import plugin from "../../src/index";
-import semver from "semver";
 import { getLegacyESLint, getESLint } from "eslint-compat-utils/eslint";
 
 // -----------------------------------------------------------------------------
