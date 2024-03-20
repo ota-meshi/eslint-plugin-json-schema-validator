@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 4.9.0
+
+### Minor Changes
+
+- [#301](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/301) [`f5464cc`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/f5464ccbb90f225e9e6dbd444d590d807ecf95fe) Thanks [@ota-meshi](https://github.com/ota-meshi)! - feat: add support for flat config
+
 ## 4.8.3
 
 ### Patch Changes
