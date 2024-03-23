@@ -45,6 +45,15 @@ tester.run(
         {
           filename: ".eslintrc.json",
           code: '{ "extends": [ 42 ] }',
+          errors: [
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        {
+          filename: ".eslintrc.json",
+          code: '{ "extends": [ 42 ] }',
           options: [
             {
               schemas: [
