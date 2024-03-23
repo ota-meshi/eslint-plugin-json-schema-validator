@@ -218,13 +218,13 @@ export default {
 };
 
 function equalsRules(a, b) {
-  const akeys = Object.keys(a).filter((k) => a[k] !== "off");
-  const bkeys = Object.keys(b).filter((k) => b[k] !== "off");
-  if (akeys.length !== bkeys.length) {
+  const aKeys = Object.keys(a).filter((k) => a[k] !== "off");
+  const bKeys = Object.keys(b).filter((k) => b[k] !== "off");
+  if (aKeys.length !== bKeys.length) {
     return false;
   }
 
-  for (const k of akeys) {
+  for (const k of aKeys) {
     if (a[k] !== b[k]) {
       return false;
     }

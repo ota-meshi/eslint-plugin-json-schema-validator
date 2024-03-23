@@ -7,6 +7,10 @@ const schema = require("../../lib/utils/schema");
 schema.loadJson("https://www.schemastore.org/api/json/catalog.json", {});
 schema.loadSchema("https://json.schemastore.org/eslintrc.json", {});
 schema.loadSchema("https://json.schemastore.org/prettierrc.json", {});
+schema.loadSchema(
+  "https://json.schemastore.org/partial-eslint-plugins.json",
+  {},
+);
 
 function ruleToLink({
   meta: {
