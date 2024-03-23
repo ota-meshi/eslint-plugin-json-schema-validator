@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.0.0
+
+### Major Changes
+
+- [#305](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/305) [`ada5a08`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/ada5a0818d0f067a99dcfe3e134acac218479536) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: `useSchemastoreCatalog` is enabled by default according to docs.
+
 ## 4.9.0
 
 ### Minor Changes
