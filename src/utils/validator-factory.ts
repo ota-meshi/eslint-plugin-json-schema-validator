@@ -5,7 +5,6 @@ import type {
   ValidateFunction,
   RegExpEngine,
 } from "./ajv";
-import { URL } from "url";
 import type { RuleContext } from "../types";
 import Ajv from "./ajv";
 import { draft7 as migrateToDraft7 } from "json-schema-migrate";
