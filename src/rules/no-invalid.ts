@@ -403,7 +403,8 @@ export default createRule("no-invalid", {
       relativeFilename: string,
     ): Validator[] | null {
       const option = context.options[0] || {};
-      if (!option.useSchemastoreCatalog) {
+      const useSchemastoreCatalog = option.useSchemastoreCatalog !== false;
+      if (!useSchemastoreCatalog) {
         return null;
       }
 
