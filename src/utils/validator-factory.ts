@@ -103,6 +103,7 @@ function schemaToValidator(
       if (resolveError(e, schemaPath, schemaObject, context)) {
         continue;
       }
+      // eslint-disable-next-line no-console -- log
       console.error(schemaPath);
       throw e;
     }
