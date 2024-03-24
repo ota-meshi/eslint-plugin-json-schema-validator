@@ -155,9 +155,9 @@ This rule was introduced in eslint-plugin-json-schema-validator ${await this
         : ""
     }## :mag: Implementation
 
-- [Rule source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/master/src/rules/${ruleName}.ts)
-- [Test source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/master/tests/src/rules/${ruleName}.ts)
-- [Test fixture sources](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/master/tests/fixtures/rules/${ruleName})
+- [Rule source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/src/rules/${ruleName}.ts)
+- [Test source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/tests/src/rules/${ruleName}.ts)
+- [Test fixture sources](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/main/tests/fixtures/rules/${ruleName})
 `;
     if (footerPattern.test(this.content)) {
       this.content = this.content.replace(

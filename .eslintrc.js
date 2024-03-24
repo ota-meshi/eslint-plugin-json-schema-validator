@@ -13,7 +13,7 @@ module.exports = {
     "plugin:@ota-meshi/+node",
     "plugin:@ota-meshi/+typescript",
     "plugin:@ota-meshi/+eslint-plugin",
-    "plugin:@ota-meshi/+vue2",
+    "plugin:@ota-meshi/+vue3",
     "plugin:@ota-meshi/+package-json",
     "plugin:@ota-meshi/+json",
     "plugin:@ota-meshi/+yaml",
@@ -100,7 +100,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*.ts"],
+      files: ["*.ts", "*.mts"],
       parser: "@typescript-eslint/parser",
       parserOptions: {
         sourceType: "module",
@@ -170,7 +170,8 @@ module.exports = {
       },
     },
     {
-      files: ["docs/.vuepress/**"],
+      files: ["docs/.vitepress/**/*.*", "docs/.vitepress/*.*"],
+      extends: ["plugin:@typescript-eslint/disable-type-checked"],
       parserOptions: {
         sourceType: "module",
         ecmaVersion: 2020,
@@ -186,6 +187,13 @@ module.exports = {
         "eslint-plugin/prefer-message-ids": "off",
         "eslint-plugin/prefer-object-rule": "off",
         "eslint-plugin/require-meta-schema": "off",
+        "n/no-extraneous-import": "off",
+      },
+    },
+    {
+      files: ["docs/.vitepress/**/*.ts", "docs/.vitepress/**/*.mts"],
+      parserOptions: {
+        project: null,
       },
     },
     {
@@ -196,6 +204,9 @@ module.exports = {
     },
     {
       files: ["*.md/**", "**/*.md/**"],
+      parserOptions: {
+        sourceType: "module",
+      },
       rules: {
         "n/no-missing-import": "off",
       },

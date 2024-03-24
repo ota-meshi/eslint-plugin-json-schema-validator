@@ -158,6 +158,6 @@ This rule was introduced in eslint-plugin-json-schema-validator v0.1.0
 
 ## :mag: Implementation
 
-- [Rule source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/master/src/rules/no-invalid.ts)
-- [Test source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/master/tests/src/rules/no-invalid.ts)
-- [Test fixture sources](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/master/tests/fixtures/rules/no-invalid)
+- [Rule source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/src/rules/no-invalid.ts)
+- [Test source](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/tests/src/rules/no-invalid.ts)
+- [Test fixture sources](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/main/tests/fixtures/rules/no-invalid)

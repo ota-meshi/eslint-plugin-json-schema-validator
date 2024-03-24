@@ -2,8 +2,10 @@
 /.nyc_output
 /coverage
 /dist
-/docs/.vuepress/dist
-/docs/.vuepress/components/demo/demo-code.js
+!/docs/.vitepress
+/docs/.vitepress/dist
+/docs/.vitepress/cache
+/docs/.vitepress/build-system/shim
 /lib
 /node_modules
 /schemastore
@@ -11,4 +13,3 @@
 /assets
 !/.github
 !/.vscode
-!/docs/.vuepress

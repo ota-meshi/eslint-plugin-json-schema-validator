@@ -1,7 +1,6 @@
 import type { RequestOptions } from "https";
 import https from "https";
 import http from "http";
-import { URL } from "url";
 // @ts-expect-error -- no types
 import tunnel from "tunnel-agent";
 
