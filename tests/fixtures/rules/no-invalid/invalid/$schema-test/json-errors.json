@@ -1,6 +1,6 @@
 [
     {
-        "message": "\"compilerOptions\" must be object.",
+        "message": "\"compilerOptions\" must be object,null.",
         "line": 4,
         "column": 5,
         "endLine": 4,
