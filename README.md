@@ -43,7 +43,7 @@ npm install --save-dev eslint eslint-plugin-jsonc eslint-plugin-json-schema-vali
 
 ### Configuration
 
-#### New (ESLint>=v9) Config (Flat Config)
+#### New Config (`eslint.config.js`)
 
 Use `eslint.config.js` file to configure rules. See also: <https://eslint.org/docs/latest/use/configure/configuration-files-new>.
 
@@ -69,7 +69,7 @@ This plugin provides configs:
 - `*.configs['flat/base']` ... Configuration to enable correct JSON, YAML and TOML parsing.
 - `*.configs['flat/recommended']` ... Above, plus rule to validate with JSON Schema.
 
-#### Legacy Config (ESLint<v9)
+#### Legacy Config (`.eslintrc`)
 
 Use `.eslintrc.*` file to configure rules. See also: <https://eslint.org/docs/latest/use/configure/>.
 
