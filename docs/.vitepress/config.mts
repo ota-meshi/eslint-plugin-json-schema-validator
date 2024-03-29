@@ -83,6 +83,7 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
 
     lastUpdated: true,
     themeConfig: {
+      siteTitle: "eslint-plugin-\njson-schema-validator",
       search: {
         provider: "local",
         options: {

@@ -2,6 +2,10 @@ a > img {
   display: inline-block;
 }
 
+a.title {
+  white-space: pre-wrap;
+}
+
 /* Playground */
 .playground .VPDoc.has-aside .content-container,
 .playground .VPDoc:not(.has-sidebar) .content,

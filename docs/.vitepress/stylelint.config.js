@@ -6,6 +6,6 @@ module.exports = {
     "value-keyword-case": null,
 
     // Conflict with Prettier
-    indentation: null,
+    // indentation: null,
   },
 };
