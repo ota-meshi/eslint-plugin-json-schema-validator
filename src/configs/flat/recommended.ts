@@ -1,3 +1,4 @@
+import type { Linter } from "eslint";
 import base from "./base";
 export default [
   ...base,
@@ -7,4 +8,4 @@ export default [
       "json-schema-validator/no-invalid": "warn",
     },
   },
-];
+] satisfies Linter.FlatConfig[];
