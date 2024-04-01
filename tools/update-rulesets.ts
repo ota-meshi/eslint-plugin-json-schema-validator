@@ -56,6 +56,7 @@ export = {
 
 for (const rec of ["recommended"] as const) {
   let content = `
+import type { Linter } from "eslint";
 import base from './base';
 export default [
   ...base,
@@ -76,7 +77,7 @@ export default [
         .join(",\n")}
     },
   }
-]
+] satisfies Linter.FlatConfig[]
 `;
 
   const filePath = path.resolve(__dirname, FLAT_RULESET_NAME[rec]);

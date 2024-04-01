@@ -1,4 +1,4 @@
-import type { ESLint } from "eslint";
+import type { ESLint, Linter } from "eslint";
 import * as jsoncParser from "jsonc-eslint-parser";
 import * as yamlParser from "yaml-eslint-parser";
 import * as tomlParser from "toml-eslint-parser";
@@ -54,4 +54,4 @@ export default [
       "spaced-comment": "off",
     },
   },
-];
+] satisfies Linter.FlatConfig[] as Linter.FlatConfig[];
