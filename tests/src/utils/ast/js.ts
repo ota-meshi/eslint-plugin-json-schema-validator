@@ -48,7 +48,7 @@ describe("AST for JS.", () => {
         },
         rules: { "test/test": "error" },
         languageOptions: {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
+          // eslint-disable-next-line @typescript-eslint/no-require-imports, n/no-extraneous-require -- test
           parser: require("espree"),
           ecmaVersion: 2020,
           sourceType: "module",

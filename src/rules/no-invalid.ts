@@ -4,16 +4,16 @@ import type { AST as YAML } from "yaml-eslint-parser";
 import { getStaticYAMLValue } from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
 import { getStaticTOMLValue } from "toml-eslint-parser";
-import { createRule } from "../utils";
+import { createRule } from "../utils/index";
 import minimatch from "minimatch";
 import path from "path";
-import type { PathData } from "../utils/ast";
+import type { PathData } from "../utils/ast/index";
 import {
   getJSONNodeFromPath,
   getYAMLNodeFromPath,
   getTOMLNodeFromPath,
   analyzeJsAST,
-} from "../utils/ast";
+} from "../utils/ast/index";
 import { loadJson, loadSchema } from "../utils/schema";
 import type { RuleContext } from "../types";
 import type { NodeData } from "../utils/ast/common";
@@ -21,6 +21,7 @@ import type {
   ESLintAssignmentExpression,
   ESLintExportDefaultDeclaration,
   ESLintExpression,
+  // eslint-disable-next-line n/no-missing-import -- d.ts
 } from "vue-eslint-parser/ast";
 import type { ValidateError, Validator } from "../utils/validator-factory";
 import { compile } from "../utils/validator-factory";

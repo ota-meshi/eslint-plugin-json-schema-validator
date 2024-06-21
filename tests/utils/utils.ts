@@ -304,7 +304,7 @@ function getParser(fileName: string) {
     return tomlESLintParser;
   }
   if (fileName.endsWith(".js")) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, n/no-extraneous-require -- test
     return require("espree");
   }
   return jsoncESLintParser;

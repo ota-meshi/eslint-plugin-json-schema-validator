@@ -97,42 +97,49 @@ export default {
               : "espree";
     },
     config() {
-      return {
-        globals: {
-          // Node
-          module: false,
-          // ES2015 globals
-          ArrayBuffer: false,
-          DataView: false,
-          Float32Array: false,
-          Float64Array: false,
-          Int16Array: false,
-          Int32Array: false,
-          Int8Array: false,
-          Map: false,
-          Promise: false,
-          Proxy: false,
-          Reflect: false,
-          Set: false,
-          Symbol: false,
-          Uint16Array: false,
-          Uint32Array: false,
-          Uint8Array: false,
-          Uint8ClampedArray: false,
-          WeakMap: false,
-          WeakSet: false,
-          // ES2017 globals
-          Atomics: false,
-          SharedArrayBuffer: false,
+      return [
+        {
+          files: ["*.*"],
+          plugins: {
+            "json-schema-validator": {
+              rules: Object.fromEntries(
+                rules.map((r) => [r.meta.docs.ruleName, r]),
+              ),
+            },
+          },
+          languageOptions: {
+            globals: {
+              // Node
+              module: false,
+            },
+          },
+          rules: this.rules,
         },
-        rules: this.rules,
-        parser: this.parser,
-        parserOptions: {
-          parser: this.espree,
-          sourceType: "module",
-          ecmaVersion: "latest",
+        {
+          files: ["*.json", "*.jsonc", "*.json5"],
+          languageOptions: {
+            parser: this.jsoncESLintParser,
+          },
         },
-      };
+        {
+          files: ["*.yml", "*.yaml"],
+          languageOptions: {
+            parser: this.yamlESLintParser,
+          },
+        },
+        {
+          files: ["*.toml"],
+          languageOptions: {
+            parser: this.tomlESLintParser,
+          },
+        },
+        {
+          files: ["*.vue"],
+          languageOptions: {
+            parser: this.vueESLintParser,
+          },
+        },
+      ];
     },
     linter() {
       if (
@@ -144,15 +151,6 @@ export default {
         return null;
       }
       const linter = new Linter();
-      linter.defineParser("jsonc-eslint-parser", this.jsoncESLintParser);
-      linter.defineParser("yaml-eslint-parser", this.yamlESLintParser);
-      linter.defineParser("toml-eslint-parser", this.tomlESLintParser);
-      linter.defineParser("vue-eslint-parser", this.vueESLintParser);
-
-      for (const k of Object.keys(rules)) {
-        const rule = rules[k];
-        linter.defineRule(rule.meta.docs.ruleId, rule);
-      }
 
       return linter;
     },
