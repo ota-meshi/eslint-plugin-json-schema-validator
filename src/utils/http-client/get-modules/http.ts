@@ -4,7 +4,7 @@ import http from "http";
 // @ts-expect-error -- no types
 import tunnel from "tunnel-agent";
 
-const TIMEOUT = 10000;
+const TIMEOUT = 60000;
 
 /**
  * GET Method using http modules.
