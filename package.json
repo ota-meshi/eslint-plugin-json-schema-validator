@@ -120,5 +120,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "npm@10.8.1"
+  "packageManager": "yarn@1.22.22"
 }
