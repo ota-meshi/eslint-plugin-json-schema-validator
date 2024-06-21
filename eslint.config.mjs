@@ -242,6 +242,9 @@ export default [
         window: true,
       },
       sourceType: "module",
+      parserOptions: {
+        project: null,
+      },
     },
 
     rules: {
@@ -254,26 +257,11 @@ export default [
       "eslint-plugin/require-meta-schema": "off",
       "n/no-extraneous-import": "off",
       "n/file-extension-in-import": "off",
+      "n/no-unsupported-features/node-builtins": "off",
     },
-  },
-  {
-    files: [
-      "docs/.vitepress/*.ts",
-      "docs/.vitepress/**/*.ts",
-      "docs/.vitepress/*.mts",
-      "docs/.vitepress/**/*.mts",
-    ],
-
-    languageOptions: {
-      parserOptions: {
-        project: null,
-      },
-    },
-    rules: {},
   },
   {
     files: ["**/*.mjs"],
-
     languageOptions: {
       sourceType: "module",
     },
@@ -324,6 +312,12 @@ export default [
       "no-constant-binary-expression": "off",
       "prettier/prettier": "off",
       "jsonc/no-sparse-arrays": "off",
+    },
+  },
+  {
+    files: ["docs/.vitepress/shim/require-from-cache.mjs"],
+    rules: {
+      "n/no-missing-import": "off",
     },
   },
 ];
