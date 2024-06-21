@@ -50,17 +50,17 @@ Use `eslint.config.js` file to configure rules. See also: <https://eslint.org/do
 Example **eslint.config.js**:
 
 ```js
-import eslintPluginJsonSchemaValidator from 'eslint-plugin-json-schema-validator';
+import eslintPluginJsonSchemaValidator from "eslint-plugin-json-schema-validator";
 export default [
   // add more generic rule sets here, such as:
   // js.configs.recommended,
-  ...eslintPluginJsonSchemaValidator.configs['flat/recommended'],
+  ...eslintPluginJsonSchemaValidator.configs["flat/recommended"],
   {
     rules: {
       // override/add rules settings here, such as:
       // 'json-schema-validator/no-invalid': 'warn'
-    }
-  }
+    },
+  },
 ];
 ```
 
@@ -80,13 +80,13 @@ module.exports = {
   extends: [
     // add more generic rulesets here, such as:
     // 'eslint:recommended',
-    'plugin:json-schema-validator/recommended'
+    "plugin:json-schema-validator/recommended",
   ],
   rules: {
     // override/add rules settings here, such as:
     // 'json-schema-validator/no-invalid': 'error'
-  }
-}
+  },
+};
 ```
 
 This plugin provides configs:
@@ -117,15 +117,15 @@ Example **.vscode/settings.json**:
 
 ```json
 {
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "json",
-        "jsonc",
-        "json5",
-        "yaml",
-        "toml"
-    ]
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml",
+    "toml"
+  ]
 }
 ```
 
@@ -137,6 +137,7 @@ Example **.vscode/settings.json**:
 <!--RULES_SECTION_START-->
 
 <!-- The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) automatically fixes problems reported by rules which have a wrench :wrench: below.   -->
+
 The rules with the following star :star: are included in the configs.
 
 <!--RULES_TABLE_START-->
@@ -169,10 +170,10 @@ module.exports = {
       http: {
         getModulePath: "",
         requestOptions: {},
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 ```
 
 - `http` ... Settings to resolve schema URLs.
@@ -186,22 +187,22 @@ Example of using the `request` module for HTTP requests.
 **`./path/to/request-get.js`**:
 
 ```js
-const request = require("request")
+const request = require("request");
 
 /**
  * GET Method using request module.
  */
 module.exports = function get(url, options) {
-    return new Promise((resolve, reject) => {
-        request.get(url, options, (error, _res, body) => {
-            if (error) {
-                reject(error)
-                return
-            }
-            resolve(body)
-        })
-    })
-}
+  return new Promise((resolve, reject) => {
+    request.get(url, options, (error, _res, body) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(body);
+    });
+  });
+};
 ```
 
 **.eslintrc.js**:
@@ -216,12 +217,12 @@ module.exports = {
         getModulePath: require.resolve("./path/to/request-get.js"),
         requestOptions: {
           // Example of proxy settings.
-          proxy: "http://my.proxy.com:8080/"
+          proxy: "http://my.proxy.com:8080/",
         },
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 ```
 
 <!--ADVANCED_USAGE_GUIDE_END-->
@@ -234,8 +235,8 @@ Please use GitHub's Issues/PRs.
 
 ### Development Tools
 
-- `npm test` runs tests and measures coverage.  
-- `npm run update` runs in order to update readme and recommended configuration.  
+- `yarn test` runs tests and measures coverage.
+- `yarn update` runs in order to update readme and recommended configuration.
 
 ### Working With Rules
 
