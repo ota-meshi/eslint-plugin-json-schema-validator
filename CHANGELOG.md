@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.1.1
+
+### Patch Changes
+
+- [#331](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/331) [`82f7f3a`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/82f7f3a682174fd9bb2b7a97d2beecf48be6a95b) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: update timeout from 10s to 60s
+
 ## 5.1.0
 
 ### Minor Changes
