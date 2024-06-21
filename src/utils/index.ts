@@ -146,6 +146,7 @@ function compositingVisitors(
   for (const v of visitors) {
     for (const key in v) {
       if (visitor[key]) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- false positive?
         const o = visitor[key]!;
         visitor[key] = (...args) => {
           o(...args);

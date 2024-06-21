@@ -13,9 +13,9 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
       - name: Install deps
-        run: npm install
+        run: yarn --ignore-engines
       - name: Format
-        run: npm run lint-fix
+        run: yarn lint-fix
       - name: Commit
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
