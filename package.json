@@ -119,5 +119,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "npm@10.8.1"
 }
