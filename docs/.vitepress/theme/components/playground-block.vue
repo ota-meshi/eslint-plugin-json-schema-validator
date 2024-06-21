@@ -51,8 +51,8 @@
 import PgEditor from "./components/PgEditor.vue";
 import RulesSettings from "./components/RulesSettings.vue";
 import SnsBar from "./components/SnsBar.vue";
-import { deserializeState, serializeState } from "./state";
-import { DEFAULT_RULES_CONFIG, getRule } from "./rules";
+import { deserializeState, serializeState } from "./state/index";
+import { DEFAULT_RULES_CONFIG, getRule } from "./rules/index";
 
 const DEFAULT_CODE = `{
     "extends": [ 42 ],
@@ -257,15 +257,18 @@ function equalsRules(a, b) {
   display: flex;
   gap: 8px;
 }
+
 .tools input {
   border: 1px solid #cfd4db;
   border-radius: 4px;
 }
+
 .tools button {
   border: 2px outset #cfd4db;
   border-radius: 4px;
   padding-inline: 8px;
 }
+
 .tools button:active {
   border: 2px inset #cfd4db;
 }

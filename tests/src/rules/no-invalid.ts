@@ -26,6 +26,7 @@ tester.run(
           code: 'module.exports = { "extends": [ require.resolve("eslint-config-foo") ] }',
           // @ts-expect-error -- typeerror
           languageOptions: {
+            // eslint-disable-next-line n/no-extraneous-require -- test
             parser: require("espree"),
           },
           options: [
@@ -75,6 +76,7 @@ tester.run(
           code: 'module.exports = { "extends": [ 42 ] }',
           // @ts-expect-error -- typeerror
           languageOptions: {
+            // eslint-disable-next-line n/no-extraneous-require -- test
             parser: require("espree"),
           },
           options: [

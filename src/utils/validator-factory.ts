@@ -77,7 +77,6 @@ function schemaToValidator(
   let validateSchema: ValidateFunction;
 
   let schemaObject = schema;
-  // eslint-disable-next-line no-constant-condition -- ignore
   while (true) {
     try {
       if (
@@ -158,7 +157,6 @@ function resolveError(
       const refSchema = loadSchema(schemaPath, context);
 
       if (refSchema) {
-        // eslint-disable-next-line no-constant-condition -- ignore
         while (true) {
           try {
             ajv.addSchema(refSchema, schemaId);

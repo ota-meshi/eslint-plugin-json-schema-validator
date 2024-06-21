@@ -21,16 +21,12 @@ jobs:
   test:
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x, 19.x]
+        node-version: [18.x, 20.x]
         os: [ubuntu-latest]
         include:
-          - node: 18.x
+          - node: 22.x
             os: windows-latest
-          - node: 18.x
-            os: macos-latest
-          - node: 14.x
-            os: windows-latest
-          - node: 14.x
+          - node: 22.x
             os: macos-latest
     runs-on: ${{ matrix.os }}
     steps:
@@ -43,14 +39,20 @@ jobs:
         run: yarn install --ignore-engines
       - name: Test
         run: yarn test
-  test-with-eslint9:
+  test-with-eslint8:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Install Target Packages
         run: |+
-          yarn add -D eslint@^9.0.0-0 --ignore-engines
+          yarn add -D eslint@8 --ignore-engines
           yarn --ignore-engines
       - name: Test
         run: yarn test
