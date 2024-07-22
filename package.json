@@ -73,7 +73,7 @@
     "@ota-meshi/site-kit-eslint-editor-vue": "^0.2.0",
     "@stylistic/stylelint-config": "^1.0.1",
     "@types/debug": "^4.1.5",
-    "@types/eslint": "^8.56.2",
+    "@types/eslint": "^9.0.0",
     "@types/eslint-scope": "^3.7.0",
     "@types/eslint-visitor-keys": "^3.0.0",
     "@types/estree": "^1.0.0",
