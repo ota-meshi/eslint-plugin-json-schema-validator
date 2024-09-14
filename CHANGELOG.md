@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.1.3
+
+### Patch Changes
+
+- [#348](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/348) [`dab937c`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/dab937cc62367fc261df29e755a90dee9f8cbb94) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: crash on empty yaml
+
 ## 5.1.2
 
 ### Patch Changes
