@@ -28,6 +28,7 @@ import { compile } from "../utils/validator-factory";
 import type { SchemaObject } from "../utils/types";
 import fs from "fs";
 import { getCwd, getFilename, getSourceCode } from "../utils/compat";
+import { toCompatCreate } from "eslint-json-compat-utils";
 
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
 
@@ -162,7 +163,7 @@ export default createRule("no-invalid", {
     messages: {},
     type: "suggestion",
   },
-  create(context, { filename }) {
+  create: toCompatCreate((context, { filename }) => {
     const sourceCode = getSourceCode(context);
     const cwd = getCwd(context);
     const relativeFilename = filename.startsWith(cwd)
@@ -560,7 +561,7 @@ export default createRule("no-invalid", {
         },
       };
     }
-  },
+  }),
 });
 
 /**
