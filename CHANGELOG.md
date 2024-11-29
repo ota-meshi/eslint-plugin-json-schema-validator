@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.2.0
+
+### Minor Changes
+
+- [#358](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/358) [`b47646a`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/b47646a00ad9b163e5278969b8f8b7913202af2e) Thanks [@ota-meshi](https://github.com/ota-meshi)! - feat: use eslint-json-compat-utils
+
 ## 5.1.3
 
 ### Patch Changes
