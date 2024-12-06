@@ -72,6 +72,7 @@ function parseUrlAndOptions(urlStr: string, baseOptions: RequestOptions) {
       ? url.hostname.slice(1, -1)
       : url.hostname;
   const options: RequestOptions = {
+    agent: false,
     ...baseOptions,
     protocol: url.protocol,
     hostname,
