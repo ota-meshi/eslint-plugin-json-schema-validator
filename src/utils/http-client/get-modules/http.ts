@@ -76,6 +76,7 @@ function parseUrlAndOptions(urlStr: string, baseOptions: RequestOptions) {
     protocol: url.protocol,
     hostname,
     path: `${url.pathname || ""}${url.search || ""}`,
+    agent: false,
   };
   if (url.port !== "") {
     options.port = Number(url.port);
