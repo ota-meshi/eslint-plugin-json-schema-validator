@@ -127,7 +127,7 @@ function loadJsonFromURL<T>(
   const httpRequestOptions = options?.requestOptions ?? {};
   const httpGetModulePath = resolvePath(options?.getModulePath, context);
 
-  makeDirs(path.dirname(jsonFilePath));
+  fs.mkdirSync(path.dirname(jsonFilePath), { recursive: true });
 
   let data, timestamp;
   try {
@@ -209,20 +209,6 @@ function postProcess<T>(
   delete require.cache[jsonFilePath];
 
   return data;
-}
-
-/**
- * Make directories
- */
-function makeDirs(dir: string) {
-  const dirs = [dir];
-  while (!fs.existsSync(dirs[0])) {
-    dirs.unshift(path.dirname(dirs[0]));
-  }
-  dirs.shift();
-  for (const dir of dirs) {
-    fs.mkdirSync(dir);
-  }
 }
 
 /**
