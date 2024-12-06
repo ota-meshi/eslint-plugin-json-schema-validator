@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.3.0
+
+### Minor Changes
+
+- [#363](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/363) [`24b6c2f`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/24b6c2f67b19f7aa3ad11f7e85e011d47617d63e) Thanks [@Kenneth-Sills](https://github.com/Kenneth-Sills)! - prevent timeouts on Node 19+
+
 ## 5.2.0
 
 ### Minor Changes
