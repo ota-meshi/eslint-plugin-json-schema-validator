@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.3.1
+
+### Patch Changes
+
+- [#365](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/365) [`0830dcb`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/0830dcb05ee3097b3df3cb4f6d0aff253ee1a2a6) Thanks [@antitoxic](https://github.com/antitoxic)! - fix: don't crash if schema cache directories already exist
+
 ## 5.3.0
 
 ### Minor Changes

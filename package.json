@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-json-schema-validator",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "description": "ESLint plugin that validates data using JSON Schema Validator.",
   "repository": "git+https://github.com/ota-meshi/eslint-plugin-json-schema-validator.git",
   "homepage": "https://ota-meshi.github.io/eslint-plugin-json-schema-validator/",
