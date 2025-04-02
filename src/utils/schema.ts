@@ -18,18 +18,16 @@ export function loadSchema(
   schemaPath: string,
   context: RuleContext,
 ): null | SchemaObject {
-  return loadJsonInternal(schemaPath, context, (schema) => {
-    migrateToDraft7(schema as SchemaObject);
+  return loadJsonInternal(schemaPath, context, (schema_) => {
+    const schema = schema_ as SchemaObject;
+    migrateToDraft7(schema);
     return schema;
   });
 }
 /**
  * Load json data
  */
-export function loadJson<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
-  T = any,
->(jsonPath: string, context: RuleContext): null | T {
+export function loadJson<T>(jsonPath: string, context: RuleContext): null | T {
   return loadJsonInternal(jsonPath, context);
 }
 
@@ -39,7 +37,7 @@ export function loadJson<
 function loadJsonInternal<T>(
   jsonPath: string,
   context: RuleContext,
-  edit?: (json: unknown) => unknown,
+  edit?: (json: unknown) => T,
 ): null | T {
   if (jsonPath.startsWith("http://") || jsonPath.startsWith("https://")) {
     return loadJsonFromURL(jsonPath, context, edit);
@@ -52,7 +50,7 @@ function loadJsonInternal<T>(
       url = `${url}.json`;
     }
     return loadJsonFromURL(url, context, (orig) => {
-      const result = edit?.(orig) ?? orig;
+      const result = edit?.(orig) ?? (orig as T);
       if (jsonPath === "vscode://schemas/settings/machine") {
         // Adjust `vscode://schemas/settings/machine` resource to avoid bugs.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
@@ -111,7 +109,7 @@ function removeEmptyEnum(
 function loadJsonFromURL<T>(
   jsonPath: string,
   context: RuleContext,
-  edit?: (json: unknown) => unknown,
+  edit?: (json: unknown) => T,
 ): null | T {
   let jsonFileName = jsonPath.replace(/^https?:\/\//u, "");
   if (!jsonFileName.endsWith(".json")) {
@@ -180,9 +178,9 @@ function postProcess<T>(
   jsonFilePath: string,
   json: string,
   context: RuleContext,
-  edit: ((json: unknown) => unknown) | undefined,
+  edit: ((json: unknown) => T) | undefined,
 ): T | null {
-  let data;
+  let data: T;
   try {
     data = JSON.parse(json);
   } catch {
