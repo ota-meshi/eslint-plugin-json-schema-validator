@@ -5,7 +5,7 @@ import { getStaticYAMLValue } from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
 import { getStaticTOMLValue } from "toml-eslint-parser";
 import { createRule } from "../utils/index";
-import minimatch from "minimatch";
+import { minimatch } from "minimatch";
 import path from "path";
 import type { PathData } from "../utils/ast/index";
 import {
