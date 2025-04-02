@@ -65,7 +65,7 @@ jobs:
           node-version: 14.x
       - name: Install Target Packages
         run: |+
-          yarn add -D eslint@6 --ignore-engines
+          yarn add -D eslint@6 espree@9 --ignore-engines
           yarn --ignore-engines
       - name: Test
         run: yarn test
@@ -78,7 +78,7 @@ jobs:
           node-version: 14.x
       - name: Install Target Packages
         run: |+
-          yarn add -D eslint@7 --ignore-engines
+          yarn add -D eslint@7 espree@9 --ignore-engines
           yarn --ignore-engines
       - name: Test
         run: yarn test
