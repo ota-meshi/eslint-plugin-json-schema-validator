@@ -7,6 +7,7 @@
   "author": "Yosuke Ota",
   "funding": "https://github.com/sponsors/ota-meshi",
   "license": "MIT",
+  "packageManager": "yarn@1.22.22",
   "engines": {
     "node": "^14.18.0 || >=16.0.0"
   },
@@ -28,15 +29,16 @@
     "build:ts": "tsc --project ./tsconfig.build.json",
     "clean": "rimraf .nyc_output dist coverage",
     "cover": "nyc --reporter=lcov yarn test",
-    "docs:watch": "vitepress dev docs",
     "docs:build": "yarn build && vitepress build docs",
     "docs:build-and-preview": "yarn docs:build && npx http-server docs/.vitepress/dist",
+    "docs:watch": "vitepress dev docs",
     "lint": "eslint .",
     "lint-fix": "yarn lint --fix",
     "mocha": "yarn ts node_modules/mocha/bin/mocha",
     "new": "yarn ts ./tools/new-rule",
     "prebuild": "yarn -s clean",
     "predocs:watch": "yarn build",
+    "prelint": "yarn build",
     "prerelease": "yarn test && yarn build",
     "preversion": "yarn test && git add .",
     "release": "clean-pkg-json && changeset publish",
@@ -121,6 +123,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "packageManager": "yarn@1.22.22"
+  }
 }
