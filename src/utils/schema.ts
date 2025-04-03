@@ -1,11 +1,13 @@
-import path from "path";
-import fs from "fs";
-import type { RuleContext } from "../types";
-import { syncGet, get } from "./http-client";
+import { draft7 as migrateToDraft7 } from "@unts/json-schema-migrate";
 import debugBuilder from "debug";
-import type { SchemaObject } from "./types";
-import { draft7 as migrateToDraft7 } from "json-schema-migrate";
+import fs from "fs";
+import path from "path";
+
+import type { RuleContext } from "../types";
 import { getCwd } from "./compat";
+import { get, syncGet } from "./http-client";
+import type { SchemaObject } from "./types";
+
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
 const TTL = 1000 * 60 * 60 * 24;

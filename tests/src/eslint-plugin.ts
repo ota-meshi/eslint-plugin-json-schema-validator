@@ -35,9 +35,7 @@ describe("Integration with eslint-plugin-json-schema-validator", () => {
     if (semver.satisfies(ESLint.version, "<7.0.0")) return;
     const engine = new ESLint({
       cwd: path.join(TEST_FIXTURES_ROOT, "flat-config-test01"),
-      // @ts-expect-error -- typing bug
       overrideConfigFile: true,
-      // @ts-expect-error -- typing bug
       overrideConfig: plugin.configs["flat/recommended"],
     });
     const results = await engine.lintFiles(["src"]);
