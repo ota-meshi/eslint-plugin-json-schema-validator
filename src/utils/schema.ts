@@ -1,6 +1,6 @@
-import { draft7 as migrateToDraft7 } from "@unts/json-schema-migrate";
 import debugBuilder from "debug";
 import fs from "fs";
+import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
 import path from "path";
 
 import type { RuleContext } from "../types";

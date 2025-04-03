@@ -1,4 +1,4 @@
-import { draft7 as migrateToDraft7 } from "@unts/json-schema-migrate";
+import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
 
 import type { RuleContext } from "../types";
 import type {
