@@ -24,7 +24,6 @@ tester.run(
         {
           filename: path.join(__dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ require.resolve("eslint-config-foo") ] }',
-          // @ts-expect-error -- typeerror
           languageOptions: {
             // eslint-disable-next-line n/no-extraneous-require -- test
             parser: require("espree"),
@@ -74,7 +73,6 @@ tester.run(
         {
           filename: path.join(__dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ 42 ] }',
-          // @ts-expect-error -- typeerror
           languageOptions: {
             // eslint-disable-next-line n/no-extraneous-require -- test
             parser: require("espree"),
@@ -289,7 +287,6 @@ trailingComma = "es3"
 tabWidth = 4
 semi = false
 singleQuote = true`,
-          // @ts-expect-error -- typeerror
           languageOptions: {
             parser: require("toml-eslint-parser"),
           },

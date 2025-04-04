@@ -1,13 +1,14 @@
+import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
+
+import type { RuleContext } from "../types";
 import type {
   DefinedError,
   ErrorObject,
+  RegExpEngine,
   SchemaObject,
   ValidateFunction,
-  RegExpEngine,
 } from "./ajv";
-import type { RuleContext } from "../types";
 import Ajv from "./ajv";
-import { draft7 as migrateToDraft7 } from "json-schema-migrate";
 import { loadSchema } from "./schema";
 
 // eslint-disable-next-line func-style -- ignore
