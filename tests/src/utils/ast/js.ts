@@ -4,7 +4,7 @@ import fs from "fs";
 import { getLinter } from "eslint-compat-utils/linter";
 import type { AnalyzedJsAST, PathData } from "../../../../src/utils/ast/js";
 import { analyzeJsAST } from "../../../../src/utils/ast/js";
-import type { ESLintExportDefaultDeclaration } from "vue-eslint-parser/ast";
+import type { AST } from "vue-eslint-parser";
 import type { SourceCode } from "../../../../src/types";
 import { getSourceCode } from "../../../../src/utils/compat";
 // eslint-disable-next-line @typescript-eslint/naming-convention -- class name
@@ -29,7 +29,7 @@ describe("AST for JS.", () => {
                 create(context) {
                   return {
                     ExportDefaultDeclaration(
-                      node: ESLintExportDefaultDeclaration,
+                      node: AST.ESLintExportDefaultDeclaration,
                     ) {
                       result = toOutput(
                         analyzeJsAST(
@@ -48,7 +48,7 @@ describe("AST for JS.", () => {
         },
         rules: { "test/test": "error" },
         languageOptions: {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports, n/no-extraneous-require -- test
+          // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
           parser: require("espree"),
           ecmaVersion: 2020,
           sourceType: "module",

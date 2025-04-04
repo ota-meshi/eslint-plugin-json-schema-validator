@@ -17,12 +17,7 @@ import {
 import { loadJson, loadSchema } from "../utils/schema";
 import type { RuleContext } from "../types";
 import type { NodeData } from "../utils/ast/common";
-import type {
-  ESLintAssignmentExpression,
-  ESLintExportDefaultDeclaration,
-  ESLintExpression,
-  // eslint-disable-next-line n/no-missing-import -- d.ts
-} from "vue-eslint-parser/ast";
+import type { AST } from "vue-eslint-parser";
 import type { ValidateError, Validator } from "../utils/validator-factory";
 import { compile } from "../utils/validator-factory";
 import type { SchemaObject } from "../utils/types";
@@ -204,7 +199,7 @@ export default createRule("no-invalid", {
      * Validate JS Object
      */
     function validateJSExport(
-      node: ESLintExpression,
+      node: AST.ESLintExpression,
       rootRange: [number, number],
     ) {
       if (existsExports) {
@@ -274,7 +269,7 @@ export default createRule("no-invalid", {
           });
         }
       },
-      ExportDefaultDeclaration(node: ESLintExportDefaultDeclaration) {
+      ExportDefaultDeclaration(node: AST.ESLintExportDefaultDeclaration) {
         if (
           node.declaration.type === "FunctionDeclaration" ||
           node.declaration.type === "ClassDeclaration" ||
@@ -288,7 +283,7 @@ export default createRule("no-invalid", {
           defaultToken.range![1],
         ]);
       },
-      AssignmentExpression(node: ESLintAssignmentExpression) {
+      AssignmentExpression(node: AST.ESLintAssignmentExpression) {
         if (
           // exports = {}
           (node.left.type === "Identifier" && node.left.name === "exports") ||

@@ -1,14 +1,6 @@
 // eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- ignore
 /* eslint-disable @typescript-eslint/no-explicit-any -- ignore */
-import type {
-  ESLintProperty,
-  ESLintLiteral,
-  ESLintTemplateLiteral,
-  ESLintMemberExpression,
-  ESLintIdentifier,
-  ESLintNode,
-  ESLintExpression,
-} from "vue-eslint-parser/ast";
+import type { AST } from "vue-eslint-parser";
 import type { RuleContext } from "../../../types";
 // @ts-expect-error -- no type def
 import * as eslintUtils from "@eslint-community/eslint-utils";
@@ -19,7 +11,7 @@ import { getSourceCode } from "../../compat";
  * Gets the property name of a given node.
  */
 export function getStaticPropertyName(
-  node: ESLintProperty | ESLintMemberExpression,
+  node: AST.ESLintProperty | AST.ESLintMemberExpression,
   context: RuleContext,
 ): string | null {
   let key;
@@ -62,7 +54,7 @@ export function getStaticPropertyName(
  * Gets the string of a given node.
  */
 export function getStringLiteralValue(
-  node: ESLintLiteral | ESLintTemplateLiteral,
+  node: AST.ESLintLiteral | AST.ESLintTemplateLiteral,
 ): string | null {
   if (node.type === "Literal") {
     if (node.value == null) {
@@ -85,7 +77,7 @@ export function getStringLiteralValue(
  */
 function findVariable(
   context: RuleContext,
-  node: ESLintIdentifier,
+  node: AST.ESLintIdentifier,
 ): Variable | null {
   return eslintUtils.findVariable(getScope(context, node), node);
 }
@@ -95,7 +87,7 @@ function findVariable(
  */
 export function getStaticValue(
   context: RuleContext,
-  node: ESLintNode,
+  node: AST.ESLintNode,
 ): { value: any } | null {
   return eslintUtils.getStaticValue(node, getScope(context, node));
 }
@@ -105,8 +97,8 @@ export function getStaticValue(
  */
 export function findInitNode(
   context: RuleContext,
-  node: ESLintIdentifier,
-): { node: ESLintExpression; reads: ESLintIdentifier[] } | null {
+  node: AST.ESLintIdentifier,
+): { node: AST.ESLintExpression; reads: AST.ESLintIdentifier[] } | null {
   const variable = findVariable(context, node);
   if (!variable) {
     return null;
@@ -118,10 +110,10 @@ export function findInitNode(
       def.parent.kind === "const" &&
       def.node.init
     ) {
-      let init = def.node.init as ESLintExpression;
+      let init = def.node.init as AST.ESLintExpression;
       const reads = variable.references
         .filter((ref) => ref.isRead())
-        .map((ref) => ref.identifier as ESLintIdentifier);
+        .map((ref) => ref.identifier as AST.ESLintIdentifier);
       if (init.type === "Identifier") {
         const data = findInitNode(context, init);
         if (!data) {
@@ -143,7 +135,7 @@ export function findInitNode(
 /**
  * Gets the scope for the current node
  */
-function getScope(context: RuleContext, currentNode: ESLintNode) {
+function getScope(context: RuleContext, currentNode: AST.ESLintNode) {
   // On Program node, get the outermost scope to avoid return Node.js special function scope or ES modules scope.
   const inner = currentNode.type !== "Program";
   const scopeManager = getSourceCode(context).scopeManager;

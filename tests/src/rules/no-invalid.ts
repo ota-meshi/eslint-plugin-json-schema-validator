@@ -25,7 +25,6 @@ tester.run(
           filename: path.join(__dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ require.resolve("eslint-config-foo") ] }',
           languageOptions: {
-            // eslint-disable-next-line n/no-extraneous-require -- test
             parser: require("espree"),
           },
           options: [
@@ -74,7 +73,6 @@ tester.run(
           filename: path.join(__dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ 42 ] }',
           languageOptions: {
-            // eslint-disable-next-line n/no-extraneous-require -- test
             parser: require("espree"),
           },
           options: [
