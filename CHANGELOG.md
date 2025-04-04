@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.4.0
+
+### Minor Changes
+
+- [#378](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/378) [`83346cb`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/83346cb7ef128731bb3470f30a47a2d3eb0e7ed6) Thanks [@JounQin](https://github.com/JounQin)! - refactor: use actively maintained [`json-schema-migrate-x`](https://github.com/un-ts/json-schema-migrate-x) instead
+
 ## 5.3.2
 
 ### Patch Changes
