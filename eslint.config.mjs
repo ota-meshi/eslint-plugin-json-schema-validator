@@ -1,16 +1,6 @@
 import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+import myPlugin from "@ota-meshi/eslint-plugin";
+import tseslint from "typescript-eslint";
 
 export default [
   {
@@ -33,19 +23,18 @@ export default [
       "**/*.md/*.bash",
     ],
   },
-  ...compat.extends(
-    "plugin:@ota-meshi/recommended",
-    "plugin:@ota-meshi/+node",
-    "plugin:@ota-meshi/+typescript",
-    "plugin:@ota-meshi/+eslint-plugin",
-    "plugin:@ota-meshi/+vue3",
-    "plugin:@ota-meshi/+package-json",
-    "plugin:@ota-meshi/+json",
-    "plugin:@ota-meshi/+yaml",
-    "plugin:@ota-meshi/+toml",
-    "plugin:@ota-meshi/+md",
-    "plugin:@ota-meshi/+prettier",
-  ),
+  ...myPlugin.config({
+    node: true,
+    ts: true,
+    eslintPlugin: true,
+    vue3: true,
+    packageJson: true,
+    json: true,
+    yaml: true,
+    toml: true,
+    md: true,
+    prettier: true,
+  }),
   {
     languageOptions: {
       ecmaVersion: "latest",
@@ -181,13 +170,14 @@ export default [
       "@typescript-eslint/no-non-null-assertion": "off",
     },
   },
-  {
+  ...tseslint.config({
     files: ["tests/fixtures/**"],
-
+    extends: [tseslint.configs.disableTypeChecked],
     rules: {
       "json-schema-validator/no-invalid": "off",
+      "jsonc/vue-custom-block/no-parsing-error": "off",
     },
-  },
+  }),
   {
     files: ["scripts/**/*.ts", "tests/**/*.ts"],
 
@@ -216,18 +206,16 @@ export default [
       sourceType: "module",
     },
   },
-  ...compat
-    .extends("plugin:@typescript-eslint/disable-type-checked")
-    .map((config) => ({
-      ...config,
-      files: ["docs/.vitepress/**/*.", "docs/.vitepress/*."].flatMap((s) => [
-        `${s}js`,
-        `${s}mjs`,
-        `${s}ts`,
-        `${s}mts`,
-        `${s}vue`,
-      ]),
-    })),
+  ...tseslint.config({
+    files: ["docs/.vitepress/**/*.", "docs/.vitepress/*."].flatMap((s) => [
+      `${s}js`,
+      `${s}mjs`,
+      `${s}ts`,
+      `${s}mts`,
+      `${s}vue`,
+    ]),
+    extends: [tseslint.configs.disableTypeChecked],
+  }),
   {
     files: ["docs/.vitepress/**/*.", "docs/.vitepress/*."].flatMap((s) => [
       `${s}js`,
@@ -258,6 +246,7 @@ export default [
       "n/no-extraneous-import": "off",
       "n/file-extension-in-import": "off",
       "n/no-unsupported-features/node-builtins": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
     },
   },
   {
@@ -266,15 +255,20 @@ export default [
       sourceType: "module",
     },
   },
-  {
-    files: ["*.md/*.js", "**/*.md/*.js"],
+  ...tseslint.config({
+    files: ["*.md/*.js", "**/*.md/*.js", "**/*.md/*.vue"],
+    extends: [tseslint.configs.disableTypeChecked],
     languageOptions: {
       sourceType: "module",
     },
     rules: {
       "n/no-missing-import": "off",
     },
-  },
+  }),
+  ...tseslint.config({
+    files: ["**/*.md"],
+    extends: [tseslint.configs.disableTypeChecked],
+  }),
   {
     files: ["**/*.toml"],
     rules: {

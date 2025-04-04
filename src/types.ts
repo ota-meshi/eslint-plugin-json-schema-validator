@@ -6,7 +6,7 @@ import type { AST as YAML } from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
 import type { AST as ES, Scope } from "eslint";
 import type { Comment as ESTreeComment } from "estree";
-import type { ESLintNode, VElement } from "vue-eslint-parser/ast";
+import type { AST } from "vue-eslint-parser";
 export interface RuleListener {
   [key: string]: ((node: never) => void) | undefined;
 }
@@ -73,7 +73,7 @@ export interface RuleContext {
     isJSON?: true;
     isYAML?: true;
     isTOML?: true;
-    customBlock?: VElement;
+    customBlock?: AST.VElement;
   };
   getAncestors(): Node[];
   getFilename(): string;
@@ -88,7 +88,11 @@ export interface RuleContext {
 export declare namespace SourceCode {
   export function splitLines(text: string): string[];
 }
-export type Node = ESLintNode | JSON.JSONNode | YAML.YAMLNode | TOML.TOMLNode;
+export type Node =
+  | AST.ESLintNode
+  | JSON.JSONNode
+  | YAML.YAMLNode
+  | TOML.TOMLNode;
 export type Token = ES.Token | YAML.Token | TOML.Token | Comment;
 export type Comment = ESTreeComment | YAML.Comment | TOML.Comment;
 export type NodeOrToken = Node | Token;

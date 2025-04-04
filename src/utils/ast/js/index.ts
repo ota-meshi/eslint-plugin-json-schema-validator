@@ -1,23 +1,6 @@
 // eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- ignore
 /* eslint-disable @typescript-eslint/no-explicit-any -- ignore */
-import type {
-  ESLintArrayExpression,
-  ESLintAssignmentExpression,
-  ESLintBinaryExpression,
-  ESLintCallExpression,
-  ESLintConditionalExpression,
-  ESLintExpression,
-  ESLintIdentifier,
-  ESLintLiteral,
-  ESLintLogicalExpression,
-  ESLintMemberExpression,
-  ESLintNewExpression,
-  ESLintObjectExpression,
-  ESLintSequenceExpression,
-  ESLintTaggedTemplateExpression,
-  ESLintTemplateLiteral,
-  ESLintUnaryExpression,
-} from "vue-eslint-parser/ast";
+import type { AST } from "vue-eslint-parser";
 import type { RuleContext, SourceCode } from "../../../types";
 import { findInitNode, getStaticValue } from "./utils";
 import { getStaticPropertyName } from "./utils";
@@ -40,16 +23,13 @@ export type PathData = {
 };
 
 type SubPathData = Pick<PathData, "data" | "children">;
-export type AnalyzedJsAST = {
-  object: unknown;
-  pathData: PathData;
-};
+export type AnalyzedJsAST = { object: unknown; pathData: PathData };
 
 /**
  * Analyze JavaScript AST
  */
 export function analyzeJsAST(
-  node: ESLintExpression,
+  node: AST.ESLintExpression,
   rootRange: [number, number],
   context: RuleContext,
 ): AnalyzedJsAST | null {
@@ -134,7 +114,7 @@ const CALC_BINARY: Record<
 
 const VISITORS = {
   ObjectExpression(
-    node: ESLintObjectExpression,
+    node: AST.ESLintObjectExpression,
     context: RuleContext,
   ): SubPathData {
     const data: Record<string, any> = {};
@@ -143,7 +123,10 @@ const VISITORS = {
       if (prop.type === "Property") {
         const keyName = getStaticPropertyName(prop, context);
         if (keyName != null) {
-          const propData = getPathData(prop.value as ESLintExpression, context);
+          const propData = getPathData(
+            prop.value as AST.ESLintExpression,
+            context,
+          );
           if (propData.data !== UNKNOWN) {
             data[keyName] = propData.data;
             children.set(keyName, {
@@ -170,7 +153,7 @@ const VISITORS = {
     };
   },
   ArrayExpression(
-    node: ESLintArrayExpression,
+    node: AST.ESLintArrayExpression,
     context: RuleContext,
   ): SubPathData {
     const data: any[] = [];
@@ -224,7 +207,7 @@ const VISITORS = {
       children,
     };
   },
-  Identifier(node: ESLintIdentifier, context: RuleContext): SubPathData {
+  Identifier(node: AST.ESLintIdentifier, context: RuleContext): SubPathData {
     const init = findInitNode(context, node);
     if (init == null) {
       const evalData = getStaticValue(context, node);
@@ -273,7 +256,7 @@ const VISITORS = {
     /**
      * Get write properties from given Identifier
      */
-    function getWriteProps(id: ESLintIdentifier) {
+    function getWriteProps(id: AST.ESLintIdentifier) {
       if (
         !id.parent ||
         id.parent.type !== "MemberExpression" ||
@@ -304,14 +287,14 @@ const VISITORS = {
       return results;
     }
   },
-  Literal(node: ESLintLiteral, _context: RuleContext): SubPathData {
+  Literal(node: AST.ESLintLiteral, _context: RuleContext): SubPathData {
     return {
       data: node.value,
       children: EMPTY_MAP,
     };
   },
   UnaryExpression(
-    node: ESLintUnaryExpression,
+    node: AST.ESLintUnaryExpression,
     context: RuleContext,
   ): SubPathData {
     const argData = getPathData(node.argument, context);
@@ -330,7 +313,7 @@ const VISITORS = {
     };
   },
   BinaryExpression(
-    node: ESLintBinaryExpression,
+    node: AST.ESLintBinaryExpression,
     context: RuleContext,
   ): SubPathData {
     if (node.left.type === "PrivateIdentifier") {
@@ -356,7 +339,7 @@ const VISITORS = {
     };
   },
   LogicalExpression(
-    node: ESLintLogicalExpression,
+    node: AST.ESLintLogicalExpression,
     context: RuleContext,
   ): SubPathData {
     const leftData = getPathData(node.left, context);
@@ -383,14 +366,14 @@ const VISITORS = {
     return rightData;
   },
   AssignmentExpression(
-    node: ESLintAssignmentExpression,
+    node: AST.ESLintAssignmentExpression,
     context: RuleContext,
   ): SubPathData {
     const rightData = getPathData(node.right, context);
     return rightData;
   },
   MemberExpression(
-    node: ESLintMemberExpression,
+    node: AST.ESLintMemberExpression,
     context: RuleContext,
   ): SubPathData {
     if (node.object.type === "Super") {
@@ -420,7 +403,7 @@ const VISITORS = {
     return UNKNOWN_PATH_DATA;
   },
   ConditionalExpression(
-    node: ESLintConditionalExpression,
+    node: AST.ESLintConditionalExpression,
     context: RuleContext,
   ): SubPathData {
     const testData = getPathData(node.test, context);
@@ -433,7 +416,7 @@ const VISITORS = {
     return getPathData(node.alternate, context);
   },
   CallExpression(
-    node: ESLintCallExpression,
+    node: AST.ESLintCallExpression,
     context: RuleContext,
   ): SubPathData {
     const evalData = getStaticValue(context, node);
@@ -453,7 +436,10 @@ const VISITORS = {
       children: EMPTY_MAP,
     };
   },
-  NewExpression(node: ESLintNewExpression, context: RuleContext): SubPathData {
+  NewExpression(
+    node: AST.ESLintNewExpression,
+    context: RuleContext,
+  ): SubPathData {
     const evalData = getStaticValue(context, node);
     if (!evalData) {
       return UNKNOWN_PATH_DATA;
@@ -464,14 +450,14 @@ const VISITORS = {
     };
   },
   SequenceExpression(
-    node: ESLintSequenceExpression,
+    node: AST.ESLintSequenceExpression,
     context: RuleContext,
   ): SubPathData {
     const last = node.expressions[node.expressions.length - 1];
     return getPathData(last, context);
   },
   TemplateLiteral(
-    node: ESLintTemplateLiteral,
+    node: AST.ESLintTemplateLiteral,
     context: RuleContext,
   ): SubPathData {
     const expressions = [];
@@ -490,7 +476,7 @@ const VISITORS = {
     return { data, children: EMPTY_MAP };
   },
   TaggedTemplateExpression(
-    node: ESLintTaggedTemplateExpression,
+    node: AST.ESLintTaggedTemplateExpression,
     context: RuleContext,
   ): SubPathData {
     const tag = getPathData(node.tag, context);
@@ -552,7 +538,7 @@ const VISITORS = {
  * Get path data
  */
 function getPathData(
-  node: ESLintExpression,
+  node: AST.ESLintExpression,
   context: RuleContext,
 ): SubPathData {
   const visitor = VISITORS[node.type];
