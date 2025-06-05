@@ -8,7 +8,7 @@ import prettierrc from "../../../.cached_schemastore/json.schemastore.org/pretti
  */
 export default function fakeRequire(p) {
   if (
-    p.endsWith(".cached_schemastore/www.schemastore.org/api/json/catalog.json")
+    p.endsWith(".cached_schemastore/json.schemastore.org/api/json/catalog.json")
   ) {
     return { ...catalog, timestamp: Infinity };
   }
