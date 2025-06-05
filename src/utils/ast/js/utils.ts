@@ -1,10 +1,8 @@
-// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- ignore
-/* eslint-disable @typescript-eslint/no-explicit-any -- ignore */
-import type { AST } from "vue-eslint-parser";
-import type { RuleContext } from "../../../types";
-// @ts-expect-error -- no type def
 import * as eslintUtils from "@eslint-community/eslint-utils";
 import type { Variable } from "eslint-scope";
+import type { AST } from "vue-eslint-parser";
+
+import type { RuleContext } from "../../../types";
 import { getSourceCode } from "../../compat";
 
 /**
@@ -58,8 +56,8 @@ export function getStringLiteralValue(
 ): string | null {
   if (node.type === "Literal") {
     if (node.value == null) {
-      if ((node as any).bigint != null) {
-        return String((node as any).bigint);
+      if (node.bigint != null) {
+        return String(node.bigint);
       }
     }
     return String(node.value);
@@ -88,8 +86,12 @@ function findVariable(
 export function getStaticValue(
   context: RuleContext,
   node: AST.ESLintNode,
-): { value: any } | null {
-  return eslintUtils.getStaticValue(node, getScope(context, node));
+): { value?: unknown; optional?: boolean } | null {
+  return eslintUtils.getStaticValue(
+    // @ts-expect-error -- `eslintUtils` is typed now but incompatible with Vue AST typings
+    node,
+    getScope(context, node),
+  );
 }
 
 /**
@@ -140,9 +142,13 @@ function getScope(context: RuleContext, currentNode: AST.ESLintNode) {
   const inner = currentNode.type !== "Program";
   const scopeManager = getSourceCode(context).scopeManager;
 
-  let node: any = currentNode;
+  let node: AST.Node | null = currentNode;
   for (; node; node = node.parent || null) {
-    const scope = scopeManager.acquire(node, inner);
+    const scope = scopeManager.acquire(
+      // @ts-expect-error -- incompatible with Vue AST typings
+      node,
+      inner,
+    );
 
     if (scope) {
       if (scope.type === "function-expression-name") {
