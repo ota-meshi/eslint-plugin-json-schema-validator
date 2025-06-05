@@ -33,7 +33,7 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
 
   // Generate a schema store cache and include it in the bundle.
   schema.loadJson(
-    "https://www.schemastore.org/api/json/catalog.json",
+    "https://json.schemastore.org/api/json/catalog.json",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any --- ignore
     {} as any,
   );
