@@ -1,4 +1,4 @@
-import catalog from "../../../.cached_schemastore/www.schemastore.org/api/json/catalog.json";
+import catalog from "../../../.cached_schemastore/json.schemastore.org/api/json/catalog.json";
 import eslintrc from "../../../.cached_schemastore/json.schemastore.org/eslintrc.json";
 import partialEslintPlugins from "../../../.cached_schemastore/json.schemastore.org/partial-eslint-plugins.json";
 import prettierrc from "../../../.cached_schemastore/json.schemastore.org/prettierrc.json";
