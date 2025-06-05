@@ -5,6 +5,9 @@
   "repository": "git+https://github.com/ota-meshi/eslint-plugin-json-schema-validator.git",
   "homepage": "https://ota-meshi.github.io/eslint-plugin-json-schema-validator/",
   "author": "Yosuke Ota",
+  "maintainers": [
+    "JounQin <admin@1stg.me> (https://www.1stG.me)"
+  ],
   "funding": "https://github.com/sponsors/ota-meshi",
   "license": "MIT",
   "packageManager": "yarn@1.22.22",
