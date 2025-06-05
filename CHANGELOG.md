@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.4.1
+
+### Patch Changes
+
+- [#387](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/387) [`de55f01`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/de55f0151750046c239e16cbebdad94de142eb3c) Thanks [@JounQin](https://github.com/JounQin)! - fix: update schemastore catlog url
+
 ## 5.4.0
 
 ### Minor Changes
