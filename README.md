@@ -9,7 +9,7 @@
 [![NPM downloads](https://img.shields.io/npm/dm/eslint-plugin-json-schema-validator.svg)](http://www.npmtrends.com/eslint-plugin-json-schema-validator)
 [![NPM downloads](https://img.shields.io/npm/dy/eslint-plugin-json-schema-validator.svg)](http://www.npmtrends.com/eslint-plugin-json-schema-validator)
 [![NPM downloads](https://img.shields.io/npm/dt/eslint-plugin-json-schema-validator.svg)](http://www.npmtrends.com/eslint-plugin-json-schema-validator)
-[![Build Status](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/workflows/CI/badge.svg?branch=main)](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/actions?query=workflow%3ACI)
+[![Build Status](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/actions/workflows/NodeCI.yml/badge.svg?branch=main)](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/actions/workflows/NodeCI.yml)
 
 ## :name_badge: Features
 
