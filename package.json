@@ -111,7 +111,7 @@
     "nyc": "^17.0.0",
     "pako": "^2.1.0",
     "prettier": "^3.0.0",
-    "prettier-plugin-pkg": "^0.20.0",
+    "prettier-plugin-pkg": "^0.21.0",
     "request": "^2.88.2",
     "semver": "^7.3.2",
     "stylelint": "^16.0.0",
