@@ -1,4 +1,4 @@
 {
-    "$schema": "http://json.schemastore.org/tsconfig",
+    "$schema": "http://www.schemastore.org/tsconfig",
     "compilerOptions": 42
 }

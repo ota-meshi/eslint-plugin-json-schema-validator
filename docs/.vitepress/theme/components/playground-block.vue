@@ -68,7 +68,7 @@ const DEFAULT_CODE = `{
 
 const JS_CODE = `/* eslint json-schema-validator/no-invalid: [
       "error",
-      "https://json.schemastore.org/eslintrc"
+      "https://www.schemastore.org/eslintrc"
    ]
    -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
 */
@@ -85,7 +85,7 @@ module.exports = {
 `;
 const JSON_CODE = `/* eslint json-schema-validator/no-invalid: [
       "error",
-      "https://json.schemastore.org/eslintrc"
+      "https://www.schemastore.org/eslintrc"
    ]
    -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
 */
@@ -100,7 +100,7 @@ const JSON_CODE = `/* eslint json-schema-validator/no-invalid: [
     }
 }
 `;
-const YAML_CODE = `# eslint json-schema-validator/no-invalid: [error, "https://json.schemastore.org/eslintrc"]
+const YAML_CODE = `# eslint json-schema-validator/no-invalid: [error, "https://www.schemastore.org/eslintrc"]
 # -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
 extends:
   - 42
@@ -110,7 +110,7 @@ rules:
   "eqeqeq": "warn"
   "strict": "off"
 `;
-const TOML_CODE = `# eslint json-schema-validator/no-invalid: [error, "https://json.schemastore.org/prettierrc"]
+const TOML_CODE = `# eslint json-schema-validator/no-invalid: [error, "https://www.schemastore.org/prettierrc"]
 # -- About options: https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/no-invalid.html#options
 trailingComma = "es3"
 tabWidth = 4

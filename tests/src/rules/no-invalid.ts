@@ -32,7 +32,7 @@ tester.run(
               schemas: [
                 {
                   fileMatch: ["tests/src/rules/.eslintrc.js"],
-                  schema: "https://json.schemastore.org/eslintrc",
+                  schema: "https://www.schemastore.org/eslintrc",
                 },
               ],
               useSchemastoreCatalog: false,
@@ -58,7 +58,7 @@ tester.run(
               schemas: [
                 {
                   fileMatch: [".eslintrc.*"],
-                  schema: "https://json.schemastore.org/eslintrc",
+                  schema: "https://www.schemastore.org/eslintrc",
                 },
               ],
             },
@@ -80,7 +80,7 @@ tester.run(
               schemas: [
                 {
                   fileMatch: ["tests/src/rules/.eslintrc.js"],
-                  schema: "https://json.schemastore.org/eslintrc",
+                  schema: "https://www.schemastore.org/eslintrc",
                 },
               ],
               useSchemastoreCatalog: false,
@@ -94,7 +94,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, ".eslintrc.json"),
-          code: '{ "extends": [ 98 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 98 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -123,7 +123,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 99 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 99 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -155,7 +155,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 100 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 100 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -184,7 +184,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 101 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 101 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -213,7 +213,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 102 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 102 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -241,7 +241,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 103 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 103 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               schemas: [
@@ -265,7 +265,7 @@ tester.run(
         },
         {
           filename: path.join(__dirname, "version.json"),
-          code: '{ "extends": [ 104 ], "$schema": "https://json.schemastore.org/eslintrc" }',
+          code: '{ "extends": [ 104 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
               mergeSchemas: ["options", "catalog"],
@@ -293,7 +293,7 @@ singleQuote = true`,
               schemas: [
                 {
                   fileMatch: [".prettierrc.toml"],
-                  schema: "https://json.schemastore.org/prettierrc",
+                  schema: "https://www.schemastore.org/prettierrc",
                 },
               ],
               useSchemastoreCatalog: false,

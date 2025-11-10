@@ -10,7 +10,7 @@ import type { SchemaObject } from "./types";
 
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
-const TTL = 1000 * 60 * 60 * 24;
+const TTL = 1000 * 60 * 60 * 24; // 1 day
 const RELOADING = new Set<string>();
 
 /**
