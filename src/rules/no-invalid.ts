@@ -25,7 +25,7 @@ import fs from "fs";
 import { getCwd, getFilename, getSourceCode } from "../utils/compat";
 import { toCompatCreate } from "eslint-json-compat-utils";
 
-const CATALOG_URL = "https://json.schemastore.org/api/json/catalog.json";
+const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
 
 /**
  * Checks if match file
