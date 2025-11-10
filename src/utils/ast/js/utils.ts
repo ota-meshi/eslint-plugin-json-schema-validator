@@ -77,7 +77,10 @@ function findVariable(
   context: RuleContext,
   node: AST.ESLintIdentifier,
 ): Variable | null {
-  return eslintUtils.findVariable(getScope(context, node), node);
+  return eslintUtils.findVariable(
+    getScope(context, node),
+    node,
+  ) as Variable | null;
 }
 
 /**
