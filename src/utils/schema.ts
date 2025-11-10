@@ -42,7 +42,7 @@ function loadJsonInternal<T>(
   edit?: (json: unknown) => T,
 ): null | T {
   if (jsonPath.startsWith("http://") || jsonPath.startsWith("https://")) {
-    return loadJsonFromURL(jsonPath, context, edit);
+    return loadJsonFromURL(normalizeSchemaUrl(jsonPath), context, edit);
   }
   if (jsonPath.startsWith("vscode://")) {
     let url = `https://raw.githubusercontent.com/ota-meshi/extract-vscode-schemas/main/resources/vscode/${jsonPath.slice(
@@ -76,6 +76,21 @@ function loadJsonInternal<T>(
   );
   const data = JSON.parse(json);
   return edit ? edit(data) : data;
+}
+
+/**
+ * Normalize schema URL to use the official schemastore domain.
+ */
+function normalizeSchemaUrl(url: string): string {
+  for (const prefix of [
+    "https://json.schemastore.org/",
+    "http://json.schemastore.org/",
+  ]) {
+    if (url.startsWith(prefix)) {
+      return `https://www.schemastore.org/${url.slice(prefix.length)}`;
+    }
+  }
+  return url;
 }
 
 /** remove empty `enum:` schema */
