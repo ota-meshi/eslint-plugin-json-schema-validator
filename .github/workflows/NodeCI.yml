@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
@@ -27,11 +27,6 @@ jobs:
         run: yarn
       - name: Lint
         run: yarn lint
-      - uses: actions/cache/save@v4
-        if: always()
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
   test:
     strategy:
       matrix:
