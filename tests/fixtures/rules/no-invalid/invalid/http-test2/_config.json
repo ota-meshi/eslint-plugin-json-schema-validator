@@ -4,7 +4,7 @@
             "schemas": [
                 {
                     "fileMatch": ["**/*.json"],
-                    "schema": "https://yarnpkg.com/configuration/yarnrc.json"
+                    "schema": "https://docs.renovatebot.com/renovate-schema.json"
                 }
             ]
         }
