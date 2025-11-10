@@ -1,5 +1,15 @@
 # eslint-plugin-json-schema-validator
 
+## 5.5.0
+
+### Minor Changes
+
+- [#424](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/424) [`604f7f8`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/604f7f8d6e2ab1bf1c741db09040e08c9b6e7150) Thanks [@ota-meshi](https://github.com/ota-meshi)! - feat: normalize schemastore URLs to use `www.schemastore.org`
+
+### Patch Changes
+
+- [#422](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/422) [`e7fc3ec`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/e7fc3ec0f219226dd4ea02f382e4bafd646eb412) Thanks [@clemensbuchacher-cpu](https://github.com/clemensbuchacher-cpu)! - fix: update schemastore to www url
+
 ## 5.4.1
 
 ### Patch Changes
