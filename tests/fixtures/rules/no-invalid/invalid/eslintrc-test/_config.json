@@ -11,7 +11,7 @@
                         "eslintrc-escape-input.json",
                         "eslintrc-js-input.js"
                     ],
-                    "schema": "https://json.schemastore.org/eslintrc"
+                    "schema": "https://www.schemastore.org/eslintrc"
                 }
             ]
         }

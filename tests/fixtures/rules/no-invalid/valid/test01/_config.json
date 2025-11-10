@@ -4,7 +4,7 @@
             "schemas": [
                 {
                     "fileMatch": ["eslintrc-input.json"],
-                    "schema": "https://json.schemastore.org/eslintrc"
+                    "schema": "https://www.schemastore.org/eslintrc"
                 }
             ]
         }

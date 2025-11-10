@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -14,10 +19,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
       - name: Install Packages
         run: yarn
       - name: Lint
         run: yarn lint
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
   test:
     strategy:
       matrix:

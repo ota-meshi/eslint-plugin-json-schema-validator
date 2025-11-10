@@ -4,7 +4,7 @@
             "schemas": [
                 {
                     "fileMatch": ["**/*.*"],
-                    "schema": "https://json.schemastore.org/tsconfig"
+                    "schema": "https://www.schemastore.org/tsconfig"
                 }
             ]
         }

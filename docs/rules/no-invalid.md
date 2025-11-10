@@ -24,18 +24,18 @@ This rule validates the file with JSON Schema and reports errors.
 // File name is ".eslintrc.json"
 /* eslint json-schema-validator/no-invalid: 'error' */
 {
-    "overrides": [
-        {
-            "files": ["good"],
-            /* ✓ GOOD */
-            "extends": ["foo"]
-        },
-        {
-            "files": ["bad"],
-            /* ✗ BAD */
-            "extends": [42]
-        }
-    ]
+  overrides: [
+    {
+      files: ["good"],
+      /* ✓ GOOD */
+      extends: ["foo"],
+    },
+    {
+      files: ["bad"],
+      /* ✗ BAD */
+      extends: [42],
+    },
+  ],
 }
 ```
 
@@ -45,19 +45,21 @@ This rule validates the file with JSON Schema and reports errors.
 
 ```json5
 {
-    "json-schema-validator/no-invalid": [
-        "error",
+  "json-schema-validator/no-invalid": [
+    "error",
+    {
+      schemas: [
         {
-            "schemas": [
-                {
-                    "fileMatch": [".eslintrc.json"],
-                    "schema": {/* JSON Schema Definition */} // or string
-                }
-            ],
-            "useSchemastoreCatalog": true,
-            "mergeSchemas": true // or ["$schema", "options", "catalog"]
-        }
-    ]
+          fileMatch: [".eslintrc.json"],
+          schema: {
+            /* JSON Schema Definition */
+          }, // or string
+        },
+      ],
+      useSchemastoreCatalog: true,
+      mergeSchemas: true, // or ["$schema", "options", "catalog"]
+    },
+  ],
 }
 ```
 
@@ -76,24 +78,24 @@ This option can also be given a JSON schema file or URL. This is useful for conf
 ```js
 /* eslint json-schema-validator/no-invalid: [
       "error",
-      "https://json.schemastore.org/eslintrc"
+      "https://www.schemastore.org/eslintrc"
    ]
 */
 
 module.exports = {
-    overrides: [
-        {
-            files: ["good"],
-            /* ✓ GOOD */
-            extends: ["foo"]
-        },
-        {
-            files: ["bad"],
-            /* ✗ BAD */
-            extends: [42]
-        }
-    ]
-}
+  overrides: [
+    {
+      files: ["good"],
+      /* ✓ GOOD */
+      extends: ["foo"],
+    },
+    {
+      files: ["bad"],
+      /* ✗ BAD */
+      extends: [42],
+    },
+  ],
+};
 ```
 
 </eslint-code-block>
@@ -120,9 +122,9 @@ To match a custom block, use a glob like this:
 
 ```json5
 {
-    // If you want to match the <i18n> block.
-    "fileMatch": ["**/*blockType=i18n*"],
-    "schema": { "type": "object" /* JSON Schema Definition */ }
+  // If you want to match the <i18n> block.
+  fileMatch: ["**/*blockType=i18n*"],
+  schema: { type: "object" /* JSON Schema Definition */ },
 }
 ```
 
