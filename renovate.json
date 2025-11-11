@@ -12,6 +12,10 @@
     {
       "depTypeList": ["devDependencies"],
       "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions", "devcontainer"],
+      "automerge": true
     }
   ]
 }
