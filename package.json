@@ -45,11 +45,11 @@
     "prerelease": "yarn test && yarn build",
     "preversion": "yarn test && git add .",
     "release": "clean-pkg-json && changeset publish",
-    "test": "env-cmd -e test yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
-    "ts": "env-cmd -e base node -r esbuild-register",
+    "test": "env-cmd -e test -- yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
+    "ts": "env-cmd -e base -- node -r esbuild-register",
     "update": "yarn ts ./tools/update && yarn lint-fix",
-    "version": "env-cmd -e version yarn update && git add .",
-    "version:ci": "env-cmd -e version-ci yarn update && changeset version"
+    "version": "env-cmd -e version -- yarn update && git add .",
+    "version:ci": "env-cmd -e version-ci -- yarn update && changeset version"
   },
   "peerDependencies": {
     "eslint": ">=6.0.0"
