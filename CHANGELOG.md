@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 5.5.1
+
+### Patch Changes
+
+- [#435](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/435) [`f02235f`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/f02235f8b53e1695a2c2d848557c18c0658235bd) Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update dependency toml-eslint-parser to ^0.12.0
+
 ## 5.5.0
 
 ### Minor Changes
