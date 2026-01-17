@@ -32,7 +32,7 @@ npm install --save-dev eslint eslint-plugin-jsonc eslint-plugin-json-schema-vali
 > **Requirements**
 >
 > - ESLint v6.0.0 and above
-> - Node.js v14.18.x, v16.x and above
+> - Node.js `^20.19.0 || ^22.13.0 || >=24`
 
 <!--DOCS_IGNORE_END-->
 
