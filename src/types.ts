@@ -6,7 +6,7 @@ import type { AST as YAML } from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
 import type { AST as ES, Scope } from "eslint";
 import type { Comment as ESTreeComment } from "estree";
-import type { AST } from "vue-eslint-parser";
+import { type AST } from "vue-eslint-parser";
 export interface RuleListener {
   [key: string]: ((node: never) => void) | undefined;
 }
