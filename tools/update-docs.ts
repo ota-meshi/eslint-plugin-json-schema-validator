@@ -97,7 +97,7 @@ class DocFile {
       if (categories) {
         const presets = [];
         for (const cat of categories.sort()) {
-          presets.push(`\`"plugin:json-schema-validator/${cat}"\``);
+          presets.push(`\`configs.${cat}\``);
         }
         notes.push(
           `- :gear: This rule is included in ${formatItems(presets)}.`,

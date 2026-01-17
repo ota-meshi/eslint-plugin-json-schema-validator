@@ -1,7 +1,7 @@
 import path from "path";
 import assert from "assert";
 import plugin from "../../src/index";
-import { getLegacyESLint, getESLint } from "eslint-compat-utils/eslint";
+import { getESLint } from "eslint-compat-utils/eslint";
 
 // -----------------------------------------------------------------------------
 // Tests
@@ -13,13 +13,13 @@ const TEST_FIXTURES_ROOT = path.join(
 );
 
 describe("Integration with eslint-plugin-json-schema-validator", () => {
-  it("should lint without errors with legacy-config", async () => {
+  it("should lint without errors with flat-config using recommended", async () => {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
-    const ESLint = getLegacyESLint();
+    const ESLint = getESLint();
     const engine = new ESLint({
-      cwd: path.join(TEST_FIXTURES_ROOT, "legacy-config-test01"),
-      extensions: [".js", ".json"],
-      plugins: { "json-schema-validator": plugin as any },
+      cwd: path.join(TEST_FIXTURES_ROOT, "flat-config-test01"),
+      overrideConfigFile: true,
+      overrideConfig: plugin.configs.recommended,
     });
     const results = await engine.lintFiles(["src"]);
     assert.strictEqual(results.length, 2);
@@ -28,7 +28,7 @@ describe("Integration with eslint-plugin-json-schema-validator", () => {
       0,
     );
   });
-  it("should lint without errors with flat-config", async () => {
+  it("should lint without errors with flat-config using flat/recommended (backward compatibility)", async () => {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
     const ESLint = getESLint();
     const engine = new ESLint({
