@@ -1,16 +1,15 @@
 import type { RuleModule } from "./types";
 import { rules as ruleList } from "./utils/rules";
-import base from "./configs/base";
-import recommended from "./configs/recommended";
-import flatBase from "./configs/flat/base";
-import flatRecommended from "./configs/flat/recommended";
+import base from "./configs/flat/base";
+import recommended from "./configs/flat/recommended";
 import * as meta from "./meta";
 
 const configs = {
   base,
   recommended,
-  "flat/base": flatBase,
-  "flat/recommended": flatRecommended,
+  // Kept for backward compatibility
+  "flat/base": base,
+  "flat/recommended": recommended,
 };
 
 const rules = ruleList.reduce(
