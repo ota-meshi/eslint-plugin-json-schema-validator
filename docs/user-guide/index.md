@@ -9,7 +9,7 @@ npm install --save-dev eslint eslint-plugin-json-schema-validator
 ::: tip Requirements
 
 - ESLint v6.0.0 and above
-- Node.js v14.17.x, v16.x and above
+- Node.js `^20.19.0 || ^22.13.0 || >=24`
 :::
 
 ## :book: Usage
