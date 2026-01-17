@@ -1,7 +1,6 @@
 import path from "path";
 import assert from "assert";
 import plugin from "../../src/index";
-import semver from "semver";
 import { getLegacyESLint, getESLint } from "eslint-compat-utils/eslint";
 
 // -----------------------------------------------------------------------------
@@ -32,7 +31,6 @@ describe("Integration with eslint-plugin-json-schema-validator", () => {
   it("should lint without errors with flat-config", async () => {
     // eslint-disable-next-line @typescript-eslint/naming-convention -- Class name
     const ESLint = getESLint();
-    if (semver.satisfies(ESLint.version, "<7.0.0")) return;
     const engine = new ESLint({
       cwd: path.join(TEST_FIXTURES_ROOT, "flat-config-test01"),
       overrideConfigFile: true,
