@@ -52,7 +52,7 @@
     "version:ci": "env-cmd -e version-ci yarn update && changeset version"
   },
   "peerDependencies": {
-    "eslint": ">=6.0.0"
+    "eslint": ">=9.38.0"
   },
   "dependencies": {
     "@eslint-community/eslint-utils": "^4.3.0",
