@@ -10,7 +10,7 @@ since: "v0.1.0"
 
 > validate object with JSON Schema.
 
-- :gear: This rule is included in `"plugin:json-schema-validator/recommended"`.
+- :gear: This rule is included in `configs.recommended`.
 
 ## :book: Rule Details
 

@@ -8,51 +8,6 @@ const isWin = os.platform().startsWith("win");
 const FLAT_RULESET_NAME = {
   recommended: "../src/configs/flat/recommended.ts",
 };
-const RULESET_NAME = {
-  recommended: "../src/configs/recommended.ts",
-  // standard: "../src/configs/standard.ts",
-};
-
-for (const rec of ["recommended"] as const) {
-  let content = `
-import path from "path"
-const base = require.resolve("./base")
-const baseExtend =
-    path.extname(\`\${base}\`) === ".ts" ? "plugin:json-schema-validator/base" : base
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore
-// @ts-ignore -- backward compatibility
-export = {
-    extends: [baseExtend],
-    rules: {
-        // eslint-plugin-json-schema-validator rules
-        ${rules
-          .filter(
-            (rule) =>
-              rule.meta.docs.categories &&
-              !rule.meta.deprecated &&
-              rule.meta.docs.categories.includes(rec),
-          )
-          .map((rule) => {
-            const conf = rule.meta.docs.default || "error";
-            return `"${rule.meta.docs.ruleId}": "${conf}"`;
-          })
-          .join(",\n")}
-    },
-}
-`;
-
-  const filePath = path.resolve(__dirname, RULESET_NAME[rec]);
-
-  if (isWin) {
-    content = content
-      .replace(/\r?\n/gu, "\n")
-      .replace(/\r/gu, "\n")
-      .replace(/\n/gu, "\r\n");
-  }
-
-  // Update file.
-  fs.writeFileSync(filePath, content);
-}
 
 for (const rec of ["recommended"] as const) {
   let content = `
