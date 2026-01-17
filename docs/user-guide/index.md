@@ -19,8 +19,6 @@ npm install --save-dev eslint eslint-plugin-json-schema-validator
 
 ### Configuration
 
-#### New Config (`eslint.config.js`)
-
 Use `eslint.config.js` file to configure rules. See also: <https://eslint.org/docs/latest/use/configure/configuration-files-new>.
 
 Example **eslint.config.js**:
@@ -30,7 +28,7 @@ import eslintPluginJsonSchemaValidator from "eslint-plugin-json-schema-validator
 export default [
   // add more generic rule sets here, such as:
   // js.configs.recommended,
-  ...eslintPluginJsonSchemaValidator.configs["flat/recommended"],
+  ...eslintPluginJsonSchemaValidator.configs.recommended,
   {
     rules: {
       // override/add rules settings here, such as:
@@ -42,33 +40,13 @@ export default [
 
 This plugin provides configs:
 
-- `*.configs['flat/base']` ... Configuration to enable correct JSON, YAML and TOML parsing.
-- `*.configs['flat/recommended']` ... Above, plus rule to validate with JSON Schema.
+- `*.configs.base` ... Configuration to enable correct JSON, YAML and TOML parsing.
+- `*.configs.recommended` ... Above, plus rule to validate with JSON Schema.
 
-#### Legacy Config (`.eslintrc`)
+For backward compatibility, the `flat/` prefix can still be used:
 
-Use `.eslintrc.*` file to configure rules. See also: <https://eslint.org/docs/latest/use/configure/>.
-
-Example **.eslintrc.js**:
-
-```js
-module.exports = {
-  extends: [
-    // add more generic rulesets here, such as:
-    // 'eslint:recommended',
-    "plugin:json-schema-validator/recommended",
-  ],
-  rules: {
-    // override/add rules settings here, such as:
-    // 'json-schema-validator/no-invalid': 'error'
-  },
-};
-```
-
-This plugin provides configs:
-
-- `plugin:json-schema-validator/base` ... Configuration to enable correct JSON, YAML and TOML parsing.
-- `plugin:json-schema-validator/recommended` ... Above, plus rule to validate with JSON Schema.
+- `*.configs["flat/base"]` is an alias for `*.configs.base`
+- `*.configs["flat/recommended"]` is an alias for `*.configs.recommended`
 
 ### Running ESLint from the command line
 
