@@ -20,6 +20,8 @@ export async function get(
  * Load module by path
  */
 function loadModule(modulePath: string) {
+  // TODO test
+  console.log(modulePath);
   try {
     const require = createRequire(import.meta.filename);
     return require(modulePath);
