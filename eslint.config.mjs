@@ -1,7 +1,7 @@
 import tsParser from "@typescript-eslint/parser";
 import myPlugin from "@ota-meshi/eslint-plugin";
 import tseslint from "typescript-eslint";
-import plugin from "./lib/index.cjs";
+import plugin from "./lib/index.mjs";
 
 export default [
   {
