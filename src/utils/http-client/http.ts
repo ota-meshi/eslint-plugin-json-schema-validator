@@ -1,5 +1,5 @@
 import type { RequestOptions } from "https";
-import defaultClient from "./get-modules/http.ts";
+import defaultClient from "./get-modules/http";
 import { createRequire } from "module";
 
 /**
