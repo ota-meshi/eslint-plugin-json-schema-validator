@@ -4,8 +4,6 @@ pageClass: "playground"
 
 # Playground
 
-<playground-block>
+You can try out eslint-plugin-json-schema-validator on the online playground:
 
-The playground is [here](https://ota-meshi.github.io/eslint-plugin-json-schema-validator/playground/)!!
-
-</playground-block>
+[Open Playground →](https://eslint-online-playground.netlify.app/#eslint-plugin-json-schema-validator)

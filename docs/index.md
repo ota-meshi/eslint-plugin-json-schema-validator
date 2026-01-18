@@ -15,7 +15,7 @@
 
 This ESLint plugin validates [JSON], [JSONC], [JSON5], [YAML], [TOML], **JavaScript** and [Vue Custom Blocks] with JSON Schema.
 
-You can check on the [Online DEMO](./playground/) that uses [JavaScript](./playground/#eJxtUMtqwzAQ/JVFvYVIhtKToIf+QH8gysGx17aCveus1kkg5N/rJ02hKyHQaDQ7Ow9TxRa/8w6NNw5TG0mlcOdk9qbgckKzHSw4nBOTTUWDXW6veRvLXFkyYhtpvno4BIK5gkERlmD2v0ij2iefZZOMW2TSKICOpc621sHMH47zaS18nXhQ4F4jU/KwabDmtsPURFdHbYaTi7xK2L4d6kj2f7MytJheLLtGu/ZtlQ+0ywJ1XI4kh/eeRRN8wmMZAe+KVI4eDvDxDsd1MKSr3xhTnYRvCcWDyoAL/Fypc+8/ZLxMy4/Z3HKhl7AAkkosdHriqlpDgWegcZvnD5npj+8=), [JSON](./playground/#eJxtUF1vgzAM/CtR9lY1RJr6xNt+x9IHPlzIBDazTTsJ8d9LgHaVtiSylDvd2efJVlSDza0/GJAuopovIXRStdAX7lp0sS6U2CO5iOs3N58BzXqCBWbiYI+/SKs6SO59ssk2G1kMICNu/NaCq2BXwXmtzpmPkkY1NGgklNw8PEgL14O0MWuitmOZRdot3NCNTUT3/7A8diAvI2et9t3bbh/w4ANO28RLgh8FrCXYJZc5vZvz8cngNaHTI1vCSqabACdceYSNmp+StfEfEXynm+BgbwXjy74SLcqx0o2my2XfjZkDLs/Od5odhuU=), [YAML](./playground/#eJxtjkFuhDAMRa9ime0kSKOu2PUCvUDTRQADqYJNHTPTqurdO8CM1EXl1X/f3/7fOKRML3EmbNBTyYlNO/8V54wn7KTfeAWHAe9F2JVuojm6S8ypjyZas7jEu2zglVRFTxBwMltKU9dbxh+ZctsmLzrWj0cB3wJX4Bw8t7IayGJJuDTwSItFN1OZkh+TTWvrk9zDbsnrmNj930nXTOVPMz/ZnKv7+cD0acR9aQIDOHg63whfdtWqXAtpwAZMVwq8X9qtgPSxzeYFvEblgAcvpqmzg8swbBh/fgE9uHsQ) and [TOML](./playground/#eJxtjjFPxDAMhf9KlK6XdOCmSgyIHYnpBsKQtr7GKImr2GE58d/xcSAY2Pze82e/iz1jhqdYwE7W7w1EEFpbvFDJ9mAXWq/JYIAzVjFvTNXxkqBE9x4zrlGojZUc1i85mRfFqR1MsElk52kcr4y/Mazb4Klt4++rYF9DHYxz5mGmLoZ2Qao8mR+eJLoCnNBvKKnPHmm81XF77htW93+r1jPwn24+ScnD9/lQpUXUI9sjlRLNvRYGvgtWgzifcJWk3jFUhoI6nWNmUKVAhudOAmpK6+rZj0/iJXYT).
+You can check on the [Online DEMO](https://eslint-online-playground.netlify.app/#eslint-plugin-json-schema-validator).
 
 ## :book: Usage
 

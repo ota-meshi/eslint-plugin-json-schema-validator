@@ -4,6 +4,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import eslint4b from "vite-plugin-eslint4b";
 import { viteCommonjs } from "./vite-plugin.mjs";
+import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
+import { createTwoslasher as createTwoslasherESLint } from "twoslash-eslint";
 
 import "./build-system/build.mts";
 
@@ -48,6 +50,9 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
   );
   const rulesPath = "../../lib/utils/rules.js";
   const { rules } = (await import(rulesPath)) as { rules: RuleModule[] };
+
+  const plugin = await import("../../lib/index.mjs").then((m) => m.default || m);
+
   return defineConfig({
     base: "/eslint-plugin-json-schema-validator/",
     title: "eslint-plugin-json-schema-validator",
@@ -55,6 +60,36 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
     description:
       "ESLint plugin that validates data using JSON Schema Validator",
     head: [],
+
+    markdown: {
+      codeTransformers: [
+        transformerTwoslash({
+          explicitTrigger: false,
+          langs: ["json", "json5", "jsonc", "yaml", "yml", "toml"],
+          filter(lang, code) {
+            if (lang.startsWith("json") || lang.startsWith("yaml") || lang === "yml" || lang === "toml") {
+              return code.includes("eslint");
+            }
+            return false;
+          },
+          errorRendering: "hover",
+          twoslasher: createTwoslasherESLint({
+            eslintConfig: [
+              {
+                files: [
+                  "*",
+                  "**/*",
+                  ...["json", "json5", "jsonc", "yaml", "yml", "toml"].flatMap((ext) => [`*.${ext}`, `**/*.${ext}`]),
+                ],
+                plugins: {
+                  "json-schema-validator": plugin,
+                },
+              },
+            ],
+          }),
+        }) as never,
+      ],
+    },
 
     vite: {
       plugins: [viteCommonjs(), eslint4b()],
@@ -98,7 +133,10 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
         { text: "Introduction", link: "/" },
         { text: "User Guide", link: "/user-guide/" },
         { text: "Rules", link: "/rules/" },
-        { text: "Playground", link: "/playground/" },
+        {
+          text: "Playground",
+          link: "https://eslint-online-playground.netlify.app/#eslint-plugin-json-schema-validator",
+        },
       ],
       socialLinks: [
         {
