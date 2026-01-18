@@ -1,5 +1,8 @@
 import assert from "assert";
-import { get, syncGet } from "../../../../src/utils/http-client";
+import { get, syncGet } from "../../../../src/utils/http-client/index.ts";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.filename);
 
 describe("HTTP GET.", () => {
   it("Should to receive a request.", async () => {
@@ -15,7 +18,7 @@ describe("HTTP GET.", () => {
     const res = syncGet(
       "https://raw.githubusercontent.com/ota-meshi/eslint-plugin-json-schema-validator/main/package.json",
       {},
-      require.resolve("./get-modules/request-get"),
+      require.resolve("./get-modules/request-get.ts"),
     );
     assert.deepStrictEqual(
       JSON.parse(res).name,

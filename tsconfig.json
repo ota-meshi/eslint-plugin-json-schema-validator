@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "es2020",
+    "module": "esnext",
     "moduleResolution": "Bundler",
     "lib": ["es2020"],
     "allowJs": true,
@@ -21,13 +21,16 @@
     "esModuleInterop": true,
     "outDir": "lib",
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src/**/*",
     "tests/src/**/*",
     "tests/utils/**/*",
-    "tools/**/*"
+    "tools/**/*",
+    "tsdown.config.ts"
     // "typings/**/*"
   ],
   "exclude": ["lib/**/*"]

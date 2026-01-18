@@ -1,15 +1,16 @@
-import type { RuleModule } from "./types";
-import { rules as ruleList } from "./utils/rules";
-import base from "./configs/flat/base";
-import recommended from "./configs/flat/recommended";
-import * as meta from "./meta";
+import type { RuleModule } from "./types.ts";
+import { rules as ruleList } from "./utils/rules.ts";
+import base from "./configs/flat/base.ts";
+import recommended from "./configs/flat/recommended.ts";
+import * as meta from "./meta.ts";
+import type { Linter } from "eslint";
 
 const configs = {
-  base,
-  recommended,
+  base: base as Linter.Config[],
+  recommended: recommended as Linter.Config[],
   // Kept for backward compatibility
-  "flat/base": base,
-  "flat/recommended": recommended,
+  "flat/base": base as Linter.Config[],
+  "flat/recommended": recommended as Linter.Config[],
 };
 
 const rules = ruleList.reduce(
@@ -20,10 +21,9 @@ const rules = ruleList.reduce(
   {} as { [key: string]: RuleModule },
 );
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore
-// @ts-ignore
-export = {
+export default {
   meta,
   configs,
   rules,
 };
+export { meta, configs, rules };

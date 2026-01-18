@@ -4,14 +4,14 @@ import type {
   RuleModule,
   PartialRuleModule,
   RuleContext,
-} from "../types";
+} from "../types.ts";
 import type { Rule } from "eslint";
 import type { AST as VueAST } from "vue-eslint-parser";
 import * as jsoncESLintParser from "jsonc-eslint-parser";
 import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
 import path from "path";
-import { getFilename, getSourceCode } from "./compat";
+import { getFilename, getSourceCode } from "./compat.ts";
 
 /**
  * Define the rule.

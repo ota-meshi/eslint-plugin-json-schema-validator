@@ -1,9 +1,9 @@
 // eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- ignore
 /* eslint-disable @typescript-eslint/no-explicit-any -- ignore */
 import type { AST } from "vue-eslint-parser";
-import type { RuleContext, SourceCode } from "../../../types";
-import { findInitNode, getStaticValue } from "./utils";
-import { getStaticPropertyName } from "./utils";
+import type { RuleContext, SourceCode } from "../../../types.ts";
+import { findInitNode, getStaticValue } from "./utils.ts";
+import { getStaticPropertyName } from "./utils.ts";
 
 const UNKNOWN = Symbol("unknown value");
 type TUnknown = typeof UNKNOWN;

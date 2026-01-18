@@ -4,25 +4,25 @@ import type { AST as YAML } from "yaml-eslint-parser";
 import { getStaticYAMLValue } from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
 import { getStaticTOMLValue } from "toml-eslint-parser";
-import { createRule } from "../utils/index";
+import { createRule } from "../utils/index.ts";
 import { minimatch } from "minimatch";
 import path from "path";
-import type { PathData } from "../utils/ast/index";
+import type { PathData } from "../utils/ast/index.ts";
 import {
   getJSONNodeFromPath,
   getYAMLNodeFromPath,
   getTOMLNodeFromPath,
   analyzeJsAST,
-} from "../utils/ast/index";
-import { loadJson, loadSchema } from "../utils/schema";
-import type { RuleContext } from "../types";
-import type { NodeData } from "../utils/ast/common";
+} from "../utils/ast/index.ts";
+import { loadJson, loadSchema } from "../utils/schema.ts";
+import type { RuleContext } from "../types.ts";
+import type { NodeData } from "../utils/ast/common.ts";
 import type { AST } from "vue-eslint-parser";
-import type { ValidateError, Validator } from "../utils/validator-factory";
-import { compile } from "../utils/validator-factory";
-import type { SchemaObject } from "../utils/types";
+import type { ValidateError, Validator } from "../utils/validator-factory.ts";
+import { compile } from "../utils/validator-factory.ts";
+import type { SchemaObject } from "../utils/types.ts";
 import fs from "fs";
-import { getCwd, getFilename, getSourceCode } from "../utils/compat";
+import { getCwd, getFilename, getSourceCode } from "../utils/compat.ts";
 import { toCompatCreate } from "eslint-json-compat-utils";
 
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";

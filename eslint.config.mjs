@@ -1,6 +1,7 @@
 import tsParser from "@typescript-eslint/parser";
 import myPlugin from "@ota-meshi/eslint-plugin";
 import tseslint from "typescript-eslint";
+import plugin from "./lib/index.cjs";
 
 export default [
   {
@@ -23,18 +24,31 @@ export default [
       "**/*.md/*.bash",
     ],
   },
-  ...myPlugin.config({
-    node: true,
-    ts: true,
-    eslintPlugin: true,
-    vue3: true,
-    packageJson: true,
-    json: true,
-    yaml: true,
-    toml: true,
-    md: true,
-    prettier: true,
-  }),
+  ...myPlugin
+    .config({
+      node: true,
+      ts: true,
+      eslintPlugin: true,
+      vue3: true,
+      packageJson: true,
+      json: true,
+      yaml: true,
+      toml: true,
+      md: true,
+      prettier: true,
+    })
+    .map((config) => {
+      if (!config.plugins?.["json-schema-validator"]) {
+        return config;
+      }
+      return {
+        ...config,
+        plugins: {
+          ...config.plugins,
+          "json-schema-validator": plugin,
+        },
+      };
+    }),
   {
     languageOptions: {
       ecmaVersion: "latest",
@@ -52,6 +66,7 @@ export default [
       "new-cap": "off",
       "no-shadow": "off",
       "@typescript-eslint/no-shadow": "off",
+      "no-return-await": "off",
 
       "no-restricted-imports": [
         "error",
@@ -285,6 +300,11 @@ export default [
     ],
     languageOptions: {
       sourceType: "module",
+      globals: {
+        exports: true,
+        require: true,
+        module: true,
+      },
     },
     rules: {
       "yml/no-empty-sequence-entry": "off",

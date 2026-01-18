@@ -2,8 +2,8 @@ import * as eslintUtils from "@eslint-community/eslint-utils";
 import type { Variable } from "eslint-scope";
 import type { AST } from "vue-eslint-parser";
 
-import type { RuleContext } from "../../../types";
-import { getSourceCode } from "../../compat";
+import type { RuleContext } from "../../../types.ts";
+import { getSourceCode } from "../../compat.ts";
 
 /**
  * Gets the property name of a given node.
