@@ -4,8 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import eslint4b from "vite-plugin-eslint4b";
 import { viteCommonjs } from "./vite-plugin.mjs";
-import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
-import { createTwoslasher as createTwoslasherESLint } from "twoslash-eslint";
 
 import "./build-system/build.mts";
 
@@ -47,25 +45,6 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
     description:
       "ESLint plugin that validates data using JSON Schema Validator",
     head: [],
-
-    markdown: {
-      codeTransformers: [
-        transformerTwoslash({
-          explicitTrigger: false,
-          langs: ["json", "json5", "jsonc", "yaml", "yml", "toml"],
-          filter(lang, code) {
-            if (lang.startsWith("json") || lang.startsWith("yaml") || lang === "yml" || lang === "toml") {
-              return code.includes("eslint");
-            }
-            return false;
-          },
-          errorRendering: "hover",
-          twoslasher: createTwoslasherESLint({
-            eslintConfig: [],
-          }),
-        }) as never,
-      ],
-    },
 
     vite: {
       plugins: [viteCommonjs(), eslint4b()],

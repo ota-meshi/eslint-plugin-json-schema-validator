@@ -16,8 +16,6 @@ since: "v0.1.0"
 
 This rule validates the file with JSON Schema and reports errors.
 
-<eslint-code-block file-name=".eslintrc.json">
-
 <!-- eslint-skip -->
 
 ```json5
@@ -38,8 +36,6 @@ This rule validates the file with JSON Schema and reports errors.
   ],
 }
 ```
-
-</eslint-code-block>
 
 ## :wrench: Options
 
@@ -71,8 +67,6 @@ This rule validates the file with JSON Schema and reports errors.
 
 This option can also be given a JSON schema file or URL. This is useful for configuring with the `/* eslint */` directive comments.
 
-<eslint-code-block file-name=".eslintrc.js">
-
 <!-- eslint-skip -->
 
 ```js
@@ -97,8 +91,6 @@ module.exports = {
   ],
 };
 ```
-
-</eslint-code-block>
 
 ### Use with `.vue`
 
