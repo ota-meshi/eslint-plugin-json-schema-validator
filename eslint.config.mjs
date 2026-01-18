@@ -299,6 +299,11 @@ export default [
     ],
     languageOptions: {
       sourceType: "module",
+      globals: {
+        exports: true,
+        require: true,
+        module: true,
+      },
     },
     rules: {
       "yml/no-empty-sequence-entry": "off",
