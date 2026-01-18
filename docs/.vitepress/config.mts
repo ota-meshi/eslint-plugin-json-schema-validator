@@ -4,6 +4,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import eslint4b from "vite-plugin-eslint4b";
 import { viteCommonjs } from "./vite-plugin.mjs";
+import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
+import { createTwoslasher as createTwoslasherESLint } from "twoslash-eslint";
 
 import "./build-system/build.mts";
 
@@ -25,21 +27,11 @@ function ruleToSidebarItem({
 }
 
 export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
-  // Hardcode rules to avoid importing the plugin which has Node dependencies
-  // that cannot be loaded in the VitePress browser environment.
-  // TODO: If more rules are added, update this list accordingly, or refactor
-  // the plugin to separate browser-compatible metadata from Node-specific code.
-  const rules: RuleModule[] = [
-    {
-      meta: {
-        docs: {
-          ruleId: "json-schema-validator/no-invalid",
-          ruleName: "no-invalid",
-        },
-        deprecated: false,
-      },
-    } as RuleModule,
-  ];
+  // Import from lib (built version) to avoid TypeScript/synckit issues
+  const { rules: rulesObj, default: plugin } = await import(
+    "../../lib/index.mjs"
+  );
+  const rules = Object.values(rulesObj) as RuleModule[];
 
   return defineConfig({
     base: "/eslint-plugin-json-schema-validator/",
@@ -48,6 +40,44 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
     description:
       "ESLint plugin that validates data using JSON Schema Validator",
     head: [],
+
+    markdown: {
+      codeTransformers: [
+        transformerTwoslash({
+          explicitTrigger: false,
+          langs: ["json", "json5", "jsonc", "yaml", "yml", "toml", "js"],
+          filter(lang, code) {
+            if (
+              lang.startsWith("json") ||
+              lang.startsWith("yaml") ||
+              lang === "yml" ||
+              lang === "toml" ||
+              lang === "js"
+            ) {
+              return code.includes("eslint");
+            }
+            return false;
+          },
+          errorRendering: "hover",
+          twoslasher: createTwoslasherESLint({
+            eslintConfig: [
+              {
+                files: [
+                  "*",
+                  "**/*",
+                  ...["json", "json5", "jsonc", "yaml", "yml", "toml", "js"].flatMap(
+                    (ext) => [`*.${ext}`, `**/*.${ext}`],
+                  ),
+                ],
+                plugins: {
+                  "json-schema-validator": plugin,
+                },
+              },
+            ],
+          }),
+        }) as never,
+      ],
+    },
 
     vite: {
       plugins: [viteCommonjs(), eslint4b()],
