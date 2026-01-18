@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["tests/**/*", "tools/**/*", "typings/**/*"],
+  "exclude": ["tests/**/*", "tools/**/*", "typings/**/*", "tsdown.config.ts"],
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",

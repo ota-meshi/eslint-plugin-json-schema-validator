@@ -27,7 +27,8 @@
     "src/**/*",
     "tests/src/**/*",
     "tests/utils/**/*",
-    "tools/**/*"
+    "tools/**/*",
+    "tsdown.config.ts"
     // "typings/**/*"
   ],
   "exclude": ["lib/**/*"]

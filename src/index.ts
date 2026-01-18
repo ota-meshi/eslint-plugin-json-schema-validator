@@ -12,7 +12,7 @@ const configs = {
   "flat/recommended": recommended,
 };
 
-const rulesObject = ruleList.reduce(
+const rules = ruleList.reduce(
   (obj, r) => {
     obj[r.meta.docs.ruleName] = r;
     return obj;
@@ -25,5 +25,5 @@ const rulesObject = ruleList.reduce(
 export = {
   meta,
   configs,
-  rules: rulesObject,
+  rules,
 };
