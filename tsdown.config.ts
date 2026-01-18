@@ -5,7 +5,7 @@ export default defineConfig({
     index: "./src/index.ts",
     worker: "./src/utils/http-client/worker.ts",
   },
-  format: ["esm", "cjs"],
+  format: ["esm"],
   platform: "node",
   dts: true,
   clean: true,
@@ -13,7 +13,4 @@ export default defineConfig({
   treeshake: {
     moduleSideEffects: false,
   },
-  // Set to false because tsdown warns about using CJS format,
-  // but ESLint plugins require CommonJS for compatibility
-  failOnWarn: false,
 });
