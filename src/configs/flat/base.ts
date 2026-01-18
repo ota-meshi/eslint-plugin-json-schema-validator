@@ -54,4 +54,4 @@ export default [
       "spaced-comment": "off",
     },
   },
-] satisfies Linter.FlatConfig[] as Linter.FlatConfig[];
+] satisfies Linter.Config[];

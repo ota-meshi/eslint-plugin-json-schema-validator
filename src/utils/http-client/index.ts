@@ -1,2 +1,2 @@
-export { get } from "./http";
-export { syncGet } from "./sync-http";
+export { get } from "./http.ts";
+export { syncGet } from "./sync-http.ts";

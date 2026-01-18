@@ -39,7 +39,7 @@
   "scripts": {
     "build": "tsdown",
     "clean": "rimraf dist coverage",
-    "cover": "c8 --reporter=lcov yarn test",
+    "cover": "c8 --reporter=lcov yarn test:debug",
     "docs:build": "yarn build && vitepress build docs",
     "docs:build-and-preview": "yarn docs:build && npx http-server docs/.vitepress/dist",
     "docs:watch": "vitepress dev docs",
@@ -55,6 +55,7 @@
     "preversion": "yarn test && git add .",
     "release": "clean-pkg-json && changeset publish",
     "test": "env-cmd -e test -- yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
+    "test:debug": "env-cmd -e test -- node --experimental-strip-types --experimental-transform-types ./node_modules/mocha/bin/mocha.js \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
     "ts": "env-cmd -e base -- tsx",
     "update": "yarn ts ./tools/update && yarn lint-fix",
     "version": "env-cmd -e version -- yarn update && git add .",

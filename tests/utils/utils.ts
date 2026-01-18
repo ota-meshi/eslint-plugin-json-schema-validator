@@ -8,7 +8,7 @@ import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
 import * as vueESLintParser from "vue-eslint-parser";
 import semver from "semver";
-import plugin from "../../src/index";
+import plugin from "../../src/index.ts";
 // @ts-expect-error -- missing types
 import * as espree from "espree";
 // eslint-disable-next-line @typescript-eslint/naming-convention -- class name

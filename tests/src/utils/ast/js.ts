@@ -2,17 +2,23 @@ import assert from "assert";
 import path from "path";
 import fs from "fs";
 import { getLinter } from "eslint-compat-utils/linter";
-import type { AnalyzedJsAST, PathData } from "../../../../src/utils/ast/js";
-import { analyzeJsAST } from "../../../../src/utils/ast/js";
+import type {
+  AnalyzedJsAST,
+  PathData,
+} from "../../../../src/utils/ast/js/index.ts";
+import { analyzeJsAST } from "../../../../src/utils/ast/js/index.ts";
 import type { AST } from "vue-eslint-parser";
-import type { SourceCode } from "../../../../src/types";
-import { getSourceCode } from "../../../../src/utils/compat";
+import type { SourceCode } from "../../../../src/types.ts";
+import { getSourceCode } from "../../../../src/utils/compat.ts";
 // @ts-expect-error -- missing types
-import espree from "espree";
+import * as espree from "espree";
 // eslint-disable-next-line @typescript-eslint/naming-convention -- class name
 const Linter = getLinter();
 
-const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures/utils/ast/js");
+const FIXTURES_ROOT = path.join(
+  import.meta.dirname,
+  "../../../fixtures/utils/ast/js",
+);
 
 describe("AST for JS.", () => {
   for (const filename of listupInput(FIXTURES_ROOT)) {

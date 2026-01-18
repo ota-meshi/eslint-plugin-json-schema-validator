@@ -1,9 +1,9 @@
-import type { RuleModule } from "../../../src/types";
+import type { RuleModule } from "../../../src/types.ts";
 import assert from "assert";
 import path from "path";
 import fs from "fs";
 
-import { rules as allRules } from "../../../src/utils/rules";
+import { rules as allRules } from "../../../src/utils/rules.ts";
 import { pathToFileURL } from "url";
 
 /**

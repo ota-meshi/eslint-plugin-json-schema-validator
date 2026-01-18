@@ -1,15 +1,15 @@
 import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
 
-import type { RuleContext } from "../types";
+import type { RuleContext } from "../types.ts";
 import type {
   DefinedError,
   ErrorObject,
   RegExpEngine,
   SchemaObject,
   ValidateFunction,
-} from "./ajv";
-import Ajv from "./ajv";
-import { loadSchema } from "./schema";
+} from "./ajv.ts";
+import Ajv from "./ajv.ts";
+import { loadSchema } from "./schema.ts";
 import v6Schema from "ajv/lib/refs/json-schema-draft-06.json" with { type: "json" };
 
 // eslint-disable-next-line func-style -- ignore

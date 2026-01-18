@@ -1,6 +1,6 @@
 import path from "path";
 import assert from "assert";
-import plugin from "../../src/index";
+import plugin from "../../src/index.ts";
 import { getESLint } from "eslint-compat-utils/eslint";
 
 // -----------------------------------------------------------------------------

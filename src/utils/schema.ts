@@ -3,10 +3,10 @@ import fs from "fs";
 import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
 import path from "path";
 
-import type { RuleContext } from "../types";
-import { getCwd } from "./compat";
-import { get, syncGet } from "./http-client";
-import type { SchemaObject } from "./types";
+import type { RuleContext } from "../types.ts";
+import { getCwd } from "./compat.ts";
+import { get, syncGet } from "./http-client/index.ts";
+import type { SchemaObject } from "./types.ts";
 import * as meta from "../meta.ts";
 
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");

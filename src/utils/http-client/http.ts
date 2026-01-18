@@ -1,5 +1,5 @@
 import type { RequestOptions } from "https";
-import defaultClient from "./get-modules/http";
+import defaultClient from "./get-modules/http.ts";
 import { createRequire } from "module";
 import { isAbsolute } from "path";
 import { pathToFileURL } from "url";
