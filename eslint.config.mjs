@@ -66,6 +66,7 @@ export default [
       "new-cap": "off",
       "no-shadow": "off",
       "@typescript-eslint/no-shadow": "off",
+      "no-return-await": "off",
 
       "no-restricted-imports": [
         "error",

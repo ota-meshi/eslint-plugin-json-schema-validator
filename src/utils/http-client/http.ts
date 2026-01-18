@@ -1,6 +1,8 @@
 import type { RequestOptions } from "https";
 import defaultClient from "./get-modules/http";
 import { createRequire } from "module";
+import { isAbsolute } from "path";
+import { pathToFileURL } from "url";
 
 /**
  * GET Method
@@ -19,13 +21,15 @@ export async function get(
 /**
  * Load module by path
  */
-function loadModule(modulePath: string) {
-  // TODO test
-  console.log(modulePath);
+async function loadModule(modulePath: string) {
+  const adjustedPath =
+    !modulePath.startsWith("file://") && isAbsolute(modulePath)
+      ? pathToFileURL(modulePath).href
+      : modulePath;
   try {
     const require = createRequire(import.meta.filename);
-    return require(modulePath);
+    return require(adjustedPath);
   } catch {
-    return import(modulePath);
+    return await import(adjustedPath);
   }
 }

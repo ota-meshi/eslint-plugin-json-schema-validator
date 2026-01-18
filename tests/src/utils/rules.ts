@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 
 import { rules as allRules } from "../../../src/utils/rules";
+import { pathToFileURL } from "url";
 
 /**
  * @returns {Array} Get the list of rules placed in the directory.
@@ -18,7 +19,9 @@ async function getDirRules() {
     const ruleName = filename.replace(/\.ts$/u, "");
     const ruleId = `json-schema-validator/${ruleName}`;
 
-    const rule = (await import(path.join(rulesRoot, filename))).default;
+    const rule = (
+      await import(pathToFileURL(path.join(rulesRoot, filename)).href)
+    ).default;
     rules[ruleId] = rule;
   }
 
