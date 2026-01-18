@@ -26,6 +26,9 @@ function ruleToSidebarItem({
 
 export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
   // Hardcode rules to avoid importing the plugin which has Node dependencies
+  // that cannot be loaded in the VitePress browser environment.
+  // TODO: If more rules are added, update this list accordingly, or refactor
+  // the plugin to separate browser-compatible metadata from Node-specific code.
   const rules: RuleModule[] = [
     {
       meta: {
