@@ -4,7 +4,6 @@ import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
 import path from "path";
 
 import type { RuleContext } from "../types.ts";
-import { getCwd } from "./compat.ts";
 import { get, syncGet } from "./http-client/index.ts";
 import type { SchemaObject } from "./types.ts";
 import * as meta from "../meta.ts";
@@ -71,10 +70,7 @@ function loadJsonInternal<T>(
       return result;
     });
   }
-  const json = fs.readFileSync(
-    path.resolve(getCwd(context), jsonPath),
-    "utf-8",
-  );
+  const json = fs.readFileSync(path.resolve(context.cwd, jsonPath), "utf-8");
   const data = JSON.parse(json);
   return edit ? edit(data) : data;
 }
@@ -254,7 +250,7 @@ function resolvePath(modulePath: string | void, context: RuleContext) {
     return undefined;
   }
   if (modulePath.startsWith(".")) {
-    return path.join(getCwd(context), modulePath);
+    return path.join(context.cwd, modulePath);
   }
   return modulePath;
 }

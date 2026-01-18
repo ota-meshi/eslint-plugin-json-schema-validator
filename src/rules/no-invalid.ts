@@ -22,7 +22,6 @@ import type { ValidateError, Validator } from "../utils/validator-factory.ts";
 import { compile } from "../utils/validator-factory.ts";
 import type { SchemaObject } from "../utils/types.ts";
 import fs from "fs";
-import { getCwd, getFilename, getSourceCode } from "../utils/compat.ts";
 import { toCompatCreate } from "eslint-json-compat-utils";
 
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
@@ -61,7 +60,7 @@ function schemaObjectToValidator(
   if (!schema) {
     return null;
   }
-  const schemaPath = getCwd(context);
+  const schemaPath = context.cwd;
   return compile(schema, schemaPath, context);
 }
 
@@ -159,8 +158,8 @@ export default createRule("no-invalid", {
     type: "suggestion",
   },
   create: toCompatCreate((context, { filename }) => {
-    const sourceCode = getSourceCode(context);
-    const cwd = getCwd(context);
+    const sourceCode = context.sourceCode;
+    const cwd = context.cwd;
     const relativeFilename = filename.startsWith(cwd)
       ? path.relative(cwd, filename)
       : filename;
@@ -372,7 +371,7 @@ export default createRule("no-invalid", {
               path.dirname(
                 typeof context.getPhysicalFilename === "function"
                   ? context.getPhysicalFilename()
-                  : getPhysicalFilename(getFilename(context)),
+                  : getPhysicalFilename(context.filename),
               ),
               $schema,
             )

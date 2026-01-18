@@ -3,7 +3,6 @@ import type { Variable } from "eslint-scope";
 import type { AST } from "vue-eslint-parser";
 
 import type { RuleContext } from "../../../types.ts";
-import { getSourceCode } from "../../compat.ts";
 
 /**
  * Gets the property name of a given node.
@@ -143,7 +142,7 @@ export function findInitNode(
 function getScope(context: RuleContext, currentNode: AST.ESLintNode) {
   // On Program node, get the outermost scope to avoid return Node.js special function scope or ES modules scope.
   const inner = currentNode.type !== "Program";
-  const scopeManager = getSourceCode(context).scopeManager;
+  const scopeManager = context.sourceCode.scopeManager;
 
   let node: AST.Node | null = currentNode;
   for (; node; node = node.parent || null) {

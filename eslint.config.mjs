@@ -83,58 +83,6 @@ export default [
           ],
         },
       ],
-
-      "no-restricted-properties": [
-        "error",
-        {
-          object: "context",
-          property: "getSourceCode",
-          message:
-            "Please use `eslint-compat-utils` module's `getSourceCode(context).getScope()` instead.",
-        },
-        {
-          object: "context",
-          property: "sourceCode",
-          message:
-            "Please use `eslint-compat-utils` module's `getSourceCode(context).getScope()` instead.",
-        },
-        {
-          object: "context",
-          property: "getFilename",
-          message:
-            "Please use `eslint-compat-utils` module's `getFilename(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "filename",
-          message:
-            "Please use `eslint-compat-utils` module's `getFilename(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "getCwd",
-          message:
-            "Please use `eslint-compat-utils` module's `getCwd(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "cwd",
-          message:
-            "Please use `eslint-compat-utils` module's `getCwd(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "getScope",
-          message:
-            "Please use `eslint-compat-utils` module's `getSourceCode(context).getScope()` instead.",
-        },
-        {
-          object: "context",
-          property: "parserServices",
-          message:
-            "Please use `eslint-compat-utils` module's `getSourceCode(context).parserServices` instead.",
-        },
-      ],
     },
   },
   {

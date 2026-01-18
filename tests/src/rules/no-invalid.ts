@@ -1,5 +1,5 @@
 import path from "path";
-import { getRuleTester } from "eslint-compat-utils/rule-tester";
+import { RuleTester } from "eslint";
 import rule from "../../../src/rules/no-invalid.ts";
 import { loadTestCases } from "../../utils/utils.ts";
 import * as jsonParser from "jsonc-eslint-parser";
@@ -7,8 +7,6 @@ import * as tomlParser from "toml-eslint-parser";
 // @ts-expect-error -- missing types
 import * as espree from "espree";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention -- class name
-const RuleTester = getRuleTester();
 const tester = new RuleTester({
   languageOptions: {
     /* eslint @typescript-eslint/no-require-imports: 0 -- ignore */

@@ -11,7 +11,6 @@ import * as jsoncESLintParser from "jsonc-eslint-parser";
 import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
 import path from "path";
-import { getFilename, getSourceCode } from "./compat.ts";
 
 /**
  * Define the rule.
@@ -33,8 +32,8 @@ export function createRule(
       },
     },
     create(context: Rule.RuleContext): any {
-      const sourceCode = getSourceCode(context);
-      const filename = getFilename(context);
+      const sourceCode = context.sourceCode;
+      const filename = context.filename;
       const visitor = rule.create(context as any, {
         customBlock: false,
         filename,

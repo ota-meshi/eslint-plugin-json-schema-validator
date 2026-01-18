@@ -1,7 +1,7 @@
 import assert from "assert";
 import path from "path";
 import fs from "fs";
-import { getLinter } from "eslint-compat-utils/linter";
+import { Linter } from "eslint";
 import type {
   AnalyzedJsAST,
   PathData,
@@ -9,11 +9,8 @@ import type {
 import { analyzeJsAST } from "../../../../src/utils/ast/js/index.ts";
 import type { AST } from "vue-eslint-parser";
 import type { SourceCode } from "../../../../src/types.ts";
-import { getSourceCode } from "../../../../src/utils/compat.ts";
 // @ts-expect-error -- missing types
 import * as espree from "espree";
-// eslint-disable-next-line @typescript-eslint/naming-convention -- class name
-const Linter = getLinter();
 
 const FIXTURES_ROOT = path.join(
   import.meta.dirname,
@@ -45,7 +42,7 @@ describe("AST for JS.", () => {
                           node.declaration.range,
                           context as never,
                         )!,
-                        getSourceCode(context) as never,
+                        context.sourceCode as never,
                       );
                     },
                   };

@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import type { RuleTester } from "eslint";
-import { getLinter as getCompatLinter } from "eslint-compat-utils/linter";
+import { Linter } from "eslint";
 import * as jsoncESLintParser from "jsonc-eslint-parser";
 import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
@@ -11,8 +11,6 @@ import semver from "semver";
 import plugin from "../../src/index.ts";
 // @ts-expect-error -- missing types
 import * as espree from "espree";
-// eslint-disable-next-line @typescript-eslint/naming-convention -- class name
-const Linter = getCompatLinter();
 
 /**
  * Prevents leading spaces in a multiline template literal from appearing in the resulting string
