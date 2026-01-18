@@ -15,7 +15,7 @@
   "engines": {
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
-  "main": "lib/index.js",
+  "main": "lib/index.cjs",
   "exports": {
     ".": {
       "import": "./lib/index.js",
