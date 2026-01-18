@@ -10,6 +10,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   outDir: "lib",
+  fixedExtension: false,
   treeshake: {
     moduleSideEffects: false,
   },

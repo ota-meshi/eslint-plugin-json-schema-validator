@@ -16,7 +16,7 @@
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
   "exports": {
-    ".": "./lib/index.mjs",
+    ".": "./lib/index.js",
     "./package.json": "./package.json"
   },
   "files": [
