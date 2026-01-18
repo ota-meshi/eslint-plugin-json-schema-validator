@@ -9,6 +9,8 @@ import * as tomlESLintParser from "toml-eslint-parser";
 import * as vueESLintParser from "vue-eslint-parser";
 import semver from "semver";
 import plugin from "../../src/index";
+// @ts-expect-error -- missing types
+import * as espree from "espree";
 // eslint-disable-next-line @typescript-eslint/naming-convention -- class name
 const Linter = getCompatLinter();
 
@@ -74,11 +76,11 @@ export function loadTestCases(
   invalid: RuleTester.InvalidTestCase[];
 } {
   const validFixtureRoot = path.resolve(
-    __dirname,
+    import.meta.dirname,
     `../fixtures/rules/${ruleName}/valid/`,
   );
   const invalidFixtureRoot = path.resolve(
-    __dirname,
+    import.meta.dirname,
     `../fixtures/rules/${ruleName}/invalid/`,
   );
 
@@ -304,8 +306,7 @@ function getParser(fileName: string) {
     return tomlESLintParser;
   }
   if (fileName.endsWith(".js")) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
-    return require("espree");
+    return espree;
   }
   return jsoncESLintParser;
 }

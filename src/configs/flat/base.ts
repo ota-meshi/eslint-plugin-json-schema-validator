@@ -2,13 +2,13 @@ import type { ESLint, Linter } from "eslint";
 import * as jsoncParser from "jsonc-eslint-parser";
 import * as yamlParser from "yaml-eslint-parser";
 import * as tomlParser from "toml-eslint-parser";
+import plugin from "../../index.ts";
 export default [
   {
     plugins: {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- plugin name
       get "json-schema-validator"(): ESLint.Plugin {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-        return require("../../index");
+        return plugin as ESLint.Plugin;
       },
     },
   },

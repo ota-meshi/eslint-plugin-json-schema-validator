@@ -7,6 +7,8 @@ import { analyzeJsAST } from "../../../../src/utils/ast/js";
 import type { AST } from "vue-eslint-parser";
 import type { SourceCode } from "../../../../src/types";
 import { getSourceCode } from "../../../../src/utils/compat";
+// @ts-expect-error -- missing types
+import espree from "espree";
 // eslint-disable-next-line @typescript-eslint/naming-convention -- class name
 const Linter = getLinter();
 
@@ -48,8 +50,7 @@ describe("AST for JS.", () => {
         },
         rules: { "test/test": "error" },
         languageOptions: {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports -- test
-          parser: require("espree"),
+          parser: espree,
           ecmaVersion: 2020,
           sourceType: "module",
         },

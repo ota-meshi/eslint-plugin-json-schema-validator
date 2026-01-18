@@ -8,25 +8,24 @@ import { rules as allRules } from "../../../src/utils/rules";
 /**
  * @returns {Array} Get the list of rules placed in the directory.
  */
-function getDirRules() {
+async function getDirRules() {
   const rules: { [key: string]: RuleModule } = {};
 
-  const rulesRoot = path.resolve(__dirname, "../../../src/rules");
+  const rulesRoot = path.resolve(import.meta.dirname, "../../../src/rules");
   for (const filename of fs
     .readdirSync(rulesRoot)
     .filter((n) => n.endsWith(".ts"))) {
     const ruleName = filename.replace(/\.ts$/u, "");
     const ruleId = `json-schema-validator/${ruleName}`;
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- for test
-    const rule = require(path.join(rulesRoot, filename)).default;
+    const rule = (await import(path.join(rulesRoot, filename))).default;
     rules[ruleId] = rule;
   }
 
   return rules;
 }
 
-const dirRules = getDirRules();
+const dirRules = await getDirRules();
 
 describe("Check that all the rules have the correct names.", () => {
   for (const ruleId of Object.keys(dirRules)) {

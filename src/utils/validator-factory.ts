@@ -10,6 +10,7 @@ import type {
 } from "./ajv";
 import Ajv from "./ajv";
 import { loadSchema } from "./schema";
+import v6Schema from "ajv/lib/refs/json-schema-draft-06.json" with { type: "json" };
 
 // eslint-disable-next-line func-style -- ignore
 const lazyRegExpEngine: RegExpEngine = (str, flags) => {
@@ -40,8 +41,7 @@ const ajv = new Ajv({
   },
 });
 // ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
-// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
-ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"));
+ajv.addMetaSchema(v6Schema);
 
 /** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
 function unescapeFragment(str: string): string {

@@ -1,6 +1,7 @@
 {
   "name": "eslint-plugin-json-schema-validator",
   "version": "5.5.1",
+  "type": "module",
   "description": "ESLint plugin that validates data using JSON Schema Validator.",
   "repository": "git+https://github.com/ota-meshi/eslint-plugin-json-schema-validator.git",
   "homepage": "https://ota-meshi.github.io/eslint-plugin-json-schema-validator/",
@@ -53,11 +54,11 @@
     "prerelease": "yarn test && yarn build",
     "preversion": "yarn test && git add .",
     "release": "clean-pkg-json && changeset publish",
-    "test": "env-cmd -e test yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
-    "ts": "env-cmd -e base node -r esbuild-register",
+    "test": "env-cmd -e test -- yarn mocha \"tests/src/**/*.ts\" --reporter dot --timeout 60000",
+    "ts": "env-cmd -e base -- tsx",
     "update": "yarn ts ./tools/update && yarn lint-fix",
-    "version": "env-cmd -e version yarn update && git add .",
-    "version:ci": "env-cmd -e version-ci yarn update && changeset version"
+    "version": "env-cmd -e version -- yarn update && git add .",
+    "version:ci": "env-cmd -e version-ci -- yarn update && changeset version"
   },
   "peerDependencies": {
     "eslint": ">=9.38.0"
@@ -113,6 +114,7 @@
     "eslint-plugin-toml": "^0.13.0",
     "eslint-plugin-vue": "^10.0.0",
     "eslint-plugin-yml": "^2.0.0",
+    "espree": "^11.0.0",
     "events": "^3.3.0",
     "mocha": "^11.0.0",
     "monaco-editor": "^0.55.0",
@@ -128,6 +130,7 @@
     "stylelint-config-standard-vue": "^1.0.0",
     "stylelint-stylus": "^1.0.0",
     "tsdown": "^0.19.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.29.0",
     "vite-plugin-eslint4b": "^0.6.0",

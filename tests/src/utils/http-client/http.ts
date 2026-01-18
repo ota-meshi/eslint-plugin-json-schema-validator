@@ -1,5 +1,8 @@
 import assert from "assert";
 import { get, syncGet } from "../../../../src/utils/http-client";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.filename);
 
 describe("HTTP GET.", () => {
   it("Should to receive a request.", async () => {

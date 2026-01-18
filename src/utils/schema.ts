@@ -7,6 +7,7 @@ import type { RuleContext } from "../types";
 import { getCwd } from "./compat";
 import { get, syncGet } from "./http-client";
 import type { SchemaObject } from "./types";
+import * as meta from "../meta.ts";
 
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
@@ -133,7 +134,7 @@ function loadJsonFromURL<T>(
     jsonFileName = `${jsonFileName}.json`;
   }
   const jsonFilePath = path.join(
-    __dirname,
+    import.meta.dirname,
     `../../.cached_schemastore/${jsonFileName}`,
   );
 
@@ -153,7 +154,15 @@ function loadJsonFromURL<T>(
         timestamp: number;
       });
   } catch {
-    // ignore
+    try {
+      const jsonText = fs.readFileSync(jsonFilePath, "utf-8");
+      ({ data, timestamp } = JSON.parse(jsonText) as {
+        data: SchemaObject;
+        timestamp: number;
+      });
+    } catch {
+      // ignore
+    }
   }
 
   if (data != null && typeof timestamp === "number") {
@@ -217,11 +226,10 @@ function postProcess<T>(
     schemaStringify({
       data,
       timestamp: Date.now(),
-      // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
-      v: require("../../package.json").version,
+      v: meta.version,
     }),
   );
-  delete require.cache[jsonFilePath];
+  if (typeof require !== "undefined") delete require.cache[jsonFilePath];
 
   return data;
 }

@@ -2,12 +2,17 @@ import path from "path";
 import { getRuleTester } from "eslint-compat-utils/rule-tester";
 import rule from "../../../src/rules/no-invalid";
 import { loadTestCases } from "../../utils/utils";
+import * as jsonParser from "jsonc-eslint-parser";
+import * as tomlParser from "toml-eslint-parser";
+// @ts-expect-error -- missing types
+import * as espree from "espree";
+
 // eslint-disable-next-line @typescript-eslint/naming-convention -- class name
 const RuleTester = getRuleTester();
 const tester = new RuleTester({
   languageOptions: {
     /* eslint @typescript-eslint/no-require-imports: 0 -- ignore */
-    parser: require("jsonc-eslint-parser"),
+    parser: jsonParser,
     ecmaVersion: 2020,
     sourceType: "module",
   },
@@ -22,10 +27,10 @@ tester.run(
     {
       valid: [
         {
-          filename: path.join(__dirname, ".eslintrc.js"),
+          filename: path.join(import.meta.dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ require.resolve("eslint-config-foo") ] }',
           languageOptions: {
-            parser: require("espree"),
+            parser: espree,
           },
           options: [
             {
@@ -70,10 +75,10 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, ".eslintrc.js"),
+          filename: path.join(import.meta.dirname, ".eslintrc.js"),
           code: 'module.exports = { "extends": [ 42 ] }',
           languageOptions: {
-            parser: require("espree"),
+            parser: espree,
           },
           options: [
             {
@@ -93,7 +98,7 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, ".eslintrc.json"),
+          filename: path.join(import.meta.dirname, ".eslintrc.json"),
           code: '{ "extends": [ 98 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -122,7 +127,7 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, "version.json"),
+          filename: path.join(import.meta.dirname, "version.json"),
           code: '{ "extends": [ 99 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -154,7 +159,7 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, "version.json"),
+          filename: path.join(import.meta.dirname, "version.json"),
           code: '{ "extends": [ 100 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -183,7 +188,7 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, "version.json"),
+          filename: path.join(import.meta.dirname, "version.json"),
           code: '{ "extends": [ 101 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -212,7 +217,7 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, "version.json"),
+          filename: path.join(import.meta.dirname, "version.json"),
           code: '{ "extends": [ 102 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -240,7 +245,7 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, "version.json"),
+          filename: path.join(import.meta.dirname, "version.json"),
           code: '{ "extends": [ 103 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -264,7 +269,7 @@ tester.run(
           errors: ["Root must have required property 'foo'."],
         },
         {
-          filename: path.join(__dirname, "version.json"),
+          filename: path.join(import.meta.dirname, "version.json"),
           code: '{ "extends": [ 104 ], "$schema": "https://www.schemastore.org/eslintrc" }',
           options: [
             {
@@ -279,14 +284,14 @@ tester.run(
           ],
         },
         {
-          filename: path.join(__dirname, ".prettierrc.toml"),
+          filename: path.join(import.meta.dirname, ".prettierrc.toml"),
           code: `
 trailingComma = "es3"
 tabWidth = 4
 semi = false
 singleQuote = true`,
           languageOptions: {
-            parser: require("toml-eslint-parser"),
+            parser: tomlParser,
           },
           options: [
             {

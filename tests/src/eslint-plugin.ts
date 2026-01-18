@@ -8,7 +8,7 @@ import { getESLint } from "eslint-compat-utils/eslint";
 // -----------------------------------------------------------------------------
 
 const TEST_FIXTURES_ROOT = path.join(
-  __dirname,
+  import.meta.dirname,
   "../fixtures/integrations/eslint-plugin",
 );
 

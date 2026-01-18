@@ -1,17 +1,29 @@
 import type { RequestOptions } from "https";
+import defaultClient from "./get-modules/http.ts";
+import { createRequire } from "module";
 
 /**
  * GET Method
  */
-export function get(
+export async function get(
   url: string,
   options?: RequestOptions,
   httpModulePath?: string,
 ): Promise<string> {
   const client = httpModulePath
-    ? // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-      require(httpModulePath)
-    : // eslint-disable-next-line @typescript-eslint/no-require-imports -- ignore
-      require("./get-modules/http");
+    ? await loadModule(httpModulePath)
+    : defaultClient;
   return client.default ? client.default(url, options) : client(url, options);
+}
+
+/**
+ * Load module by path
+ */
+function loadModule(modulePath: string) {
+  try {
+    const require = createRequire(import.meta.filename);
+    return require(modulePath);
+  } catch {
+    return import(modulePath);
+  }
 }
