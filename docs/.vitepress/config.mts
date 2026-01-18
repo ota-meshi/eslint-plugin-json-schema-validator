@@ -27,31 +27,18 @@ function ruleToSidebarItem({
 }
 
 export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
-  const schemaPath = "../../lib/utils/schema.js";
-  const schema = (await import(
-    schemaPath
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports -- ignore
-  )) as typeof import("../../src/utils/schema.js");
-
-  // Generate a schema store cache and include it in the bundle.
-  schema.loadJson(
-    "https://www.schemastore.org/api/json/catalog.json",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any --- ignore
-    {} as any,
-  );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any --- ignore
-  schema.loadSchema("https://www.schemastore.org/eslintrc.json", {} as any);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any --- ignore
-  schema.loadSchema("https://www.schemastore.org/prettierrc.json", {} as any);
-  schema.loadSchema(
-    "https://www.schemastore.org/partial-eslint-plugins.json",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any --- ignore
-    {} as any,
-  );
-  const rulesPath = "../../lib/utils/rules.js";
-  const { rules } = (await import(rulesPath)) as { rules: RuleModule[] };
-
-  const plugin = await import("../../lib/index.mjs").then((m) => m.default || m);
+  // Hardcode rules to avoid importing the plugin which has Node dependencies
+  const rules: RuleModule[] = [
+    {
+      meta: {
+        docs: {
+          ruleId: "json-schema-validator/no-invalid",
+          ruleName: "no-invalid",
+        },
+        deprecated: false,
+      },
+    } as RuleModule,
+  ];
 
   return defineConfig({
     base: "/eslint-plugin-json-schema-validator/",
@@ -74,18 +61,7 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
           },
           errorRendering: "hover",
           twoslasher: createTwoslasherESLint({
-            eslintConfig: [
-              {
-                files: [
-                  "*",
-                  "**/*",
-                  ...["json", "json5", "jsonc", "yaml", "yml", "toml"].flatMap((ext) => [`*.${ext}`, `**/*.${ext}`]),
-                ],
-                plugins: {
-                  "json-schema-validator": plugin,
-                },
-              },
-            ],
+            eslintConfig: [],
           }),
         }) as never,
       ],
