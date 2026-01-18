@@ -5,7 +5,7 @@ export default defineConfig({
     index: "./src/index.ts",
     worker: "./src/utils/http-client/worker.ts",
   },
-  format: ["cjs"],
+  format: ["esm", "cjs"],
   platform: "node",
   dts: true,
   clean: true,

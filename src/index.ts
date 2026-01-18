@@ -22,8 +22,9 @@ const rules = ruleList.reduce(
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore
 // @ts-ignore
-export = {
+export default {
   meta,
   configs,
   rules,
 };
+export { meta, configs, rules };

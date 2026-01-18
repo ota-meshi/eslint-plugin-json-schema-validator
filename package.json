@@ -15,6 +15,14 @@
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
   "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs",
+      "default": "./lib/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "lib"
   ],
@@ -29,7 +37,6 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "build:ts": "tsc --project ./tsconfig.build.json",
     "clean": "rimraf .nyc_output dist coverage",
     "cover": "nyc --reporter=lcov yarn test",
     "docs:build": "yarn build && vitepress build docs",
@@ -37,6 +44,7 @@
     "docs:watch": "vitepress dev docs",
     "lint": "eslint .",
     "lint-fix": "yarn lint --fix",
+    "lint:ts": "tsc --project ./tsconfig.json",
     "mocha": "yarn ts node_modules/mocha/bin/mocha",
     "new": "yarn ts ./tools/new-rule",
     "prebuild": "yarn -s clean",
