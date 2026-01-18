@@ -83,54 +83,6 @@ export default [
           ],
         },
       ],
-
-      "no-restricted-properties": [
-        "error",
-        {
-          object: "context",
-          property: "getSourceCode",
-          message:
-            "Please use helper module's `getSourceCode(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "sourceCode",
-          message:
-            "Please use helper module's `getSourceCode(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "getFilename",
-          message: "Please use helper module's `getFilename(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "filename",
-          message: "Please use helper module's `getFilename(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "getCwd",
-          message: "Please use helper module's `getCwd(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "cwd",
-          message: "Please use helper module's `getCwd(context)` instead.",
-        },
-        {
-          object: "context",
-          property: "getScope",
-          message:
-            "Please use helper module's `getSourceCode(context).getScope()` instead.",
-        },
-        {
-          object: "context",
-          property: "parserServices",
-          message:
-            "Please use helper module's `getSourceCode(context).parserServices` instead.",
-        },
-      ],
     },
   },
   {

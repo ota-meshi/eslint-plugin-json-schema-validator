@@ -9,7 +9,6 @@ import type {
 import { analyzeJsAST } from "../../../../src/utils/ast/js/index.ts";
 import type { AST } from "vue-eslint-parser";
 import type { SourceCode } from "../../../../src/types.ts";
-import { getSourceCode } from "../../../../src/utils/compat.ts";
 // @ts-expect-error -- missing types
 import * as espree from "espree";
 
@@ -43,7 +42,7 @@ describe("AST for JS.", () => {
                           node.declaration.range,
                           context as never,
                         )!,
-                        getSourceCode(context) as never,
+                        context.sourceCode as never,
                       );
                     },
                   };
