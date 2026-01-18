@@ -101,14 +101,12 @@ export default [
         {
           object: "context",
           property: "getFilename",
-          message:
-            "Please use helper module's `getFilename(context)` instead.",
+          message: "Please use helper module's `getFilename(context)` instead.",
         },
         {
           object: "context",
           property: "filename",
-          message:
-            "Please use helper module's `getFilename(context)` instead.",
+          message: "Please use helper module's `getFilename(context)` instead.",
         },
         {
           object: "context",

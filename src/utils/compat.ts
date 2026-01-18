@@ -9,6 +9,7 @@ export function getSourceCode(context: Rule.RuleContext): ESLintSourceCode;
 export function getSourceCode(
   context: RuleContext | Rule.RuleContext,
 ): SourceCode | ESLintSourceCode {
+  // eslint-disable-next-line no-restricted-properties -- This is the helper function itself
   return context.sourceCode as never;
 }
 
@@ -16,6 +17,7 @@ export function getSourceCode(
  * Gets the value of `context.filename`.
  */
 export function getFilename(context: RuleContext | Rule.RuleContext): string {
+  // eslint-disable-next-line no-restricted-properties -- This is the helper function itself
   return context.filename;
 }
 
@@ -23,5 +25,6 @@ export function getFilename(context: RuleContext | Rule.RuleContext): string {
  * Gets the value of `context.cwd`.
  */
 export function getCwd(context: RuleContext | Rule.RuleContext): string {
+  // eslint-disable-next-line no-restricted-properties -- This is the helper function itself
   return context.cwd;
 }
