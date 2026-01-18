@@ -25,11 +25,11 @@ function ruleToSidebarItem({
 }
 
 export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
-  const schemaPath = "../../lib/utils/schema.js";
+  const schemaPath = "../../lib/utils/schema.mjs";
   const schema = (await import(
     schemaPath
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports -- ignore
-  )) as typeof import("../../src/utils/schema.js");
+  )) as typeof import("../../src/utils/schema.ts");
 
   // Generate a schema store cache and include it in the bundle.
   schema.loadJson(
@@ -46,8 +46,10 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any --- ignore
     {} as any,
   );
-  const rulesPath = "../../lib/utils/rules.js";
-  const { rules } = (await import(rulesPath)) as { rules: RuleModule[] };
+  const pluginPath = "../../lib/index.mjs";
+  const rules = Object.values(
+    ((await import(pluginPath)) as { rules: Record<string, RuleModule> }).rules,
+  );
   return defineConfig({
     base: "/eslint-plugin-json-schema-validator/",
     title: "eslint-plugin-json-schema-validator",
@@ -69,6 +71,7 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
           synckit: path.join(dirname, "./shim/synckit.mjs"),
           "tunnel-agent": path.join(dirname, "./shim/tunnel-agent.mjs"),
           events: path.join(dirname, "./build-system/shim/events.mjs"),
+          url: path.join(dirname, "./shim/url.mjs"),
         },
       },
       define: {

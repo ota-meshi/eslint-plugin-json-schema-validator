@@ -4,6 +4,8 @@ export default defineConfig({
   entry: {
     index: "./src/index.ts",
     worker: "./src/utils/http-client/worker.ts",
+    // For our site
+    "utils/schema": "./src/utils/schema.ts",
   },
   format: ["esm", "cjs"],
   platform: "node",
