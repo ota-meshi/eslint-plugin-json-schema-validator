@@ -123,6 +123,7 @@
     "prettier": "^3.0.0",
     "prettier-plugin-pkg": "^0.21.0",
     "request": "^2.88.2",
+    "rimraf": "^6.1.2",
     "semver": "^7.3.2",
     "stylelint": "^17.0.0",
     "stylelint-config-recommended-vue": "^1.0.0",
