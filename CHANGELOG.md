@@ -1,5 +1,23 @@
 # eslint-plugin-json-schema-validator
 
+## 6.0.0
+
+### Major Changes
+
+- [#449](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/449) [`3de7aa3`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/3de7aa39c53c5949dc0a7daae1b410b4684981b1) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Drop support for older ESLint versions. The new supported version is `>=9.38.0`.
+
+- [#451](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/451) [`2547aa8`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/2547aa8b5d2d6e2b9a5e95fd66d48272f2e1d499) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Drop support for legacy config. The plugin now exports flat configuration as the main configuration format. The previous `flat/*` namespace is kept for backward compatibility.
+
+- [#444](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/444) [`f817419`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/f8174196612c2a826679f6573762747a8f574adc) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Drop support for older Node.js versions. The new supported version is `^20.19.0 || ^22.13.0 || >=24`.
+
+- [#454](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/454) [`8ccc888`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/8ccc888d5fb7ae16b2dd974b3793557c77cb4bfa) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Change to ESM-only package. This package no longer provides CommonJS exports and only supports ESM (ECMAScript modules).
+
+- [#457](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/457) [`9c4d7b0`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/9c4d7b0d6ecd08f29a7d92c68d3ebdb7747d8be4) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Organize package dependencies:
+  - Remove `eslint-compat-utils` dependency and use native ESLint 9 APIs instead
+  - Limit `minimatch` dependency to version 10 only (remove version 9 support)
+  - Update `toml-eslint-parser` from ^0.12.0 to ^1.0.0
+  - Update `yaml-eslint-parser` from ^1.0.0 to ^2.0.0
+
 ## 5.5.1
 
 ### Patch Changes
