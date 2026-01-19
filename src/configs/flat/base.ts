@@ -8,7 +8,7 @@ export default [
     plugins: {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- plugin name
       get "json-schema-validator"(): ESLint.Plugin {
-        return plugin as ESLint.Plugin;
+        return plugin;
       },
     },
   },
