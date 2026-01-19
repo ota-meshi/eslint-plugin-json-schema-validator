@@ -33,18 +33,18 @@ jobs:
           node-version: "lts/*"
 
       - name: Install Dependencies
-        run: yarn --ignore-engines
+        run: npm install
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
           # this expects you to have a npm script called version that runs some logic and then calls `changeset version`.
-          version: yarn version:ci
+          version: npm run version:ci
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: yarn release
+          publish: npm run release
           commit: "chore: release eslint-plugin-json-schema-validator"
           title: "chore: release eslint-plugin-json-schema-validator"
         env:
