@@ -29,10 +29,10 @@ jobs:
         with:
           node-version: lts/*
       - name: Install Packages
-        run: yarn
+        run: npm install
       - name: Build docs
         run: |+
-          yarn docs:build
+          npm run docs:build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

@@ -22,11 +22,11 @@ jobs:
       - uses: actions/cache@v5
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.ref }}
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.ref }}
       - name: Install Packages
-        run: yarn
+        run: npm install
       - name: Lint
-        run: yarn lint
+        run: npm run lint
   test:
     strategy:
       matrix:
@@ -45,9 +45,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Packages
-        run: yarn --ignore-engines
+        run: npm install
       - name: Test
-        run: yarn test
+        run: npm test
   test-and-coverage:
     runs-on: ubuntu-latest
     steps:
@@ -56,10 +56,10 @@ jobs:
         with:
           node-version: lts/*
       - name: Install Packages
-        run: yarn
+        run: npm install
       - name: Test
         run: |
-          yarn cover
+          npm run cover
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2
         with:

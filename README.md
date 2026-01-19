@@ -215,8 +215,8 @@ Please use GitHub's Issues/PRs.
 
 ### Development Tools
 
-- `yarn test` runs tests and measures coverage.
-- `yarn update` runs in order to update readme and recommended configuration.
+- `npm test` runs tests and measures coverage.
+- `npm run update` runs in order to update readme and recommended configuration.
 
 ### Working With Rules
 
