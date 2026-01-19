@@ -2,14 +2,10 @@ import type { DefaultTheme, UserConfig } from "vitepress";
 import { defineConfig } from "vitepress";
 import path from "path";
 import { fileURLToPath } from "url";
-import eslint4b from "vite-plugin-eslint4b";
-import { viteCommonjs } from "./vite-plugin.mjs";
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
 import { createTwoslasher as createTwoslasherESLint } from "twoslash-eslint";
 import type { TwoslashGenericFunction } from "twoslash-protocol";
 import * as jsoncParser from "jsonc-eslint-parser";
-
-import "./build-system/build.mts";
 
 type RuleModule = {
   meta: { docs: { ruleId: string; ruleName: string }; deprecated?: boolean };
@@ -103,34 +99,9 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
       ],
     },
 
-    vite: {
-      plugins: [viteCommonjs(), eslint4b()],
-      resolve: {
-        alias: {
-          "vue-eslint-parser": path.join(
-            dirname,
-            "./build-system/shim/vue-eslint-parser.mjs",
-          ),
-          module: path.join(dirname, "./shim/module.mjs"),
-          fs: path.join(dirname, "./shim/fs.mjs"),
-          synckit: path.join(dirname, "./shim/synckit.mjs"),
-          "tunnel-agent": path.join(dirname, "./shim/tunnel-agent.mjs"),
-          events: path.join(dirname, "./build-system/shim/events.mjs"),
-        },
-      },
-      define: {
-        "process.env.NODE_DEBUG": "false",
-        "process.platform": JSON.stringify(process.platform),
-        "process.version": JSON.stringify(process.version),
-      },
-      optimizeDeps: {
-        // exclude: ["vue-eslint-parser"],
-      },
-    },
-
     lastUpdated: true,
     themeConfig: {
-      siteTitle: "eslint-plugin-\njson-schema-validator",
+      siteTitle: "eslint-plugin-<wbr>json-schema-validator",
       search: {
         provider: "local",
         options: {
