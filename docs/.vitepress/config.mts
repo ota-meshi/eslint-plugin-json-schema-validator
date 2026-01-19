@@ -91,7 +91,9 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
             });
             return (code: string, filename: string | undefined) => {
               // Try to extract defined filename from the code block
-              const definedFilename = /File name is "([^"]*)"/iu.exec(code)?.[1];
+              const definedFilename = /file name is "([^"]*)"/iu.exec(
+                code,
+              )?.[1];
               return twoslasher(code, definedFilename ?? filename);
             };
           })(),
