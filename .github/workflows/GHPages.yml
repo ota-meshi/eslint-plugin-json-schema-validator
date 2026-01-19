@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: lts/*
       - name: Install Packages
-        run: npm ci
+        run: npm install
       - name: Build docs
         run: |+
           npm run docs:build
