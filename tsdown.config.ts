@@ -13,4 +13,5 @@ export default defineConfig({
   treeshake: {
     moduleSideEffects: false,
   },
+  external: ["@eslint/core"],
 });

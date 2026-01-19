@@ -4,6 +4,7 @@ import base from "./configs/flat/base.ts";
 import recommended from "./configs/flat/recommended.ts";
 import * as meta from "./meta.ts";
 import type { Linter } from "eslint";
+import type { RuleDefinition } from "@eslint/core";
 
 const configs = {
   base: base as Linter.Config[],
@@ -19,7 +20,7 @@ const rules = ruleList.reduce(
     return obj;
   },
   {} as { [key: string]: RuleModule },
-);
+) as Record<string, RuleDefinition>;
 
 export default {
   meta,

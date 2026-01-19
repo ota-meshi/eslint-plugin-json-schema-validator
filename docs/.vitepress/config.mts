@@ -6,6 +6,8 @@ import eslint4b from "vite-plugin-eslint4b";
 import { viteCommonjs } from "./vite-plugin.mjs";
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
 import { createTwoslasher as createTwoslasherESLint } from "twoslash-eslint";
+import type { TwoslashGenericFunction } from "twoslash-protocol";
+import * as jsoncParser from "jsonc-eslint-parser";
 
 import "./build-system/build.mts";
 
@@ -28,10 +30,8 @@ function ruleToSidebarItem({
 
 export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
   // Import from lib (built version) to avoid TypeScript/synckit issues
-  const { rules: rulesObj, default: plugin } = await import(
-    "../../lib/index.mjs"
-  );
-  const rules = Object.values(rulesObj) as RuleModule[];
+  const { default: plugin } = await import("../../lib/index.mjs");
+  const rules = Object.values(plugin.rules) as unknown as RuleModule[];
 
   return defineConfig({
     base: "/eslint-plugin-json-schema-validator/",
@@ -54,27 +54,51 @@ export default async (): Promise<UserConfig<DefaultTheme.Config>> => {
               lang === "toml" ||
               lang === "js"
             ) {
-              return code.includes("eslint");
+              return /\beslint\s/u.test(code);
             }
             return false;
           },
           errorRendering: "hover",
-          twoslasher: createTwoslasherESLint({
-            eslintConfig: [
-              {
-                files: [
-                  "*",
-                  "**/*",
-                  ...["json", "json5", "jsonc", "yaml", "yml", "toml", "js"].flatMap(
-                    (ext) => [`*.${ext}`, `**/*.${ext}`],
-                  ),
-                ],
-                plugins: {
-                  "json-schema-validator": plugin,
+          twoslasher: ((): TwoslashGenericFunction => {
+            const twoslasher = createTwoslasherESLint({
+              eslintConfig: [
+                {
+                  files: [
+                    "*",
+                    "**/*",
+                    ...[
+                      "json",
+                      "json5",
+                      "jsonc",
+                      "yaml",
+                      "yml",
+                      "toml",
+                      "js",
+                    ].flatMap((ext) => [`*.${ext}`, `**/*.${ext}`]),
+                  ],
+                  plugins: {
+                    "json-schema-validator": plugin,
+                  },
                 },
-              },
-            ],
-          }),
+                {
+                  files: [
+                    ...["json", "json5", "jsonc"].flatMap((ext) => [
+                      `*.${ext}`,
+                      `**/*.${ext}`,
+                    ]),
+                  ],
+                  languageOptions: {
+                    parser: jsoncParser,
+                  },
+                },
+              ],
+            });
+            return (code: string, filename: string | undefined) => {
+              // Try to extract defined filename from the code block
+              const definedFilename = /File name is "([^"]*)"/u.exec(code)?.[1];
+              return twoslasher(code, definedFilename ?? filename);
+            };
+          })(),
         }) as never,
       ],
     },
