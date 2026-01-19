@@ -1,5 +1,5 @@
 ---
-"eslint-plugin-json-schema-validator": patch
+"eslint-plugin-json-schema-validator": major
 ---
 
 Organize package dependencies:
