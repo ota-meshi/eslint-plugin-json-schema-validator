@@ -22,7 +22,7 @@ function yamlValue(val: unknown) {
   return val;
 }
 
-const ROOT = path.resolve(__dirname, "../docs/rules");
+const ROOT = path.resolve(import.meta.dirname, "../docs/rules");
 
 //eslint-disable-next-line jsdoc/require-jsdoc -- tools
 function pickSince(content: string): string | null | Promise<string> {

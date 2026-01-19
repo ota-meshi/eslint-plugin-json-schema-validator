@@ -19,7 +19,7 @@ ${rules
     (rule) =>
       `import ${camelCase(rule.meta.docs.ruleName)} from "../rules/${
         rule.meta.docs.ruleName
-      }"`,
+      }.ts"`,
   )
   .join("\n")}
 
@@ -28,7 +28,7 @@ export const rules = [
 ] as RuleModule[]
 `;
 
-const filePath = path.resolve(__dirname, "../src/utils/rules.ts");
+const filePath = path.resolve(import.meta.dirname, "../src/utils/rules.ts");
 
 if (isWin) {
   content = content

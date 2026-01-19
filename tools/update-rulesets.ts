@@ -12,7 +12,7 @@ const FLAT_RULESET_NAME = {
 for (const rec of ["recommended"] as const) {
   let content = `
 import type { Linter } from "eslint";
-import base from './base';
+import base from "./base.ts";
 export default [
   ...base,
   {
@@ -32,10 +32,10 @@ export default [
         .join(",\n")}
     },
   }
-] satisfies Linter.FlatConfig[]
+] satisfies Linter.Config[]
 `;
 
-  const filePath = path.resolve(__dirname, FLAT_RULESET_NAME[rec]);
+  const filePath = path.resolve(import.meta.dirname, FLAT_RULESET_NAME[rec]);
 
   if (isWin) {
     content = content

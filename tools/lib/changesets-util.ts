@@ -5,7 +5,7 @@ import { getPackages } from "@manypkg/get-packages";
 import { readPreState } from "@changesets/pre";
 import path from "path";
 
-const root = path.resolve(__dirname, "../..");
+const root = path.resolve(import.meta.dirname, "../..");
 
 /** Get new version string from changesets */
 export async function getNewVersion(): Promise<string> {

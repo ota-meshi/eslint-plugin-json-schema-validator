@@ -16,13 +16,22 @@ const logger = console;
     return;
   }
 
-  const ruleFile = path.resolve(__dirname, `../src/rules/${ruleId}.ts`);
-  const testFile = path.resolve(__dirname, `../tests/src/rules/${ruleId}.ts`);
+  const ruleFile = path.resolve(
+    import.meta.dirname,
+    `../src/rules/${ruleId}.ts`,
+  );
+  const testFile = path.resolve(
+    import.meta.dirname,
+    `../tests/src/rules/${ruleId}.ts`,
+  );
   const fixturesRoot = path.resolve(
-    __dirname,
+    import.meta.dirname,
     `../tests/fixtures/rules/${ruleId}/`,
   );
-  const docFile = path.resolve(__dirname, `../docs/rules/${ruleId}.md`);
+  const docFile = path.resolve(
+    import.meta.dirname,
+    `../docs/rules/${ruleId}.md`,
+  );
   try {
     fs.mkdirSync(fixturesRoot);
     fs.mkdirSync(path.resolve(fixturesRoot, "valid"));
