@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.0.1
+
+### Patch Changes
+
+- [#464](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/464) [`43f97b2`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/43f97b2b4ed2d0e6d3497cbaf3282e717d0b3934) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: update createRequire to use import.meta.url for module loading
+
 ## 6.0.0
 
 ### Major Changes
