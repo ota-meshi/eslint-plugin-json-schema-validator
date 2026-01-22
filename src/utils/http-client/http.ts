@@ -27,7 +27,7 @@ async function loadModule(modulePath: string) {
       ? pathToFileURL(modulePath).href
       : modulePath;
   try {
-    const require = createRequire(import.meta.filename);
+    const require = createRequire(import.meta.url);
     return require(adjustedPath);
   } catch {
     return await import(adjustedPath);

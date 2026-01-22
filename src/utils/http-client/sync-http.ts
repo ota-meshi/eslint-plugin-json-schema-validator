@@ -3,9 +3,8 @@ import { createRequire } from "module";
 import path from "path";
 import { createSyncFn } from "synckit";
 
-const filename = import.meta.filename;
-const require = createRequire(filename);
-const ext = path.extname(filename);
+const require = createRequire(import.meta.url);
+const ext = path.extname(import.meta.filename);
 const getSync = createSyncFn(require.resolve(`./worker${ext}`));
 
 /**
