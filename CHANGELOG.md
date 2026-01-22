@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.0.2
+
+### Patch Changes
+
+- [#467](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/467) [`1c15fe2`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/1c15fe2034b9808293c6af7b8501ba598ed9dc8f) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: update ext calculation to use fileURLToPath for import.meta.url
+
 ## 6.0.1
 
 ### Patch Changes
