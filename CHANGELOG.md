@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.0.3
+
+### Patch Changes
+
+- [#470](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/470) [`aa17118`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/aa17118095eae5cb279e5c9784b16c8cb36e7f8c) Thanks [@renovate](https://github.com/apps/renovate)! - fix: not working with Node v20.19.0
+
 ## 6.0.2
 
 ### Patch Changes
