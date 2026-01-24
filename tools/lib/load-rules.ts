@@ -1,4 +1,5 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import type { RuleModule } from "../../src/types";
 
@@ -8,7 +9,10 @@ import type { RuleModule } from "../../src/types";
  */
 async function readRules() {
   const rules: RuleModule[] = [];
-  const rulesLibRoot = path.resolve(import.meta.dirname, "../../src/rules");
+  const rulesLibRoot = path.resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    "../../src/rules",
+  );
   for (const name of fs
     .readdirSync(rulesLibRoot)
     .filter((n) => n.endsWith(".ts"))) {

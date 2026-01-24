@@ -1,4 +1,5 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import os from "os";
 // import eslint from "eslint"
@@ -35,7 +36,10 @@ export default [
 ] satisfies Linter.Config[]
 `;
 
-  const filePath = path.resolve(import.meta.dirname, FLAT_RULESET_NAME[rec]);
+  const filePath = path.resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    FLAT_RULESET_NAME[rec],
+  );
 
   if (isWin) {
     content = content

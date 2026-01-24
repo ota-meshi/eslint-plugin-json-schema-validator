@@ -1,6 +1,7 @@
 /* globals process, require -- test */
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import type { RuleTester } from "eslint";
 import { Linter } from "eslint";
 import * as jsoncESLintParser from "jsonc-eslint-parser";
@@ -74,11 +75,11 @@ export function loadTestCases(
   invalid: RuleTester.InvalidTestCase[];
 } {
   const validFixtureRoot = path.resolve(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../fixtures/rules/${ruleName}/valid/`,
   );
   const invalidFixtureRoot = path.resolve(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../fixtures/rules/${ruleName}/invalid/`,
   );
 

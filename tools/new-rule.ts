@@ -1,4 +1,5 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import cp from "child_process";
 const logger = console;
@@ -17,19 +18,19 @@ const logger = console;
   }
 
   const ruleFile = path.resolve(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../src/rules/${ruleId}.ts`,
   );
   const testFile = path.resolve(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../tests/src/rules/${ruleId}.ts`,
   );
   const fixturesRoot = path.resolve(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../tests/fixtures/rules/${ruleId}/`,
   );
   const docFile = path.resolve(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../docs/rules/${ruleId}.md`,
   );
   try {

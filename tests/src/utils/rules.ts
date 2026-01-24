@@ -1,10 +1,10 @@
 import type { RuleModule } from "../../../src/types.ts";
 import assert from "assert";
-import path from "path";
+import path, { dirname } from "path";
 import fs from "fs";
 
 import { rules as allRules } from "../../../src/utils/rules.ts";
-import { pathToFileURL } from "url";
+import { pathToFileURL, fileURLToPath } from "url";
 
 /**
  * @returns {Array} Get the list of rules placed in the directory.
@@ -12,7 +12,10 @@ import { pathToFileURL } from "url";
 async function getDirRules() {
   const rules: { [key: string]: RuleModule } = {};
 
-  const rulesRoot = path.resolve(import.meta.dirname, "../../../src/rules");
+  const rulesRoot = path.resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    "../../../src/rules",
+  );
   for (const filename of fs
     .readdirSync(rulesRoot)
     .filter((n) => n.endsWith(".ts"))) {

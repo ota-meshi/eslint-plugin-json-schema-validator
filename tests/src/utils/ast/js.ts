@@ -1,5 +1,6 @@
 import assert from "assert";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import { Linter } from "eslint";
 import type {
@@ -13,7 +14,7 @@ import type { SourceCode } from "../../../../src/types.ts";
 import * as espree from "espree";
 
 const FIXTURES_ROOT = path.join(
-  import.meta.dirname,
+  dirname(fileURLToPath(import.meta.url)),
   "../../../fixtures/utils/ast/js",
 );
 

@@ -1,4 +1,5 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import os from "os";
 // import eslint from "eslint"
@@ -28,7 +29,10 @@ export const rules = [
 ] as RuleModule[]
 `;
 
-const filePath = path.resolve(import.meta.dirname, "../src/utils/rules.ts");
+const filePath = path.resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../src/utils/rules.ts",
+);
 
 if (isWin) {
   content = content

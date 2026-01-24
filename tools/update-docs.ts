@@ -1,4 +1,5 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import { rules } from "../src/utils/rules";
 import type { RuleModule } from "../src/types";
@@ -22,7 +23,10 @@ function yamlValue(val: unknown) {
   return val;
 }
 
-const ROOT = path.resolve(import.meta.dirname, "../docs/rules");
+const ROOT = path.resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../docs/rules",
+);
 
 //eslint-disable-next-line jsdoc/require-jsdoc -- tools
 function pickSince(content: string): string | null | Promise<string> {
