@@ -1,10 +1,11 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import fs from "fs";
 import renderRulesTableContent from "./render-rules";
 
 // -----------------------------------------------------------------------------
 const readmeFilePath = path.resolve(
-  import.meta.dirname,
+  dirname(fileURLToPath(import.meta.url)),
   "../docs/rules/index.md",
 );
 fs.writeFileSync(

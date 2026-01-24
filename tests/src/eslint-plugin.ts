@@ -1,4 +1,5 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import assert from "assert";
 import plugin from "../../src/index.ts";
 import { ESLint } from "eslint";
@@ -8,7 +9,7 @@ import { ESLint } from "eslint";
 // -----------------------------------------------------------------------------
 
 const TEST_FIXTURES_ROOT = path.join(
-  import.meta.dirname,
+  dirname(fileURLToPath(import.meta.url)),
   "../fixtures/integrations/eslint-plugin",
 );
 

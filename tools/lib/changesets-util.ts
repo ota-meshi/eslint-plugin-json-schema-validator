@@ -3,9 +3,10 @@ import readChangesets from "@changesets/read";
 import { read } from "@changesets/config";
 import { getPackages } from "@manypkg/get-packages";
 import { readPreState } from "@changesets/pre";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
-const root = path.resolve(import.meta.dirname, "../..");
+const root = path.resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 /** Get new version string from changesets */
 export async function getNewVersion(): Promise<string> {

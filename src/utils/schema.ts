@@ -1,7 +1,8 @@
 import debugBuilder from "debug";
 import fs from "fs";
 import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 import type { RuleContext } from "../types.ts";
 import { get, syncGet } from "./http-client/index.ts";
@@ -130,7 +131,7 @@ function loadJsonFromURL<T>(
     jsonFileName = `${jsonFileName}.json`;
   }
   const jsonFilePath = path.join(
-    import.meta.dirname,
+    dirname(fileURLToPath(import.meta.url)),
     `../../.cached_schemastore/${jsonFileName}`,
   );
 
