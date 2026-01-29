@@ -72,7 +72,7 @@
     "yaml-eslint-parser": "^2.0.0"
   },
   "devDependencies": {
-    "@actions/core": "^2.0.0",
+    "@actions/core": "^3.0.0",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.24.2",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.0.0",
