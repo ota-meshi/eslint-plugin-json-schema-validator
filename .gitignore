@@ -116,7 +116,7 @@ docs/.vitepress/cache
 /docs/**/*.html
 
 # cache
-/.cached_schemastore
+.cached_schemastore
 
 /yarn.lock
 
