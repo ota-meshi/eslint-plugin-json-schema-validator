@@ -8,7 +8,6 @@ import type { RuleContext } from "../types.ts";
 import { get, syncGet } from "./http-client/index.ts";
 import type { SchemaObject } from "./types.ts";
 import * as meta from "../meta.ts";
-import { createRequire } from "module";
 
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
@@ -143,9 +142,9 @@ function loadJsonFromURL<T>(
 
   fs.mkdirSync(path.dirname(jsonFilePath), { recursive: true });
 
-  const require = createRequire(import.meta.url);
   let data, timestamp;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- Resolved by tsdown
     ({ data, timestamp } = require(
       `../.cached_schemastore/${jsonFileName}`,
     ) as {
