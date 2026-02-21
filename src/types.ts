@@ -76,12 +76,11 @@ export interface RuleContext {
     customBlock?: AST.VElement;
   };
   getAncestors(): Node[];
-  getFilename(): string;
-  getPhysicalFilename?: () => string;
-  getSourceCode(): SourceCode;
+  filename: string;
+  physicalFilename: string;
+  sourceCode: SourceCode;
   report(descriptor: ReportDescriptor): void;
-  // eslint@6 does not have this method.
-  getCwd?: () => string;
+  cwd: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace -- for type

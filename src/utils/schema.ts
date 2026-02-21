@@ -8,6 +8,7 @@ import type { RuleContext } from "../types.ts";
 import { get, syncGet } from "./http-client/index.ts";
 import type { SchemaObject } from "./types.ts";
 import * as meta from "../meta.ts";
+import { createRequire } from "module";
 
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
@@ -132,7 +133,7 @@ function loadJsonFromURL<T>(
   }
   const jsonFilePath = path.join(
     dirname(fileURLToPath(import.meta.url)),
-    `../../.cached_schemastore/${jsonFileName}`,
+    `../.cached_schemastore/${jsonFileName}`,
   );
 
   const options = context.settings?.["json-schema-validator"]?.http;
@@ -142,14 +143,15 @@ function loadJsonFromURL<T>(
 
   fs.mkdirSync(path.dirname(jsonFilePath), { recursive: true });
 
+  const require = createRequire(import.meta.url);
   let data, timestamp;
   try {
-    ({ data, timestamp } =
-      // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- ignore
-      require(`../../.cached_schemastore/${jsonFileName}`) as {
-        data: SchemaObject;
-        timestamp: number;
-      });
+    ({ data, timestamp } = require(
+      `../.cached_schemastore/${jsonFileName}`,
+    ) as {
+      data: SchemaObject;
+      timestamp: number;
+    });
   } catch {
     try {
       const jsonText = fs.readFileSync(jsonFilePath, "utf-8");

@@ -6,7 +6,7 @@ import plugin from "./lib/index.mjs";
 export default [
   {
     ignores: [
-      ".cached_schemastore/",
+      "**/.cached_schemastore/",
       ".nyc_output/",
       "coverage/",
       "dist/",
