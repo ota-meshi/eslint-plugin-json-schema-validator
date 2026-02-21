@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.2.0
+
+### Minor Changes
+
+- [#480](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/480) [`9977e59`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/9977e5981eef32d1e7073762a2ea42aeb7df443d) Thanks [@ota-meshi](https://github.com/ota-meshi)! - fix: revert cache location
+
 ## 6.1.0
 
 ### Minor Changes
