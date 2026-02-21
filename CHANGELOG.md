@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.1.0
+
+### Minor Changes
+
+- [#474](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/474) [`79c0b8a`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/79c0b8a5fb3ffc38eebf9dc63f365ccc6ae1e583) Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update dependency jsonc-eslint-parser to v3
+
 ## 6.0.3
 
 ### Patch Changes
