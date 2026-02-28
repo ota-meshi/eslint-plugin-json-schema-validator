@@ -80,7 +80,7 @@
     "@eslint/js": "^10.0.0",
     "@ota-meshi/eslint-plugin": "^0.20.0",
     "@oxc-node/core": "^0.0.35",
-    "@shikijs/vitepress-twoslash": "^3.0.0",
+    "@shikijs/vitepress-twoslash": "^4.0.0",
     "@stylistic/stylelint-config": "^4.0.0",
     "@types/debug": "^4.1.5",
     "@types/eslint": "^9.0.0",
