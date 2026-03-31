@@ -112,7 +112,7 @@
     "espree": "^11.0.0",
     "mocha": "^11.0.0",
     "prettier": "^3.0.0",
-    "prettier-plugin-pkg": "^0.21.0",
+    "prettier-plugin-pkg": "^0.22.0",
     "request": "^2.88.2",
     "rimraf": "^6.1.2",
     "semver": "^7.3.2",
