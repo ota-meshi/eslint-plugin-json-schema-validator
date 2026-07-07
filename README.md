@@ -151,6 +151,10 @@ module.exports = {
         getModulePath: "",
         requestOptions: {},
       },
+      cache: {
+        path: "",
+        ttl: "1d",
+      },
     },
   },
 };
@@ -159,6 +163,9 @@ module.exports = {
 - `http` ... Settings to resolve schema URLs.
   - `getModulePath` ... Module path to `GET` the URL. The default implementation is [./src/utils/http-client/get-modules/http.ts](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/src/utils/http-client/get-modules/http.ts).
   - `requestOptions` ... Options used in the module.
+- `cache` ... Settings for the schemastore cache used when resolving remote schema URLs.
+  - `path` ... Directory to store cached schemas. A relative path is resolved against the current working directory; an absolute path is used as-is. When unset, the OS user cache directory is used (`$XDG_CACHE_HOME` / `~/.cache`, `~/Library/Caches`, or `%LOCALAPPDATA%`) under an `eslint-plugin-json-schema-validator` subfolder.
+  - `ttl` ... How long a cached schema is used before it is refetched. A number is milliseconds; a string is a duration such as `"30m"`, `"12h"`, `"1d"`, or `"2w"`. Defaults to 1 day. Use `0` to always refetch.
 
 #### Example of `http`
 
@@ -199,6 +206,25 @@ module.exports = {
           // Example of proxy settings.
           proxy: "http://my.proxy.com:8080/",
         },
+      },
+    },
+  },
+};
+```
+
+#### Example of `cache`
+
+Persist the cache to a directory that survives between runs (for example a mounted Docker volume), and refetch weekly:
+
+<!-- eslint-skip -->
+
+```js
+module.exports = {
+  settings: {
+    "json-schema-validator": {
+      cache: {
+        path: "/cache/eslint-json-schema-validator",
+        ttl: "1w",
       },
     },
   },
