@@ -54,6 +54,7 @@ This rule validates the file with JSON Schema and reports errors.
       ],
       useSchemastoreCatalog: true,
       mergeSchemas: true, // or ["$schema", "options", "catalog"]
+      validateFormats: false, // requires the `ajv-formats` package
     },
   ],
 }
@@ -64,6 +65,7 @@ This rule validates the file with JSON Schema and reports errors.
   - `schema` ... An object that defines a JSON schema. Or the path of the JSON schema file or URL.
 - `useSchemastoreCatalog` ... If `true`, it will automatically configure some schemas defined in [https://www.schemastore.org/api/json/catalog.json](https://www.schemastore.org/api/json/catalog.json). Default `true`
 - `mergeSchemas` ... If `true`, it will merge all schemas defined in `schemas`, at the `$schema` field within files, and the catalogue. If an array is given, it will merge only schemas from the given sources. Default `false`
+- `validateFormats` ... If `true`, validates the `format` keyword (for example `email`, `uri`, `date-time`). This requires you to install the [`ajv-formats`](https://github.com/ajv-validator/ajv-formats) package yourself (`npm install ajv-formats`). Default `false`
 
 This option can also be given a JSON schema file or URL. This is useful for configuring with the `/* eslint */` directive comments.
 
