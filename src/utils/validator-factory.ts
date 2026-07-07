@@ -10,6 +10,7 @@ import type {
 } from "./ajv.ts";
 import Ajv from "./ajv.ts";
 import { loadSchema } from "./schema.ts";
+import { loadAjvFormats, type AddFormats } from "./ajv-formats-loader.ts";
 import v6Schema from "ajv/lib/refs/json-schema-draft-06.json" with { type: "json" };
 
 // eslint-disable-next-line func-style -- ignore
@@ -27,21 +28,50 @@ const lazyRegExpEngine: RegExpEngine = (str, flags) => {
 };
 lazyRegExpEngine.code = "new RegExp";
 
-const ajv = new Ajv({
-  // schemaId: "auto",
-  allErrors: true,
-  verbose: true,
-  validateSchema: false,
-  // missingRefs: "ignore",
-  // extendRefs: "ignore",
-  logger: false,
-  strict: false,
-  code: {
-    regExp: lazyRegExpEngine,
-  },
-});
-// ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
-ajv.addMetaSchema(v6Schema);
+type AjvInstance = InstanceType<typeof Ajv>;
+
+/**
+ * Build a fresh Ajv instance with the plugin's standard configuration.
+ * When `validateFormats` is true, the optional `ajv-formats` package is
+ * loaded via `loadFormats` and registered on the instance.
+ */
+export function buildAjv(
+  validateFormats: boolean,
+  loadFormats: () => AddFormats = loadAjvFormats,
+): AjvInstance {
+  const instance = new Ajv({
+    // schemaId: "auto",
+    allErrors: true,
+    verbose: true,
+    validateSchema: false,
+    // missingRefs: "ignore",
+    // extendRefs: "ignore",
+    logger: false,
+    strict: false,
+    code: {
+      regExp: lazyRegExpEngine,
+    },
+  });
+  // ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
+  instance.addMetaSchema(v6Schema);
+  if (validateFormats) {
+    const addFormats = loadFormats();
+    addFormats(instance);
+  }
+  return instance;
+}
+
+const ajvCache = new Map<boolean, AjvInstance>();
+
+/** Get a cached Ajv instance for the given `validateFormats` setting. */
+function getAjv(validateFormats: boolean): AjvInstance {
+  let instance = ajvCache.get(validateFormats);
+  if (!instance) {
+    instance = buildAjv(validateFormats);
+    ajvCache.set(validateFormats, instance);
+  }
+  return instance;
+}
 
 /** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
 function unescapeFragment(str: string): string {
@@ -64,13 +94,16 @@ export function compile(
   schemaPath: string,
   context: RuleContext,
 ): Validator {
-  return schemaToValidator(schema, schemaPath, context);
+  const validateFormats = context.options[0]?.validateFormats === true;
+  const ajv = getAjv(validateFormats);
+  return schemaToValidator(ajv, schema, schemaPath, context);
 }
 
 /**
  * Build validator
  */
 function schemaToValidator(
+  ajv: AjvInstance,
   schema: SchemaObject,
   schemaPath: string,
   context: RuleContext,
@@ -100,7 +133,7 @@ function schemaToValidator(
         migrateToDraft7(schemaObject);
         continue;
       }
-      if (resolveError(e, schemaPath, schemaObject, context)) {
+      if (resolveError(ajv, e, schemaPath, schemaObject, context)) {
         continue;
       }
       // eslint-disable-next-line no-console -- log
@@ -123,6 +156,7 @@ function schemaToValidator(
  * Resolve Schema Error
  */
 function resolveError(
+  ajv: AjvInstance,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ignore
   error: any,
   baseSchemaPath: string,
@@ -162,7 +196,7 @@ function resolveError(
           try {
             ajv.addSchema(refSchema, schemaId);
           } catch (e) {
-            if (resolveError(e, schemaPath, refSchema, context)) {
+            if (resolveError(ajv, e, schemaPath, refSchema, context)) {
               continue;
             }
             throw e;
