@@ -56,7 +56,13 @@
     "version:ci": "env-cmd -e version-ci -- npm run update && changeset version"
   },
   "peerDependencies": {
-    "eslint": ">=9.38.0"
+    "eslint": ">=9.38.0",
+    "ajv-formats": "^2.0.0 || ^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ajv-formats": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@eslint-community/eslint-utils": "^4.3.0",
@@ -92,6 +98,7 @@
     "@types/semver": "^7.3.1",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.56.0",
+    "ajv-formats": "^3.0.1",
     "c8": "^11.0.0",
     "clean-pkg-json": "^1.2.1",
     "env-cmd": "^11.0.0",
