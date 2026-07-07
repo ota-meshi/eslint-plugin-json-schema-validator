@@ -155,4 +155,53 @@ describe("reduceErrors", () => {
       "outer losing string-branch dropped",
     );
   });
+
+  it("keeps the umbrella alone when no branch produced descendant errors", () => {
+    // Both branches pass, so ajv only emits the oneOf umbrella error
+    // (no per-branch descendant errors exist to reduce).
+    const errors = errorsFor(
+      { oneOf: [{ type: "object" }, { type: "object" }] },
+      { a: 1 },
+    );
+    assert.deepStrictEqual(project(reduceErrors(errors)), project(errors));
+    assert.deepStrictEqual(project(errors), [
+      {
+        path: "",
+        keyword: "oneOf",
+        params: { passingSchemas: [0, 1] },
+      },
+    ]);
+  });
+
+  it("handles 3+ branches (two identical + one differing)", () => {
+    const errors = errorsFor(
+      {
+        type: "object",
+        properties: {
+          v: {
+            anyOf: [
+              { type: "number" },
+              { type: "number" },
+              { type: "boolean" },
+            ],
+          },
+        },
+      },
+      { v: "str" },
+    );
+    assert.deepStrictEqual(project(reduceErrors(errors)), [
+      { path: "/v", keyword: "anyOf", params: {} },
+      { path: "/v", keyword: "type", params: { type: "number" } },
+    ]);
+  });
+
+  it("collapses 3 identical branch failures and drops the umbrella", () => {
+    const errors = errorsFor(
+      { anyOf: [{ type: "number" }, { type: "number" }, { type: "number" }] },
+      "str",
+    );
+    assert.deepStrictEqual(project(reduceErrors(errors)), [
+      { path: "", keyword: "type", params: { type: "number" } },
+    ]);
+  });
 });
