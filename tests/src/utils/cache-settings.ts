@@ -26,6 +26,10 @@ describe("parseTtl", () => {
   it("tolerates whitespace and case", () => {
     assert.strictEqual(parseTtl(" 12 H "), 12 * 60 * 60 * 1000);
   });
+  it("treats a bare-number string as raw milliseconds", () => {
+    assert.strictEqual(parseTtl("0"), 0);
+    assert.strictEqual(parseTtl("1500"), 1500);
+  });
   it("throws on an unrecognized string", () => {
     assert.throws(() => parseTtl("5x"), /Invalid cache\.ttl/u);
     assert.throws(() => parseTtl("abc"), /Invalid cache\.ttl/u);
