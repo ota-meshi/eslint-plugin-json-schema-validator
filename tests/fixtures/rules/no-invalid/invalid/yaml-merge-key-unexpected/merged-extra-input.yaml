@@ -1,0 +1,5 @@
+.base: &base
+  image: node
+  extra: nope
+job:
+  <<: *base

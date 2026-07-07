@@ -1,0 +1,8 @@
+.a: &a
+  image: node
+  stage: build
+.b: &b
+  image: ruby
+  stage: test
+job:
+  <<: [*a, *b]

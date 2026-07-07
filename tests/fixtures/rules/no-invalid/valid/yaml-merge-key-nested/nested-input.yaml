@@ -1,0 +1,6 @@
+.spec: &spec
+  image: node
+  stage: build
+job:
+  spec:
+    <<: *spec

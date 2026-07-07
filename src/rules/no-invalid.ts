@@ -11,6 +11,7 @@ import type { PathData } from "../utils/ast/index.ts";
 import {
   getJSONNodeFromPath,
   getYAMLNodeFromPath,
+  getStaticYAMLValueWithMerge,
   getTOMLNodeFromPath,
   analyzeJsAST,
 } from "../utils/ast/index.ts";
@@ -258,7 +259,7 @@ export default createRule("no-invalid", {
           });
         } else if (sourceCode.parserServices.isYAML) {
           const program = node as YAML.YAMLProgram;
-          validateData(getStaticYAMLValue(program), (error) => {
+          validateData(getStaticYAMLValueWithMerge(program), (error) => {
             return errorDataToLoc(getYAMLNodeFromPath(program, error.path));
           });
         } else if (sourceCode.parserServices.isTOML) {

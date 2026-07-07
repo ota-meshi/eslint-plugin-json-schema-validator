@@ -1,0 +1,26 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.yaml"],
+                    "schema": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "spec": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "useSchemastoreCatalog": false
+        }
+    ]
+}

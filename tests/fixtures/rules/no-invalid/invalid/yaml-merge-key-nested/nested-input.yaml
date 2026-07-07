@@ -1,0 +1,5 @@
+.base: &base
+  spec:
+    image: 123
+job:
+  <<: *base

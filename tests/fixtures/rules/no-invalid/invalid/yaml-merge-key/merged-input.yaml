@@ -1,0 +1,5 @@
+.base: &base
+  image: 123
+  stage: build
+job:
+  <<: *base

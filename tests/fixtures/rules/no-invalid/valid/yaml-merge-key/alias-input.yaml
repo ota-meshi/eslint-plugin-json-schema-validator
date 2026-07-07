@@ -1,0 +1,6 @@
+.base: &base
+  image: node
+  stage: build
+job:
+  <<: *base
+  stage: test

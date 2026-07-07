@@ -1,0 +1,8 @@
+.base: &base
+  image: node
+  stage: build
+.derived: &derived
+  <<: *base
+  stage: test
+job:
+  <<: *derived
