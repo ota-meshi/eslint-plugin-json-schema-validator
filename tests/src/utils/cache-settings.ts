@@ -4,7 +4,9 @@ import {
   DEFAULT_TTL,
   parseTtl,
   resolveCacheDir,
+  getCacheSettings,
 } from "../../../src/utils/cache-settings.ts";
+import type { RuleContext } from "../../../src/types.ts";
 import * as meta from "../../../src/meta.ts";
 
 describe("parseTtl", () => {
@@ -81,5 +83,30 @@ describe("resolveCacheDir", () => {
       dir,
       path.join("C:\\Users\\me\\AppData\\Local", meta.name),
     );
+  });
+});
+
+describe("getCacheSettings", () => {
+  it("resolves cacheDir and ttl from settings", () => {
+    const context = {
+      settings: {
+        "json-schema-validator": {
+          cache: { path: "/abs/cache", ttl: "1d" },
+        },
+      },
+      cwd: "/project",
+    } as unknown as RuleContext;
+    const result = getCacheSettings(context);
+    assert.strictEqual(result.cacheDir, "/abs/cache");
+    assert.strictEqual(result.ttl, 24 * 60 * 60 * 1000);
+  });
+  it("falls back to defaults when cache settings are absent", () => {
+    const context = {
+      settings: {},
+      cwd: "/project",
+    } as unknown as RuleContext;
+    const result = getCacheSettings(context);
+    assert.strictEqual(result.ttl, DEFAULT_TTL);
+    assert.ok(result.cacheDir.includes(meta.name));
   });
 });

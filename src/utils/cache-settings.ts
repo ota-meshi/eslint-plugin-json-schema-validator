@@ -2,6 +2,7 @@ import os from "os";
 import path from "path";
 
 import * as meta from "../meta.ts";
+import type { RuleContext } from "../types.ts";
 
 /** Default cache TTL: 1 day. */
 export const DEFAULT_TTL = 1000 * 60 * 60 * 24;
@@ -92,4 +93,21 @@ export function resolveCacheDir(
       : path.resolve(cwd, pathSetting);
   }
   return path.join(osCacheBaseDir(deps), meta.name);
+}
+
+/**
+ * Resolve the cache directory and TTL for a rule context.
+ * @param context - The ESLint rule context, whose `settings["json-schema-validator"].cache`
+ * (if present) supplies the raw `path` and `ttl` values.
+ * @returns The resolved absolute cache directory and TTL in milliseconds.
+ */
+export function getCacheSettings(context: RuleContext): {
+  cacheDir: string;
+  ttl: number;
+} {
+  const cache = context.settings?.["json-schema-validator"]?.cache;
+  return {
+    cacheDir: resolveCacheDir(cache?.path, context.cwd),
+    ttl: parseTtl(cache?.ttl),
+  };
 }
