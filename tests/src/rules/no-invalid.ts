@@ -427,6 +427,44 @@ singleQuote = true`,
           ],
           errors: ["Root must be object."],
         },
+        // mostSpecificErrorsOnly: ON — partial overlap (the issue's typo scenario):
+        // both branches agree `runn` is unexpected but each requires a different
+        // property, so the umbrella + best (lowest-index) branch are reported.
+        {
+          filename: "reduce-typo.json",
+          code: '{ "name": "t", "runn": "echo" }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["reduce-typo.json"],
+                  schema: {
+                    type: "object",
+                    oneOf: [
+                      {
+                        required: ["run"],
+                        properties: { run: {}, name: {} },
+                        additionalProperties: false,
+                      },
+                      {
+                        required: ["uses"],
+                        properties: { uses: {}, name: {} },
+                        additionalProperties: false,
+                      },
+                    ],
+                  },
+                },
+              ],
+              useSchemastoreCatalog: false,
+              mostSpecificErrorsOnly: true,
+            },
+          ],
+          errors: [
+            "Root must match one of the allowed schemas.",
+            "Root must have required property 'run'.",
+            'Unexpected property "runn"',
+          ],
+        },
       ],
     },
   ),
