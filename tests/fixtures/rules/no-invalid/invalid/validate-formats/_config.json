@@ -1,0 +1,22 @@
+{
+    "options": [
+        {
+            "useSchemastoreCatalog": false,
+            "validateFormats": true,
+            "schemas": [
+                {
+                    "fileMatch": ["**/input.json"],
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "format": "email"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

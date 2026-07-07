@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"email\" must match format \"email\".",
+        "line": 2,
+        "column": 3,
+        "endLine": 2,
+        "endColumn": 10
+    }
+]
