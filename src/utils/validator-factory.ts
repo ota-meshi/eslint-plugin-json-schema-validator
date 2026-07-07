@@ -9,6 +9,7 @@ import type {
   ValidateFunction,
 } from "./ajv.ts";
 import Ajv from "./ajv.ts";
+import { reduceErrors } from "./reduce-errors.ts";
 import { loadSchema } from "./schema.ts";
 import v6Schema from "ajv/lib/refs/json-schema-draft-06.json" with { type: "json" };
 
@@ -77,6 +78,11 @@ function schemaToValidator(
 ): Validator {
   let validateSchema: ValidateFunction;
 
+  const mostSpecific =
+    typeof context.options[0] === "object" &&
+    context.options[0] != null &&
+    context.options[0].mostSpecificErrorsOnly === true;
+
   let schemaObject = schema;
   while (true) {
     try {
@@ -114,8 +120,9 @@ function schemaToValidator(
     if (validateSchema(data)) {
       return [];
     }
-
-    return validateSchema.errors!.map(errorToValidateError);
+    const raw = validateSchema.errors!;
+    const reduced = mostSpecific ? reduceErrors(raw) : raw;
+    return reduced.map((error) => errorToValidateError(error, mostSpecific));
   };
 }
 
@@ -184,6 +191,7 @@ function resolveError(
 function errorToValidateError(
   /* eslint-enable complexity -- X( */
   errorObject: ErrorObject,
+  mostSpecific = false,
 ): ValidateError {
   const error: DefinedError = errorObject as DefinedError;
 
@@ -194,6 +202,16 @@ function errorToValidateError(
   const path: string[] = instancePath
     ? instancePath.split("/").map(unescapeFragment)
     : [];
+
+  if (
+    mostSpecific &&
+    (error.keyword === "oneOf" || error.keyword === "anyOf")
+  ) {
+    return {
+      message: `${joinPath(path)} must match one of the allowed schemas.`,
+      path,
+    };
+  }
 
   if (error.keyword === "additionalProperties") {
     path.push(error.params.additionalProperty);

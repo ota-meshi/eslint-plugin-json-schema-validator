@@ -342,6 +342,91 @@ singleQuote = true`,
             "Root must match exactly one schema in oneOf.",
           ],
         },
+        // mostSpecificErrorsOnly: OFF (default) — cascade preserved
+        {
+          filename: "reduce-off.json",
+          code: '{ "extends": [ 42 ] }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["reduce-off.json"],
+                  schema: {
+                    type: "object",
+                    properties: {
+                      extends: {
+                        oneOf: [
+                          { type: "string" },
+                          { type: "array", items: { type: "string" } },
+                        ],
+                      },
+                    },
+                  },
+                },
+              ],
+              useSchemastoreCatalog: false,
+            },
+          ],
+          errors: [
+            '"extends" must be string.',
+            '"extends" must match exactly one schema in oneOf.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        // mostSpecificErrorsOnly: ON — best-branch + reworded umbrella
+        {
+          filename: "reduce-on.json",
+          code: '{ "extends": [ 42 ] }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["reduce-on.json"],
+                  schema: {
+                    type: "object",
+                    properties: {
+                      extends: {
+                        oneOf: [
+                          { type: "string" },
+                          { type: "array", items: { type: "string" } },
+                        ],
+                      },
+                    },
+                  },
+                },
+              ],
+              useSchemastoreCatalog: false,
+              mostSpecificErrorsOnly: true,
+            },
+          ],
+          errors: [
+            '"extends" must match one of the allowed schemas.',
+            '"extends[0]" must be string.',
+          ],
+        },
+        // mostSpecificErrorsOnly: ON — identical branches collapse to one error
+        {
+          filename: "reduce-identical.json",
+          code: '"hello"',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["reduce-identical.json"],
+                  schema: {
+                    oneOf: [
+                      { type: "object", properties: { a: { type: "number" } } },
+                      { type: "object", properties: { b: { type: "number" } } },
+                    ],
+                  },
+                },
+              ],
+              useSchemastoreCatalog: false,
+              mostSpecificErrorsOnly: true,
+            },
+          ],
+          errors: ["Root must be object."],
+        },
       ],
     },
   ),
