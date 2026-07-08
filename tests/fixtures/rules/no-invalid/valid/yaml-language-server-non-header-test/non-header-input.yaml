@@ -1,0 +1,3 @@
+$schema: ./prop-schema.json
+theAnswer: hello
+# yaml-language-server: $schema=./modeline-schema.json

@@ -317,10 +317,15 @@ export default createRule("no-invalid", {
 
     /** Find schema path from program */
     function findSchemaPathFromYAML(node: YAML.YAMLProgram) {
+      const rootExpr = node.body[0]?.content;
+
       // A `# yaml-language-server: $schema=...` modeline takes precedence over a
       // root `$schema:` property (matching yaml-language-server / IDE behavior).
-      // yaml-language-server scans all line comments and uses the first match.
+      const headerBoundary = rootExpr ? rootExpr.range[0] : Infinity;
       for (const comment of node.comments) {
+        if (comment.range[0] >= headerBoundary) {
+          continue;
+        }
         const matched = /^\s*yaml-language-server\s*:\s*\$schema=(\S+)/u.exec(
           comment.value,
         );
@@ -329,7 +334,6 @@ export default createRule("no-invalid", {
         }
       }
 
-      const rootExpr = node.body[0]?.content;
       if (!rootExpr || rootExpr.type !== "YAMLMapping") {
         return null;
       }
