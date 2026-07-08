@@ -1,7 +1,6 @@
-import os from "os";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
-import * as meta from "../meta.ts";
 import type { RuleContext } from "../types.ts";
 
 /** Default cache TTL: 1 day. */
@@ -47,56 +46,34 @@ export function parseTtl(value: number | string | undefined): number {
   return Number(match[1]) * multiplier;
 }
 
-/** Injectable platform dependencies, used to make `resolveCacheDir` testable across OSes. */
-export interface PlatformDeps {
-  platform?: NodeJS.Platform;
-  env?: NodeJS.ProcessEnv;
-  homedir?: () => string;
-}
-
 /**
- * Resolve the OS user cache base directory.
- * @param deps - Injectable platform dependencies (platform, env, homedir).
- * @returns The OS-specific base directory under which per-app cache
- * directories are conventionally stored.
+ * The default cache directory, located alongside the built module.
+ * This is the historical location and is left unchanged; configuring
+ * `cache.path` is the supported way to move it.
  */
-function osCacheBaseDir({
-  platform = process.platform,
-  // eslint-disable-next-line no-process-env -- default only used when no deps are injected (e.g. real usage, not tests)
-  env = process.env,
-  homedir = os.homedir,
-}: PlatformDeps = {}): string {
-  const home = homedir();
-  if (platform === "win32") {
-    return env.LOCALAPPDATA || path.join(home, "AppData", "Local");
-  }
-  if (platform === "darwin") {
-    return path.join(home, "Library", "Caches");
-  }
-  return env.XDG_CACHE_HOME || path.join(home, ".cache");
-}
+export const DEFAULT_CACHE_DIR = path.join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../.cached_schemastore",
+);
 
 /**
  * Resolve the cache directory from a `cache.path` setting.
  * Absolute paths are used as-is; relative paths resolve against `cwd`; when
- * unset, the OS user cache directory under the plugin name is used.
+ * unset, the default cache directory alongside the module is used.
  * @param pathSetting - The raw `cache.path` setting value, or `undefined`.
  * @param cwd - The directory to resolve a relative `pathSetting` against.
- * @param deps - Injectable platform dependencies, used when `pathSetting` is
- * unset to determine the OS user cache directory.
  * @returns The resolved absolute cache directory path.
  */
 export function resolveCacheDir(
   pathSetting: string | undefined,
   cwd: string,
-  deps?: PlatformDeps,
 ): string {
   if (pathSetting) {
     return path.isAbsolute(pathSetting)
       ? pathSetting
       : path.resolve(cwd, pathSetting);
   }
-  return path.join(osCacheBaseDir(deps), meta.name);
+  return DEFAULT_CACHE_DIR;
 }
 
 /**

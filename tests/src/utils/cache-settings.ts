@@ -1,13 +1,13 @@
 import assert from "assert";
 import path from "path";
 import {
+  DEFAULT_CACHE_DIR,
   DEFAULT_TTL,
   parseTtl,
   resolveCacheDir,
   getCacheSettings,
 } from "../../../src/utils/cache-settings.ts";
 import type { RuleContext } from "../../../src/types.ts";
-import * as meta from "../../../src/meta.ts";
 
 describe("parseTtl", () => {
   it("returns the default TTL when unset", () => {
@@ -50,43 +50,12 @@ describe("resolveCacheDir", () => {
       path.resolve("/project", ".cache/schemastore"),
     );
   });
-  it("uses XDG_CACHE_HOME on linux when unset", () => {
-    const dir = resolveCacheDir(undefined, "/project", {
-      platform: "linux",
-      env: { XDG_CACHE_HOME: "/xdg" },
-      homedir: () => "/home/me",
-    });
-    assert.strictEqual(dir, path.join("/xdg", meta.name));
-  });
-  it("falls back to ~/.cache on linux without XDG_CACHE_HOME", () => {
-    const dir = resolveCacheDir(undefined, "/project", {
-      platform: "linux",
-      env: {},
-      homedir: () => "/home/me",
-    });
-    assert.strictEqual(dir, path.join("/home/me", ".cache", meta.name));
-  });
-  it("uses ~/Library/Caches on darwin", () => {
-    const dir = resolveCacheDir(undefined, "/project", {
-      platform: "darwin",
-      env: {},
-      homedir: () => "/Users/me",
-    });
+  it("uses the default cache directory when unset", () => {
     assert.strictEqual(
-      dir,
-      path.join("/Users/me", "Library", "Caches", meta.name),
+      resolveCacheDir(undefined, "/project"),
+      DEFAULT_CACHE_DIR,
     );
-  });
-  it("uses LOCALAPPDATA on win32", () => {
-    const dir = resolveCacheDir(undefined, "/project", {
-      platform: "win32",
-      env: { LOCALAPPDATA: "C:\\Users\\me\\AppData\\Local" },
-      homedir: () => "C:\\Users\\me",
-    });
-    assert.strictEqual(
-      dir,
-      path.join("C:\\Users\\me\\AppData\\Local", meta.name),
-    );
+    assert.ok(DEFAULT_CACHE_DIR.endsWith(".cached_schemastore"));
   });
 });
 
@@ -111,6 +80,6 @@ describe("getCacheSettings", () => {
     } as unknown as RuleContext;
     const result = getCacheSettings(context);
     assert.strictEqual(result.ttl, DEFAULT_TTL);
-    assert.ok(result.cacheDir.includes(meta.name));
+    assert.strictEqual(result.cacheDir, DEFAULT_CACHE_DIR);
   });
 });

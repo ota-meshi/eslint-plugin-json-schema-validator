@@ -118,7 +118,7 @@ module.exports = {
   - `getModulePath` ... Module path to `GET` the URL. The default implementation is [./src/utils/http-client/get-modules/http.ts](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/src/utils/http-client/get-modules/http.ts).
   - `requestOptions` ... Options used in the module.
 - `cache` ... Settings for the schemastore cache used when resolving remote schema URLs.
-  - `path` ... Directory to store cached schemas. A relative path is resolved against the current working directory; an absolute path is used as-is. When unset, the OS user cache directory is used (`$XDG_CACHE_HOME` / `~/.cache`, `~/Library/Caches`, or `%LOCALAPPDATA%`) under an `eslint-plugin-json-schema-validator` subfolder.
+  - `path` ... Directory to store cached schemas. A relative path is resolved against the current working directory; an absolute path is used as-is. When unset, the default location alongside the installed package is used.
   - `ttl` ... How long a cached schema is used before it is refetched. A number is milliseconds; a string is a duration such as `"30m"`, `"12h"`, `"1d"`, or `"2w"`. Defaults to 1 day. Use `0` to always refetch.
 
 #### Example of `http`
