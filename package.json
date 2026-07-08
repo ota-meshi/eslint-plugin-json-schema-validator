@@ -56,8 +56,8 @@
     "version:ci": "env-cmd -e version-ci -- npm run update && changeset version"
   },
   "peerDependencies": {
-    "eslint": ">=9.38.0",
-    "ajv-formats": "^2.0.0 || ^3.0.0"
+    "ajv-formats": "^2.0.0 || ^3.0.0",
+    "eslint": ">=9.38.0"
   },
   "peerDependenciesMeta": {
     "ajv-formats": {
