@@ -77,6 +77,24 @@ describe("reduceErrors", () => {
     ]);
   });
 
+  it("keeps the oneOf umbrella when multiple schemas pass (multi-match)", () => {
+    // Data matches BOTH branches, so ajv emits only the `oneOf` umbrella
+    // (passingSchemas: [0, 1]) with no branch errors. There is nothing to
+    // collapse into, so the "must match exactly one schema" cause survives.
+    const errors = errorsFor(
+      {
+        oneOf: [
+          { type: "object", properties: { a: { type: "number" } } },
+          { type: "object", properties: { b: { type: "number" } } },
+        ],
+      },
+      { a: 1, b: 2 },
+    );
+    assert.deepStrictEqual(project(reduceErrors(errors)), [
+      { path: "", keyword: "oneOf", params: { passingSchemas: [0, 1] } },
+    ]);
+  });
+
   it("preserves errors outside the umbrella", () => {
     const errors = errorsFor(
       {

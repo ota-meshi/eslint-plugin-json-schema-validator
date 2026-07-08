@@ -427,6 +427,34 @@ singleQuote = true`,
           ],
           errors: ["Root must be object."],
         },
+        // mostSpecificErrorsOnly: ON — anyOf end-to-end: umbrella + best branch
+        {
+          filename: "reduce-anyof.json",
+          code: '{ "val": true }',
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["reduce-anyof.json"],
+                  schema: {
+                    type: "object",
+                    properties: {
+                      val: {
+                        anyOf: [{ type: "string" }, { type: "number" }],
+                      },
+                    },
+                  },
+                },
+              ],
+              useSchemastoreCatalog: false,
+              mostSpecificErrorsOnly: true,
+            },
+          ],
+          errors: [
+            '"val" must match one of the allowed schemas.',
+            '"val" must be string.',
+          ],
+        },
         // mostSpecificErrorsOnly: ON — partial overlap (the issue's typo scenario):
         // both branches agree `runn` is unexpected but each requires a different
         // property, so the umbrella + best (lowest-index) branch are reported.

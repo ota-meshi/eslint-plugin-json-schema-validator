@@ -78,10 +78,7 @@ function schemaToValidator(
 ): Validator {
   let validateSchema: ValidateFunction;
 
-  const mostSpecific =
-    typeof context.options[0] === "object" &&
-    context.options[0] != null &&
-    context.options[0].mostSpecificErrorsOnly === true;
+  const mostSpecific = context.options[0]?.mostSpecificErrorsOnly === true;
 
   let schemaObject = schema;
   while (true) {
