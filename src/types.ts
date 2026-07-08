@@ -62,6 +62,10 @@ export type JsonSchemaValidatorSettings = {
     requestOptions?: any;
     getModulePath?: string;
   };
+  cache?: {
+    path?: string;
+    ttl?: number | string;
+  };
 };
 
 export interface RuleContext {
