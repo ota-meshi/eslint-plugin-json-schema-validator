@@ -4,7 +4,7 @@
             "schemas": [
                 {
                     "fileMatch": ["**/*.json"],
-                    "schema": "https://docs.renovatebot.com/renovate-schema.json"
+                    "schema": "https://www.schemastore.org/renovate-41.json"
                 }
             ]
         }
