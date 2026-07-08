@@ -188,95 +188,10 @@ function isTraverseTarget(node: YAML.YAMLNode): node is TraverseTarget {
 }
 
 /**
- * Get the static value of a YAML program with merge keys (`<<`) resolved.
- *
- * `getStaticYAMLValue` keeps `<<` as a literal property, so the merge must be
- * applied before the value is validated against a JSON Schema.
- */
-export function getStaticYAMLValueWithMerge(
-  node: YAML.YAMLProgram,
-): ReturnType<typeof getStaticYAMLValue> {
-  return resolveMergeKeys(getStaticYAMLValue(node)) as ReturnType<
-    typeof getStaticYAMLValue
-  >;
-}
-
-/**
- * Recursively resolve YAML merge keys (`<<`) in a static value.
- */
-function resolveMergeKeys(value: unknown): unknown {
-  if (Array.isArray(value)) {
-    return value.map(resolveMergeKeys);
-  }
-
-  if (!isPlainObject(value)) {
-    return value;
-  }
-
-  const result: Record<string, unknown> = {};
-  const mergeSources: Record<string, unknown>[] = [];
-
-  for (const [key, val] of Object.entries(value)) {
-    if (key === MERGE_KEY) {
-      const sources = toMergeSources(val);
-
-      if (sources) {
-        mergeSources.push(...sources);
-        continue;
-      }
-    }
-
-    result[key] = resolveMergeKeys(val);
-  }
-
-  // Keys defined directly on the mapping take precedence over merged keys, and
-  // earlier merge sources take precedence over later ones.
-  for (const source of mergeSources) {
-    for (const [key, val] of Object.entries(source)) {
-      if (!(key in result)) {
-        result[key] = val;
-      }
-    }
-  }
-
-  return result;
-}
-
-/**
- * Normalize the value of a merge key (`<<`) into the mappings to merge in.
- * Returns `null` if the value is not a valid merge target, in which case `<<`
- * is treated as a normal key.
- */
-function toMergeSources(value: unknown): Record<string, unknown>[] | null {
-  if (Array.isArray(value)) {
-    const sources: Record<string, unknown>[] = [];
-    for (const item of value) {
-      const resolved = resolveMergeKeys(item);
-
-      if (!isPlainObject(resolved)) {
-        return null;
-      }
-
-      sources.push(resolved);
-    }
-
-    return sources;
-  }
-
-  if (isPlainObject(value)) {
-    return [resolveMergeKeys(value) as Record<string, unknown>];
-  }
-
-  return null;
-}
-
-/**
- * Checks whether the value of a merge-key node can actually be merged.
- *
- * Only the top-level shape matters here (a mapping, or a sequence of
- * mappings), so this avoids the recursive merge resolution that
- * `toMergeSources` performs — that work happens later for the pair that is
- * actually selected.
+ * Checks whether the value of a merge-key node can actually be merged, i.e.
+ * whether it resolves to a mapping or a sequence of mappings. This mirrors the
+ * merge resolution in `getStaticYAMLValue`, so a `<<` pair is only treated as a
+ * merge source here when its keys were actually merged into the value.
  */
 function isMergeable(
   value: YAML.YAMLContent | YAML.YAMLWithMeta | null,

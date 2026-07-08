@@ -1,9 +1,9 @@
 [
     {
         "message": "\"job.image\" must be string.",
-        "line": 7,
+        "line": 9,
         "column": 3,
-        "endLine": 7,
+        "endLine": 9,
         "endColumn": 8
     }
 ]
