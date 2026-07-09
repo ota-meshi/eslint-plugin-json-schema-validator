@@ -7,7 +7,7 @@
         "endColumn": 8
     },
     {
-        "message": "\"job.image\" must be string.",
+        "message": "\"job.image\" must be string. (from merge key)",
         "line": 8,
         "column": 3,
         "endLine": 8,

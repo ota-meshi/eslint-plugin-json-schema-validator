@@ -7,7 +7,7 @@
         "endColumn": 10
     },
     {
-        "message": "\"job.spec.image\" must be string.",
+        "message": "\"job.spec.image\" must be string. (from merge key)",
         "line": 8,
         "column": 3,
         "endLine": 8,

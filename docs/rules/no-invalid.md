@@ -141,31 +141,6 @@ foo: bar
 </i18n>
 ```
 
-### YAML merge keys
-
-For YAML files, this rule resolves [merge keys (`<<`)](https://yaml.org/type/merge.html) before validating. A mapping that pulls in an anchored mapping with `<<` is validated as the final merged object, instead of the `<<` key being reported as an unexpected property.
-
-Merge keys are a YAML 1.1 feature, so they are only resolved for documents parsed as YAML 1.1. [`yaml-eslint-parser`](https://github.com/ota-meshi/yaml-eslint-parser) parses documents as YAML 1.2 by default, where `<<` is an ordinary key and is left as-is. A document is treated as YAML 1.1 when it either begins with a `%YAML 1.1` directive or is parsed with the `defaultYAMLVersion` parser option set to `"1.1"`.
-
-To resolve merge keys across files without adding a directive to each one, set `defaultYAMLVersion` for the relevant files in your configuration:
-
-```js
-import eslintPluginJsonSchemaValidator from "eslint-plugin-json-schema-validator";
-export default [
-  ...eslintPluginJsonSchemaValidator.configs.recommended,
-  {
-    files: ["**/.gitlab-ci.yml", "**/config/**/*.yaml"],
-    languageOptions: {
-      parserOptions: {
-        defaultYAMLVersion: "1.1",
-      },
-    },
-  },
-];
-```
-
-This parses the matched files as YAML 1.1 in full, so the YAML 1.1 scalar rules apply as well (for example, `yes` and `on` are parsed as booleans).
-
 ## :books: Further reading
 
 - [JSON Schema](https://json-schema.org/)

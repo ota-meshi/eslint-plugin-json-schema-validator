@@ -1,0 +1,22 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.yaml"],
+                    "schema": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "deep": { "type": "string" },
+                                "other": { "type": "string" }
+                            }
+                        }
+                    }
+                }
+            ],
+            "useSchemastoreCatalog": false
+        }
+    ]
+}

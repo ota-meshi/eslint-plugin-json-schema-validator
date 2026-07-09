@@ -259,7 +259,13 @@ export default createRule("no-invalid", {
         } else if (sourceCode.parserServices.isYAML) {
           const program = node as YAML.YAMLProgram;
           validateData(getStaticYAMLValue(program), (error) => {
-            return errorDataToLoc(getYAMLNodeFromPath(program, error.path));
+            const errorData = getYAMLNodeFromPath(program, error.path);
+            if (errorData.fromMergeKey) {
+              // The property is not defined directly on the mapping; it was
+              // pulled in by a merge key (`<<`), which is where it is reported.
+              error.message += " (from merge key)";
+            }
+            return errorDataToLoc(errorData);
           });
         } else if (sourceCode.parserServices.isTOML) {
           const program = node as TOML.TOMLProgram;
