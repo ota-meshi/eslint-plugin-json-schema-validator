@@ -1,0 +1,7 @@
+%YAML 1.1
+---
+.base: &base
+  image: node
+job:
+  <<: *base
+  extra: nope

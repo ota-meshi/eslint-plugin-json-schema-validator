@@ -1,0 +1,16 @@
+[
+    {
+        "message": "\"[\".base\"].image\" must be string.",
+        "line": 5,
+        "column": 3,
+        "endLine": 5,
+        "endColumn": 8
+    },
+    {
+        "message": "\"job.image\" must be string. (from merge key)",
+        "line": 8,
+        "column": 3,
+        "endLine": 8,
+        "endColumn": 5
+    }
+]

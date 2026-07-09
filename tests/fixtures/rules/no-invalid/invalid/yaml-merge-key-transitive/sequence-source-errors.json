@@ -1,0 +1,37 @@
+[
+    {
+        "message": "\"[\".a\"].deep\" must be string.",
+        "line": 5,
+        "column": 3,
+        "endLine": 5,
+        "endColumn": 7
+    },
+    {
+        "message": "\"[\".b\"].deep\" must be string. (from merge key)",
+        "line": 7,
+        "column": 3,
+        "endLine": 7,
+        "endColumn": 5
+    },
+    {
+        "message": "\"[\".c\"].other\" must be string.",
+        "line": 9,
+        "column": 3,
+        "endLine": 9,
+        "endColumn": 8
+    },
+    {
+        "message": "\"job.deep\" must be string. (from merge key)",
+        "line": 11,
+        "column": 3,
+        "endLine": 11,
+        "endColumn": 5
+    },
+    {
+        "message": "\"job.other\" must be string. (from merge key)",
+        "line": 11,
+        "column": 3,
+        "endLine": 11,
+        "endColumn": 5
+    }
+]

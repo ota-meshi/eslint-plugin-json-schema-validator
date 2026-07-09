@@ -1,0 +1,9 @@
+[
+    {
+        "message": "Unexpected property \"job.extra\"",
+        "line": 8,
+        "column": 3,
+        "endLine": 8,
+        "endColumn": 8
+    }
+]
