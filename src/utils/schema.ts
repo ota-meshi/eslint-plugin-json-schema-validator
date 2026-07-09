@@ -1,18 +1,18 @@
 import debugBuilder from "debug";
 import fs from "fs";
 import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
 import type { RuleContext } from "../types.ts";
 import { get, syncGet } from "./http-client/index.ts";
 import type { SchemaObject } from "./types.ts";
 import * as meta from "../meta.ts";
+import { getCacheSettings } from "./cache-settings.ts";
 
 const debug = debugBuilder("eslint-plugin-json-schema-validator:utils-schema");
 
-const TTL = 1000 * 60 * 60 * 24; // 1 day
 const RELOADING = new Set<string>();
+const MEMORY_CACHE = new Map<string, { data: unknown; timestamp: number }>();
 
 /**
  * Load schema data
@@ -130,10 +130,8 @@ function loadJsonFromURL<T>(
   if (!jsonFileName.endsWith(".json")) {
     jsonFileName = `${jsonFileName}.json`;
   }
-  const jsonFilePath = path.join(
-    dirname(fileURLToPath(import.meta.url)),
-    `../.cached_schemastore/${jsonFileName}`,
-  );
+  const { cacheDir, ttl } = getCacheSettings(context);
+  const jsonFilePath = path.join(cacheDir, jsonFileName);
 
   const options = context.settings?.["json-schema-validator"]?.http;
 
@@ -143,28 +141,24 @@ function loadJsonFromURL<T>(
   fs.mkdirSync(path.dirname(jsonFilePath), { recursive: true });
 
   let data, timestamp;
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- Resolved by tsdown
-    ({ data, timestamp } = require(
-      `../.cached_schemastore/${jsonFileName}`,
-    ) as {
-      data: SchemaObject;
-      timestamp: number;
-    });
-  } catch {
+  const cached = MEMORY_CACHE.get(jsonFilePath);
+  if (cached) {
+    ({ data, timestamp } = cached);
+  } else {
     try {
       const jsonText = fs.readFileSync(jsonFilePath, "utf-8");
       ({ data, timestamp } = JSON.parse(jsonText) as {
         data: SchemaObject;
         timestamp: number;
       });
+      MEMORY_CACHE.set(jsonFilePath, { data, timestamp });
     } catch {
       // ignore
     }
   }
 
   if (data != null && typeof timestamp === "number") {
-    if (timestamp + TTL < Date.now()) {
+    if (timestamp + ttl < Date.now()) {
       // Reload!
       // However, the data can actually be used the next time access it.
       if (!RELOADING.has(jsonFilePath)) {
@@ -184,10 +178,6 @@ function loadJsonFromURL<T>(
     json = syncGet(jsonPath, httpRequestOptions, httpGetModulePath);
   } catch (e) {
     debug((e as Error).message);
-    // context.report({
-    //     loc: { line: 1, column: 0 },
-    //     message: `Could not be resolved: "${schemaPath}"`,
-    // })
     return null;
   }
 
@@ -219,15 +209,16 @@ function postProcess<T>(
     data = edit(data);
   }
 
+  const timestamp = Date.now();
   fs.writeFileSync(
     jsonFilePath,
     schemaStringify({
       data,
-      timestamp: Date.now(),
+      timestamp,
       v: meta.version,
     }),
   );
-  if (typeof require !== "undefined") delete require.cache[jsonFilePath];
+  MEMORY_CACHE.set(jsonFilePath, { data, timestamp });
 
   return data;
 }
