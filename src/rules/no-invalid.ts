@@ -336,7 +336,7 @@ export default createRule("no-invalid", {
           continue;
         }
         const matched =
-          /(?:yaml-language-server\s*:\s*)?\$schema\s*[:=]\s*(\S+)/iu.exec(
+          /^\s*(?:yaml-language-server\s*:\s*)?\$schema\s*[:=]\s*(\S+)/iu.exec(
             comment.value,
           );
         if (matched) {
