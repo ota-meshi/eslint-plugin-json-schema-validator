@@ -64,8 +64,9 @@ export function compile(
   schema: SchemaObject,
   schemaPath: string,
   context: RuleContext,
+  mostSpecificErrorsOnly: boolean,
 ): Validator {
-  return schemaToValidator(schema, schemaPath, context);
+  return schemaToValidator(schema, schemaPath, context, mostSpecificErrorsOnly);
 }
 
 /**
@@ -75,10 +76,9 @@ function schemaToValidator(
   schema: SchemaObject,
   schemaPath: string,
   context: RuleContext,
+  mostSpecific: boolean,
 ): Validator {
   let validateSchema: ValidateFunction;
-
-  const mostSpecific = context.options[0]?.mostSpecificErrorsOnly === true;
 
   let schemaObject = schema;
   while (true) {

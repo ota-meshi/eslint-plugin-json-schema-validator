@@ -42,12 +42,13 @@ function matchFile(filename: string, fileMatch: string[]) {
 function schemaPathToValidator(
   schemaPath: string,
   context: RuleContext,
+  mostSpecificErrorsOnly: boolean,
 ): Validator | null {
   const schema = loadSchema(schemaPath, context);
   if (!schema) {
     return null;
   }
-  return compile(schema, schemaPath, context);
+  return compile(schema, schemaPath, context, mostSpecificErrorsOnly);
 }
 
 /**
@@ -56,12 +57,13 @@ function schemaPathToValidator(
 function schemaObjectToValidator(
   schema: SchemaObject | null,
   context: RuleContext,
+  mostSpecificErrorsOnly: boolean,
 ): Validator | null {
   if (!schema) {
     return null;
   }
   const schemaPath = context.cwd;
-  return compile(schema, schemaPath, context);
+  return compile(schema, schemaPath, context, mostSpecificErrorsOnly);
 }
 
 /**
@@ -134,7 +136,6 @@ export default createRule("no-invalid", {
                 },
               },
               useSchemastoreCatalog: { type: "boolean" },
-              mostSpecificErrorsOnly: { type: "boolean" },
               mergeSchemas: {
                 oneOf: [
                   { type: "boolean" },
@@ -149,6 +150,7 @@ export default createRule("no-invalid", {
                   },
                 ],
               },
+              mostSpecificErrorsOnly: { type: "boolean" },
             },
             additionalProperties: false,
           },
@@ -161,6 +163,8 @@ export default createRule("no-invalid", {
   create: toCompatCreate((context, { filename }) => {
     const sourceCode = context.sourceCode;
     const cwd = context.cwd;
+    const mostSpecificErrorsOnly =
+      context.options[0]?.mostSpecificErrorsOnly === true;
     const relativeFilename = filename.startsWith(cwd)
       ? path.relative(cwd, filename)
       : filename;
@@ -385,7 +389,11 @@ export default createRule("no-invalid", {
       const $schemaPath = findSchemaPath(sourceCode.ast);
       if (!$schemaPath) return null;
 
-      const validator = schemaPathToValidator($schemaPath, context);
+      const validator = schemaPathToValidator(
+        $schemaPath,
+        context,
+        mostSpecificErrorsOnly,
+      );
       if (!validator) {
         reportCannotResolvedPath($schemaPath, context);
         return null;
@@ -429,7 +437,11 @@ export default createRule("no-invalid", {
         if (!matchFile(relativeFilename, schemaData.fileMatch)) {
           continue;
         }
-        const validator = schemaPathToValidator(schemaData.url, context);
+        const validator = schemaPathToValidator(
+          schemaData.url,
+          context,
+          mostSpecificErrorsOnly,
+        );
         if (validator) validators.push(validator);
       }
       return validators.length ? validators : null;
@@ -442,7 +454,11 @@ export default createRule("no-invalid", {
     ): Validator[] | null {
       const option = context.options[0];
       if (typeof option === "string") {
-        const validator = schemaPathToValidator(option, context);
+        const validator = schemaPathToValidator(
+          option,
+          context,
+          mostSpecificErrorsOnly,
+        );
         return validator ? [validator] : null;
       }
 
@@ -457,14 +473,22 @@ export default createRule("no-invalid", {
         }
 
         if (typeof schemaData.schema === "string") {
-          const validator = schemaPathToValidator(schemaData.schema, context);
+          const validator = schemaPathToValidator(
+            schemaData.schema,
+            context,
+            mostSpecificErrorsOnly,
+          );
           if (validator) {
             validators.push(validator);
           } else {
             reportCannotResolvedPath(schemaData.schema, context);
           }
         } else {
-          const validator = schemaObjectToValidator(schemaData.schema, context);
+          const validator = schemaObjectToValidator(
+            schemaData.schema,
+            context,
+            mostSpecificErrorsOnly,
+          );
           if (validator) {
             validators.push(validator);
           } else {
