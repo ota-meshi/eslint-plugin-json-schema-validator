@@ -260,6 +260,7 @@ export default [
       "yml/no-empty-document": "off",
       "yml/require-string-key": "off",
       "yml/no-empty-key": "off",
+      "yml/spaced-comment": "off",
       "no-sparse-arrays": "off",
       "n/no-unsupported-features/es-syntax": "off",
       "no-implicit-coercion": "off",

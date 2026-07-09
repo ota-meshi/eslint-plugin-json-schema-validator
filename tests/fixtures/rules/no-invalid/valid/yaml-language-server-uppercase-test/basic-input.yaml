@@ -1,0 +1,2 @@
+# YAML-LANGUAGE-SERVER: $SCHEMA=./schema.json
+theAnswer: 42

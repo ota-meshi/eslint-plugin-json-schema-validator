@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "properties": {
+        "$schema": { "type": "string" },
+        "theAnswer": { "type": "string" }
+    }
+}

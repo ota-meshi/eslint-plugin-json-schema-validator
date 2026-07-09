@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "properties": {
+        "theAnswer": { "type": "number" }
+    },
+    "required": ["theAnswer"]
+}
