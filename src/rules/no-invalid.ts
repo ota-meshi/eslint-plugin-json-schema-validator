@@ -27,6 +27,14 @@ import { toCompatCreate } from "eslint-json-compat-utils";
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
 
 /**
+ * Sentinel returned when a `$schema=none` modeline is found. In
+ * yaml-language-server (and the JetBrains equivalent) a `none` schema disables
+ * schema validation for the file entirely, so it must not be treated as a
+ * schema path.
+ */
+const SCHEMA_NONE = Symbol("$schema=none");
+
+/**
  * Checks if match file
  */
 function matchFile(filename: string, fileMatch: string[]) {
@@ -332,6 +340,11 @@ export default createRule("no-invalid", {
             comment.value,
           );
         if (matched) {
+          // `none` disables schema validation for the file rather than
+          // pointing at a schema path.
+          if (matched[1].toLowerCase() === "none") {
+            return SCHEMA_NONE;
+          }
           return matched[1];
         }
       }
@@ -383,6 +396,9 @@ export default createRule("no-invalid", {
         const program = node as TOML.TOMLProgram;
         $schema = findSchemaPathFromTOML(program);
       }
+      if ($schema === SCHEMA_NONE) {
+        return SCHEMA_NONE;
+      }
       return typeof $schema === "string"
         ? $schema.startsWith(".")
           ? path.resolve(
@@ -400,7 +416,7 @@ export default createRule("no-invalid", {
     /** Validator from $schema */
     function get$SchemaValidators(context: RuleContext): Validator[] | null {
       const $schemaPath = findSchemaPath(sourceCode.ast);
-      if (!$schemaPath) return null;
+      if (!$schemaPath || $schemaPath === SCHEMA_NONE) return null;
 
       const validator = schemaPathToValidator($schemaPath, context);
       if (!validator) {
@@ -494,6 +510,12 @@ export default createRule("no-invalid", {
 
     /** Create combined validator */
     function createValidator(context: RuleContext, filename: string) {
+      // A `$schema=none` modeline disables schema validation for the file, so
+      // skip every schema source (modeline, options, and catalog).
+      if (findSchemaPath(sourceCode.ast) === SCHEMA_NONE) {
+        return null;
+      }
+
       const mergeSchemas = parseMergeSchemasOption(
         context.options[0]?.mergeSchemas,
       );
