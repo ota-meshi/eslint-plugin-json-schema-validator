@@ -319,16 +319,18 @@ export default createRule("no-invalid", {
     function findSchemaPathFromYAML(node: YAML.YAMLProgram) {
       const rootExpr = node.body[0]?.content;
 
-      // A `# yaml-language-server: $schema=...` modeline takes precedence over a
-      // root `$schema:` property (matching yaml-language-server / IDE behavior).
+      // A schema modeline in a header comment takes precedence over a root
+      // `$schema:` property (matching editor behavior). We accept any
+      // modeline form used by either of yaml-language-server or JetBrains IDEs.
       const headerBoundary = rootExpr ? rootExpr.range[0] : Infinity;
       for (const comment of node.comments) {
         if (comment.range[0] >= headerBoundary) {
           continue;
         }
-        const matched = /^\s*yaml-language-server\s*:\s*\$schema=(\S+)/u.exec(
-          comment.value,
-        );
+        const matched =
+          /(?:yaml-language-server\s*:\s*)?\$schema\s*[:=]\s*(\S+)/iu.exec(
+            comment.value,
+          );
         if (matched) {
           return matched[1];
         }

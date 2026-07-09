@@ -94,25 +94,19 @@ module.exports = {
 
 ### Specify a schema with a `yaml-language-server` comment
 
-For YAML files, you can specify the JSON Schema inline using a `yaml-language-server` modeline comment, the same syntax understood by the [Red Hat YAML extension for VS Code](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) and JetBrains IDEs:
+For YAML files, you can specify the JSON Schema inline using a [modeline comment](https://github.com/redhat-developer/yaml-language-server#using-a-modeline) in the same syntax accepted by the YAML Language Server or JetBrains IDEs:
 
 <!-- eslint-skip -->
 
 ```yaml
-# yaml-language-server: $schema=https://json-schema.org/draft-07/schema
+# yaml-language-server: $schema=<url-or-path>
+# $schema: <url-or-path>
 foo: bar
 ```
 
-The schema location may be a URL, or a path relative to the YAML file:
+The schema location may be a URL, or a path relative to the YAML file.
 
-<!-- eslint-skip -->
-
-```yaml
-# yaml-language-server: $schema=../custom.schema.json
-foo: bar
-```
-
-The first matching `yaml-language-server` comment in the file is used. If a file has both a modeline comment and a `$schema` property, the modeline comment takes precedence, matching `yaml-language-server` behavior.
+Only a modeline in the document's header comment block is used, and the first such modeline wins. If a file has both a modeline comment and a `$schema` property, the modeline comment takes precedence.
 
 ### Use with `.vue`
 
