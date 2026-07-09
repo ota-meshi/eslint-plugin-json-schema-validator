@@ -37,6 +37,8 @@ This rule validates the file with JSON Schema and reports errors.
 }
 ```
 
+The `format` keyword (for example `email`, `uri`, `date-time`) is validated using [`ajv-formats`](https://github.com/ajv-validator/ajv-formats).
+
 ## :wrench: Options
 
 ```json5
