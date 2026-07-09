@@ -134,7 +134,6 @@ export default createRule("no-invalid", {
                 },
               },
               useSchemastoreCatalog: { type: "boolean" },
-              validateFormats: { type: "boolean" },
               mergeSchemas: {
                 oneOf: [
                   { type: "boolean" },

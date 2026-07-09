@@ -2,7 +2,6 @@
     "options": [
         {
             "useSchemastoreCatalog": false,
-            "validateFormats": true,
             "schemas": [
                 {
                     "fileMatch": ["**/input.json"],

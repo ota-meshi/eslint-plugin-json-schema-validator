@@ -10,7 +10,7 @@ import type {
 } from "./ajv.ts";
 import Ajv from "./ajv.ts";
 import { loadSchema } from "./schema.ts";
-import { loadAjvFormats, type AddFormats } from "./ajv-formats-loader.ts";
+import addFormats from "ajv-formats";
 import v6Schema from "ajv/lib/refs/json-schema-draft-06.json" with { type: "json" };
 
 // eslint-disable-next-line func-style -- ignore
@@ -32,13 +32,10 @@ type AjvInstance = InstanceType<typeof Ajv>;
 
 /**
  * Build a fresh Ajv instance with the plugin's standard configuration.
- * When `validateFormats` is true, the optional `ajv-formats` package is
- * loaded via `loadFormats` and registered on the instance.
+ * The `ajv-formats` package is registered so that the `format` keyword
+ * (for example `email`, `uri`, `date-time`) is validated.
  */
-export function buildAjv(
-  validateFormats: boolean,
-  loadFormats: () => AddFormats = loadAjvFormats,
-): AjvInstance {
+export function buildAjv(): AjvInstance {
   const instance = new Ajv({
     // schemaId: "auto",
     allErrors: true,
@@ -54,23 +51,18 @@ export function buildAjv(
   });
   // ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"))
   instance.addMetaSchema(v6Schema);
-  if (validateFormats) {
-    const addFormats = loadFormats();
-    addFormats(instance);
-  }
+  addFormats(instance);
   return instance;
 }
 
-const ajvCache = new Map<boolean, AjvInstance>();
+let ajvInstance: AjvInstance | undefined;
 
-/** Get a cached Ajv instance for the given `validateFormats` setting. */
-function getAjv(validateFormats: boolean): AjvInstance {
-  let instance = ajvCache.get(validateFormats);
-  if (!instance) {
-    instance = buildAjv(validateFormats);
-    ajvCache.set(validateFormats, instance);
+/** Get the cached Ajv instance, building it on first use. */
+function getAjv(): AjvInstance {
+  if (!ajvInstance) {
+    ajvInstance = buildAjv();
   }
-  return instance;
+  return ajvInstance;
 }
 
 /** @see https://github.com/ajv-validator/ajv/blob/e816cd24b60068b3937dc7143beeab3fe6612391/lib/compile/util.ts#L59 */
@@ -94,8 +86,7 @@ export function compile(
   schemaPath: string,
   context: RuleContext,
 ): Validator {
-  const validateFormats = context.options[0]?.validateFormats === true;
-  const ajv = getAjv(validateFormats);
+  const ajv = getAjv();
   return schemaToValidator(ajv, schema, schemaPath, context);
 }
 
