@@ -1,5 +1,26 @@
 # eslint-plugin-json-schema-validator
 
+## 6.3.0
+
+### Minor Changes
+
+- [#505](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/505) [`bb39d3d`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/bb39d3daa12e157428c3432d23dc6a0234ec472a) Thanks [@Kenneth-Sills](https://github.com/Kenneth-Sills)! - feat: add configurable schemastore cache location and TTL
+
+  New `settings["json-schema-validator"].cache` options:
+  - `path` — where cached schemas are stored (relative to cwd, or absolute).
+  - `ttl` — how long before a cached schema is refetched (ms number or a
+    duration string like `"12h"` / `"1d"`).
+
+- [#504](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/504) [`6cf8075`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/6cf8075b207a0a84fada9ecfa743a8e635c9c09c) Thanks [@Kenneth-Sills](https://github.com/Kenneth-Sills)! - feat: resolve YAML schema from yaml-language-server modeline comment
+
+- [#506](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/506) [`9f5f38b`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/9f5f38bfa7129e30b107287da20283407f554ec0) Thanks [@Kenneth-Sills](https://github.com/Kenneth-Sills)! - feat(no-invalid): add `mostSpecificErrorsOnly` option to collapse cascading `oneOf`/`anyOf` errors
+
+- [#507](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/507) [`e4795b1`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/e4795b1bc4ca01cd9abd7f48ad4f8fa41527abae) Thanks [@Kenneth-Sills](https://github.com/Kenneth-Sills)! - feat: validate the JSON Schema `format` keyword
+
+### Patch Changes
+
+- [#501](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/501) [`d9a0cce`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/d9a0ccea5e6ee64237e67a5ef3d8ade2727927f6) Thanks [@Kenneth-Sills](https://github.com/Kenneth-Sills)! - fix: resolve YAML merge keys (`<<`) before validation in `no-invalid`
+
 ## 6.2.0
 
 ### Minor Changes
