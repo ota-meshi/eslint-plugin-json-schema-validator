@@ -271,15 +271,19 @@ export default createRule("no-invalid", {
           });
         } else if (sourceCode.parserServices.isYAML) {
           const program = node as YAML.YAMLProgram;
-          validateData(getStaticYAMLValue(program), (error) => {
-            const errorData = getYAMLNodeFromPath(program, error.path);
-            if (errorData.fromMergeKey) {
-              // The property is not defined directly on the mapping; it was
-              // pulled in by a merge key (`<<`), which is where it is reported.
-              error.message += " (from merge key)";
-            }
-            return errorDataToLoc(errorData);
-          });
+          // Each YAML document is validated independently against the schema
+          // (rather than validating the array of all documents as a whole).
+          for (const doc of program.body) {
+            validateData(getStaticYAMLValue(doc), (error) => {
+              const errorData = getYAMLNodeFromPath(doc, error.path);
+              if (errorData.fromMergeKey) {
+                // The property is not defined directly on the mapping; it was
+                // pulled in by a merge key (`<<`), which is where it is reported.
+                error.message += " (from merge key)";
+              }
+              return errorDataToLoc(errorData);
+            });
+          }
         } else if (sourceCode.parserServices.isTOML) {
           const program = node as TOML.TOMLProgram;
           validateData(getStaticTOMLValue(program), (error) => {
