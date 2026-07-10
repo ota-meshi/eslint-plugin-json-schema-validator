@@ -206,6 +206,11 @@ export default createRule("no-invalid", {
     const relativeFilename = filename.startsWith(cwd)
       ? path.relative(cwd, filename)
       : filename;
+    // Memoize `$schema`-source validators by resolved path. A carried-forward
+    // directive resolves the same path for every document in a multi-document
+    // YAML file, so this reuses valid validators and reports an unresolved
+    // schema only once per unique path instead of once per document.
+    const $schemaValidatorsByPath = new Map<string, Validator[] | null>();
 
     if (sourceCode.parserServices.isYAML) {
       const validatorsCtx = createValidatorsContext(context, relativeFilename);
@@ -501,6 +506,9 @@ export default createRule("no-invalid", {
 
     /** Build the `$schema`-source validators from an absolute schema path. */
     function schemaValidatorsFromPath($schemaPath: string): Validator[] | null {
+      if ($schemaValidatorsByPath.has($schemaPath)) {
+        return $schemaValidatorsByPath.get($schemaPath)!;
+      }
       const validator = schemaPathToValidator(
         $schemaPath,
         context,
@@ -508,9 +516,12 @@ export default createRule("no-invalid", {
       );
       if (!validator) {
         reportCannotResolvedPath($schemaPath, context);
+        $schemaValidatorsByPath.set($schemaPath, null);
         return null;
       }
-      return [validator];
+      const result = [validator];
+      $schemaValidatorsByPath.set($schemaPath, result);
+      return result;
     }
 
     /** Find schema path from program (JSON/TOML only). */
