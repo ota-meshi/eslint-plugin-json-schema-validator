@@ -320,9 +320,7 @@ export default createRule("no-invalid", {
         const errorData = handler.getNodeFromPath(parsed.ast, error.path);
         const range = errorData.key
           ? errorData.key(subSourceCode)
-          : errorData.value
-            ? errorData.value.range
-            : null;
+          : errorData.value.range;
         if (!range) {
           return null;
         }
@@ -407,6 +405,10 @@ export default createRule("no-invalid", {
           validateJSExport(node.right, node.left.range);
         }
       },
+      // Frontmatter nodes only appear under @eslint/markdown. Their lowercase
+      // mdast types (`yaml`/`toml`/`json`) never collide with the native data
+      // parsers, whose node types are capitalized (`JSON*`/`YAML*`/`TOML*`), so
+      // no parserServices guard is required here.
       yaml(node: unknown) {
         validateFrontmatter(
           node as MarkdownFrontmatterNode,
