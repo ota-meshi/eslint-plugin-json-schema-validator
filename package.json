@@ -56,7 +56,13 @@
     "version:ci": "env-cmd -e version-ci -- npm run update && changeset version"
   },
   "peerDependencies": {
+    "@eslint/markdown": ">=8.0.0",
     "eslint": ">=9.38.0"
+  },
+  "peerDependenciesMeta": {
+    "@eslint/markdown": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@eslint-community/eslint-utils": "^4.3.0",
@@ -79,6 +85,7 @@
     "@eslint-community/eslint-plugin-eslint-comments": "^4.0.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^10.0.0",
+    "@eslint/markdown": "^8.0.0",
     "@ota-meshi/eslint-plugin": "^0.20.0",
     "@oxc-node/core": "^0.1.0",
     "@shikijs/vitepress-twoslash": "^4.0.0",
