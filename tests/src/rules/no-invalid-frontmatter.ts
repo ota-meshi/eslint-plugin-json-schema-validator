@@ -54,6 +54,25 @@ tester.run("no-invalid (markdown frontmatter)", rule as any, {
       options: OPTIONS,
       ...md("yaml"),
     },
+    {
+      // Frontmatter parsing disabled: `---` is not treated as frontmatter, so
+      // there is no frontmatter node and nothing is validated.
+      filename: "ok.md",
+      code: "---\nver: 9\n---\n# Title\n",
+      options: OPTIONS,
+      plugins: { markdown },
+      language: "markdown/commonmark",
+      // no languageOptions.frontmatter
+    },
+    {
+      // Malformed YAML frontmatter body: yaml-eslint-parser throws while
+      // parsing `foo: [unclosed`, so `validateFrontmatter`'s try/catch skips
+      // it rather than crashing or reporting anything.
+      filename: "ok.md",
+      code: "---\nfoo: [unclosed\n---\n# Title\n",
+      options: OPTIONS,
+      ...md("yaml"),
+    },
   ],
   invalid: [
     {
@@ -84,6 +103,21 @@ tester.run("no-invalid (markdown frontmatter)", rule as any, {
       options: OPTIONS,
       ...md("json"),
       errors: [{ message: '"ver" must be string.', line: 2 }],
+    },
+    {
+      filename: "bad.md",
+      code: "---\nname: x\ntitle: ok\nver: 9\n---\n# Title\n",
+      options: OPTIONS,
+      ...md("yaml"),
+      errors: [
+        {
+          message: '"ver" must be string.',
+          line: 4,
+          column: 1,
+          endLine: 4,
+          endColumn: 4,
+        },
+      ],
     },
   ],
 });
