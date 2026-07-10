@@ -170,6 +170,53 @@ foo: bar
 </i18n>
 ```
 
+### Validate Markdown frontmatter
+
+This rule can validate the [front matter](https://github.com/eslint/markdown/blob/main/docs/language-options.md) of Markdown files.
+
+You must install [`@eslint/markdown`](https://github.com/eslint/markdown) and enable front matter parsing via `languageOptions.frontmatter` (`"yaml"`, `"toml"`, or `"json"`). This rule then validates the parsed front matter against the schema you configure for the Markdown file.
+
+```js
+import eslintPluginJsonSchemaValidator from "eslint-plugin-json-schema-validator";
+import markdown from "@eslint/markdown";
+
+export default [
+  ...eslintPluginJsonSchemaValidator.configs.recommended,
+  {
+    files: ["**/*.md"],
+    plugins: { markdown },
+    language: "markdown/commonmark",
+    languageOptions: { frontmatter: "yaml" },
+    rules: {
+      "json-schema-validator/no-invalid": [
+        "error",
+        {
+          schemas: [
+            {
+              fileMatch: ["**/*.md"],
+              schema: { type: "object" /* JSON Schema Definition */ },
+            },
+          ],
+        },
+      ],
+    },
+  },
+];
+```
+
+For example, the following front matter would be validated against the schema above:
+
+<!-- eslint-skip -->
+
+```md
+---
+title: My Post
+draft: false
+---
+
+# My Post
+```
+
 ## :books: Further reading
 
 - [JSON Schema](https://json-schema.org/)
