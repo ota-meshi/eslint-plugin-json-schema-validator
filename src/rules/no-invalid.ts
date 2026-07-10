@@ -1,9 +1,13 @@
+import { SourceCode } from "eslint";
 import type { AST as JSONAST } from "jsonc-eslint-parser";
 import { getStaticJSONValue } from "jsonc-eslint-parser";
+import * as jsoncESLintParser from "jsonc-eslint-parser";
 import type { AST as YAML } from "yaml-eslint-parser";
 import { getStaticYAMLValue } from "yaml-eslint-parser";
+import * as yamlESLintParser from "yaml-eslint-parser";
 import type { AST as TOML } from "toml-eslint-parser";
 import { getStaticTOMLValue } from "toml-eslint-parser";
+import * as tomlESLintParser from "toml-eslint-parser";
 import { createRule } from "../utils/index.ts";
 import { minimatch } from "minimatch";
 import path from "path";
@@ -33,6 +37,47 @@ const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
  * schema path.
  */
 const SCHEMA_NONE = Symbol("$schema=none");
+
+/** A `@eslint/markdown` frontmatter node (mdast `Literal`). */
+interface MarkdownFrontmatterNode {
+  type: "yaml" | "toml" | "json";
+  value: string;
+  position: { start: { offset: number } };
+}
+
+interface FrontmatterHandler {
+  parse: (code: string) => { ast: unknown };
+  getStaticValue: (ast: unknown) => unknown;
+  getNodeFromPath: (
+    ast: unknown,
+    paths: string[],
+  ) => NodeData<JSONAST.JSONNode | YAML.YAMLNode | TOML.TOMLNode>;
+}
+
+/** Frontmatter handlers keyed by the mdast frontmatter node type. */
+const FRONTMATTER_HANDLERS: Record<
+  MarkdownFrontmatterNode["type"],
+  FrontmatterHandler
+> = {
+  yaml: {
+    parse: (code) => yamlESLintParser.parseForESLint(code),
+    getStaticValue: (ast) => getStaticYAMLValue(ast as YAML.YAMLProgram),
+    getNodeFromPath: (ast, paths) =>
+      getYAMLNodeFromPath(ast as YAML.YAMLProgram, paths),
+  },
+  toml: {
+    parse: (code) => tomlESLintParser.parseForESLint(code),
+    getStaticValue: (ast) => getStaticTOMLValue(ast as TOML.TOMLProgram),
+    getNodeFromPath: (ast, paths) =>
+      getTOMLNodeFromPath(ast as TOML.TOMLProgram, paths),
+  },
+  json: {
+    parse: (code) => jsoncESLintParser.parseForESLint(code),
+    getStaticValue: (ast) => getStaticJSONValue(ast as JSONAST.JSONProgram),
+    getNodeFromPath: (ast, paths) =>
+      getJSONNodeFromPath(ast as JSONAST.JSONProgram, paths),
+  },
+};
 
 /**
  * Checks if match file
@@ -242,6 +287,52 @@ export default createRule("no-invalid", {
       });
     }
 
+    /** Validate a Markdown frontmatter node against the schema. */
+    function validateFrontmatter(
+      node: MarkdownFrontmatterNode,
+      handler: FrontmatterHandler,
+    ) {
+      let parsed: { ast: unknown };
+      try {
+        parsed = handler.parse(node.value);
+      } catch {
+        // A malformed frontmatter body is a Markdown-parser concern, not a
+        // schema-validation concern; skip it.
+        return;
+      }
+      // Several `GetLoc` helpers read their SourceCode argument, so build one for
+      // the sub-parse. Its ranges are relative to `node.value`.
+      const subSourceCode = new SourceCode({
+        text: node.value,
+        ast: parsed.ast as SourceCode.Program,
+      });
+      const fullText = sourceCode.getText();
+      // Offset in the real file where the frontmatter body begins.
+      const valueStart = fullText.indexOf(
+        node.value,
+        node.position.start.offset,
+      );
+      if (valueStart < 0) {
+        return;
+      }
+
+      validateData(handler.getStaticValue(parsed.ast), (error) => {
+        const errorData = handler.getNodeFromPath(parsed.ast, error.path);
+        const range = errorData.key
+          ? errorData.key(subSourceCode)
+          : errorData.value
+            ? errorData.value.range
+            : null;
+        if (!range) {
+          return null;
+        }
+        return {
+          start: sourceCode.getLocFromIndex(valueStart + range[0]),
+          end: sourceCode.getLocFromIndex(valueStart + range[1]),
+        };
+      });
+    }
+
     /** Find schema path from program */
     function findSchemaPathFromJSON(node: JSONAST.JSONProgram) {
       const rootExpr = node.body[0].expression;
@@ -264,12 +355,12 @@ export default createRule("no-invalid", {
 
     return {
       Program(node) {
-        if (sourceCode.parserServices.isJSON) {
+        if (sourceCode.parserServices?.isJSON) {
           const program = node as JSONAST.JSONProgram;
           validateData(getStaticJSONValue(program), (error) => {
             return errorDataToLoc(getJSONNodeFromPath(program, error.path));
           });
-        } else if (sourceCode.parserServices.isYAML) {
+        } else if (sourceCode.parserServices?.isYAML) {
           const program = node as YAML.YAMLProgram;
           validateData(getStaticYAMLValue(program), (error) => {
             const errorData = getYAMLNodeFromPath(program, error.path);
@@ -280,7 +371,7 @@ export default createRule("no-invalid", {
             }
             return errorDataToLoc(errorData);
           });
-        } else if (sourceCode.parserServices.isTOML) {
+        } else if (sourceCode.parserServices?.isTOML) {
           const program = node as TOML.TOMLProgram;
           validateData(getStaticTOMLValue(program), (error) => {
             return errorDataToLoc(getTOMLNodeFromPath(program, error.path));
@@ -315,6 +406,24 @@ export default createRule("no-invalid", {
         ) {
           validateJSExport(node.right, node.left.range);
         }
+      },
+      yaml(node: unknown) {
+        validateFrontmatter(
+          node as MarkdownFrontmatterNode,
+          FRONTMATTER_HANDLERS.yaml,
+        );
+      },
+      toml(node: unknown) {
+        validateFrontmatter(
+          node as MarkdownFrontmatterNode,
+          FRONTMATTER_HANDLERS.toml,
+        );
+      },
+      json(node: unknown) {
+        validateFrontmatter(
+          node as MarkdownFrontmatterNode,
+          FRONTMATTER_HANDLERS.json,
+        );
       },
     };
 
@@ -397,13 +506,13 @@ export default createRule("no-invalid", {
     /** Find schema path from program */
     function findSchemaPath(node: unknown) {
       let $schema = null;
-      if (sourceCode.parserServices.isJSON) {
+      if (sourceCode.parserServices?.isJSON) {
         const program = node as JSONAST.JSONProgram;
         $schema = findSchemaPathFromJSON(program);
-      } else if (sourceCode.parserServices.isYAML) {
+      } else if (sourceCode.parserServices?.isYAML) {
         const program = node as YAML.YAMLProgram;
         $schema = findSchemaPathFromYAML(program);
-      } else if (sourceCode.parserServices.isTOML) {
+      } else if (sourceCode.parserServices?.isTOML) {
         const program = node as TOML.TOMLProgram;
         $schema = findSchemaPathFromTOML(program);
       }

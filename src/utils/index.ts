@@ -39,7 +39,7 @@ export function createRule(
         filename,
       });
       if (
-        typeof sourceCode.parserServices.defineCustomBlocksVisitor ===
+        typeof sourceCode.parserServices?.defineCustomBlocksVisitor ===
           "function" &&
         path.extname(filename) === ".vue"
       ) {
