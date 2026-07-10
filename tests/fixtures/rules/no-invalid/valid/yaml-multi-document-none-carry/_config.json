@@ -4,7 +4,11 @@
             "schemas": [
                 {
                     "fileMatch": ["**/*.yaml"],
-                    "schema": { "type": "object", "properties": { "foo": { "type": "number" } }, "required": ["foo"] }
+                    "schema": {
+                        "type": "object",
+                        "properties": { "foo": { "type": "number" } },
+                        "required": ["foo"]
+                    }
                 }
             ],
             "useSchemastoreCatalog": false
