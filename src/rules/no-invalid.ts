@@ -230,13 +230,12 @@ export default createRule("no-invalid", {
             continue;
           }
           const resolvedPath: string | null = directive;
+          const $schemaValidators = resolvedPath
+            ? schemaValidatorsFromPath(resolvedPath)
+            : null;
           const docValidator = combineValidators(
             {
-              get $schema() {
-                return resolvedPath
-                  ? schemaValidatorsFromPath(resolvedPath)
-                  : null;
-              },
+              $schema: $schemaValidators,
               get options() {
                 return validatorsCtx.options;
               },
@@ -526,7 +525,7 @@ export default createRule("no-invalid", {
     }
 
     /** Validator from $schema (JSON/TOML). */
-    function get$SchemaValidators(_context: RuleContext): Validator[] | null {
+    function get$SchemaValidators(): Validator[] | null {
       const $schemaPath = findSchemaPath(sourceCode.ast);
       if (!$schemaPath || $schemaPath === SCHEMA_NONE) {
         return null;
@@ -633,41 +632,11 @@ export default createRule("no-invalid", {
 
     /** Create combined validator */
     function createValidator(context: RuleContext, filename: string) {
-      // A `$schema=none` modeline disables schema validation for the file, so
-      // skip every schema source (modeline, options, and catalog).
-      if (findSchemaPath(sourceCode.ast) === SCHEMA_NONE) {
-        return null;
-      }
-
       const mergeSchemas = parseMergeSchemasOption(
         context.options[0]?.mergeSchemas,
       );
-
       const validatorsCtx = createValidatorsContext(context, filename);
-      if (mergeSchemas && mergeSchemas.some((kind) => validatorsCtx[kind])) {
-        const validators: Validator[] = [];
-        for (const kind of mergeSchemas) {
-          const v = validatorsCtx[kind];
-          if (v) validators.push(...v);
-        }
-        return margeValidators(validators);
-      }
-
-      const validators =
-        validatorsCtx.$schema || validatorsCtx.options || validatorsCtx.catalog;
-      if (!validators) {
-        return null;
-      }
-      return margeValidators(validators);
-
-      /** Marge validators */
-      function margeValidators(validators: Validator[]) {
-        return (data: unknown) =>
-          validators.reduce(
-            (errors, validator) => [...errors, ...validator(data)],
-            [] as ValidateError[],
-          );
-      }
+      return combineValidators(validatorsCtx, mergeSchemas);
     }
 
     /** Creates validators context */
@@ -699,7 +668,7 @@ export default createRule("no-invalid", {
           return get(
             $schema,
             (c) => ($schema = c),
-            () => get$SchemaValidators(context),
+            () => get$SchemaValidators(),
           );
         },
         get options() {
