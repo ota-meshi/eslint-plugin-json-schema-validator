@@ -110,6 +110,36 @@ function parseMergeSchemasOption(
       : null;
 }
 
+/** Merge multiple validators into one that concatenates their errors. */
+function mergeValidators(validators: Validator[]): Validator {
+  return (data: unknown) =>
+    validators.reduce(
+      (errors, validator) => [...errors, ...validator(data)],
+      [] as ValidateError[],
+    );
+}
+
+/**
+ * Combine schema sources into a single validator, honoring `mergeSchemas`.
+ * Without `mergeSchemas`, the first non-empty source wins in the order
+ * `$schema` (or a per-document directive) > `options` > `catalog`.
+ */
+function combineValidators(
+  sources: Record<SchemaKind, Validator[] | null>,
+  mergeSchemas: SchemaKind[] | null,
+): Validator | null {
+  if (mergeSchemas && mergeSchemas.some((kind) => sources[kind])) {
+    const validators: Validator[] = [];
+    for (const kind of mergeSchemas) {
+      const v = sources[kind];
+      if (v) validators.push(...v);
+    }
+    return mergeValidators(validators);
+  }
+  const validators = sources.$schema || sources.options || sources.catalog;
+  return validators ? mergeValidators(validators) : null;
+}
+
 export default createRule("no-invalid", {
   meta: {
     docs: {
@@ -176,6 +206,72 @@ export default createRule("no-invalid", {
     const relativeFilename = filename.startsWith(cwd)
       ? path.relative(cwd, filename)
       : filename;
+    // Memoize `$schema`-source validators by resolved path. A carried-forward
+    // directive resolves the same path for every document in a multi-document
+    // YAML file, so this reuses valid validators and reports an unresolved
+    // schema only once per unique path instead of once per document.
+    const $schemaValidatorsByPath = new Map<string, Validator[] | null>();
+
+    if (sourceCode.parserServices.isYAML) {
+      const validatorsCtx = createValidatorsContext(context, relativeFilename);
+      const mergeSchemas = parseMergeSchemasOption(
+        context.options[0]?.mergeSchemas,
+      );
+
+      /** Validate every document in a multi-document YAML program. */
+      function validateYAMLProgram(program: YAML.YAMLProgram) {
+        let carried: string | typeof SCHEMA_NONE | null = null;
+        for (const doc of program.body) {
+          const own = normalizeSchemaPath(
+            findSchemaPathFromYAMLDocument(program, doc),
+          );
+          if (own !== null) {
+            carried = own;
+          }
+          const directive = own !== null ? own : carried;
+          // A `$schema=none` directive disables validation for this document
+          // (it does not fall through to options/catalog).
+          if (directive === SCHEMA_NONE) {
+            continue;
+          }
+          const resolvedPath: string | null = directive;
+          const $schemaValidators = resolvedPath
+            ? schemaValidatorsFromPath(resolvedPath)
+            : null;
+          const docValidator = combineValidators(
+            {
+              $schema: $schemaValidators,
+              get options() {
+                return validatorsCtx.options;
+              },
+              get catalog() {
+                return validatorsCtx.catalog;
+              },
+            },
+            mergeSchemas,
+          );
+          if (!docValidator) {
+            continue;
+          }
+          for (const error of docValidator(getStaticYAMLValue(doc))) {
+            const errorData = getYAMLNodeFromPath(doc, error.path);
+            if (errorData.fromMergeKey) {
+              error.message += " (from merge key)";
+            }
+            const loc = errorDataToLoc(errorData);
+            if (loc) {
+              context.report({ loc, message: error.message });
+            }
+          }
+        }
+      }
+
+      return {
+        Program(node) {
+          validateYAMLProgram(node as YAML.YAMLProgram);
+        },
+      };
+    }
 
     const validator = createValidator(context, relativeFilename);
     if (!validator) {
@@ -262,23 +358,58 @@ export default createRule("no-invalid", {
       return null;
     }
 
+    /** Find the schema directive (modeline or root `$schema`) for one document. */
+    function findSchemaPathFromYAMLDocument(
+      program: YAML.YAMLProgram,
+      doc: YAML.YAMLDocument,
+    ): string | typeof SCHEMA_NONE | null {
+      const rootExpr = doc.content;
+      const headerStart = doc.range[0];
+      const headerEnd = rootExpr ? rootExpr.range[0] : doc.range[1];
+
+      // A modeline in the document's header comment takes precedence over a
+      // root `$schema:` property (matching editor behavior). Accept the forms
+      // used by yaml-language-server and JetBrains IDEs.
+      for (const comment of program.comments) {
+        if (comment.range[0] < headerStart || comment.range[0] >= headerEnd) {
+          continue;
+        }
+        const matched =
+          /^\s*(?:yaml-language-server\s*:\s*)?\$schema\s*[:=]\s*(\S+)/iu.exec(
+            comment.value,
+          );
+        if (matched) {
+          if (matched[1].toLowerCase() === "none") {
+            return SCHEMA_NONE;
+          }
+          return matched[1];
+        }
+      }
+
+      if (!rootExpr || rootExpr.type !== "YAMLMapping") {
+        return null;
+      }
+      for (const pair of rootExpr.pairs) {
+        if (
+          !pair.key ||
+          !pair.value ||
+          pair.key.type !== "YAMLScalar" ||
+          pair.key.value !== "$schema"
+        ) {
+          continue;
+        }
+        const value = getStaticYAMLValue(pair.value);
+        return typeof value === "string" ? value : null;
+      }
+      return null;
+    }
+
     return {
       Program(node) {
         if (sourceCode.parserServices.isJSON) {
           const program = node as JSONAST.JSONProgram;
           validateData(getStaticJSONValue(program), (error) => {
             return errorDataToLoc(getJSONNodeFromPath(program, error.path));
-          });
-        } else if (sourceCode.parserServices.isYAML) {
-          const program = node as YAML.YAMLProgram;
-          validateData(getStaticYAMLValue(program), (error) => {
-            const errorData = getYAMLNodeFromPath(program, error.path);
-            if (errorData.fromMergeKey) {
-              // The property is not defined directly on the mapping; it was
-              // pulled in by a merge key (`<<`), which is where it is reported.
-              error.message += " (from merge key)";
-            }
-            return errorDataToLoc(errorData);
           });
         } else if (sourceCode.parserServices.isTOML) {
           const program = node as TOML.TOMLProgram;
@@ -335,49 +466,6 @@ export default createRule("no-invalid", {
     }
 
     /** Find schema path from program */
-    function findSchemaPathFromYAML(node: YAML.YAMLProgram) {
-      const rootExpr = node.body[0]?.content;
-
-      // A schema modeline in a header comment takes precedence over a root
-      // `$schema:` property (matching editor behavior). We accept any
-      // modeline form used by either of yaml-language-server or JetBrains IDEs.
-      const headerBoundary = rootExpr ? rootExpr.range[0] : Infinity;
-      for (const comment of node.comments) {
-        if (comment.range[0] >= headerBoundary) {
-          continue;
-        }
-        const matched =
-          /^\s*(?:yaml-language-server\s*:\s*)?\$schema\s*[:=]\s*(\S+)/iu.exec(
-            comment.value,
-          );
-        if (matched) {
-          // `none` disables schema validation for the file rather than
-          // pointing at a schema path.
-          if (matched[1].toLowerCase() === "none") {
-            return SCHEMA_NONE;
-          }
-          return matched[1];
-        }
-      }
-
-      if (!rootExpr || rootExpr.type !== "YAMLMapping") {
-        return null;
-      }
-      for (const pair of rootExpr.pairs) {
-        if (
-          !pair.key ||
-          !pair.value ||
-          pair.key.type !== "YAMLScalar" ||
-          pair.key.value !== "$schema"
-        ) {
-          continue;
-        }
-        return getStaticYAMLValue(pair.value);
-      }
-      return null;
-    }
-
-    /** Find schema path from program */
     function findSchemaPathFromTOML(node: TOML.TOMLProgram) {
       const rootExpr = node.body[0];
       for (const body of rootExpr.body) {
@@ -394,41 +482,33 @@ export default createRule("no-invalid", {
       return null;
     }
 
-    /** Find schema path from program */
-    function findSchemaPath(node: unknown) {
-      let $schema = null;
-      if (sourceCode.parserServices.isJSON) {
-        const program = node as JSONAST.JSONProgram;
-        $schema = findSchemaPathFromJSON(program);
-      } else if (sourceCode.parserServices.isYAML) {
-        const program = node as YAML.YAMLProgram;
-        $schema = findSchemaPathFromYAML(program);
-      } else if (sourceCode.parserServices.isTOML) {
-        const program = node as TOML.TOMLProgram;
-        $schema = findSchemaPathFromTOML(program);
-      }
+    /** Resolve a raw schema reference to an absolute path (or SCHEMA_NONE/null). */
+    function normalizeSchemaPath(
+      $schema: string | typeof SCHEMA_NONE | null,
+    ): string | typeof SCHEMA_NONE | null {
       if ($schema === SCHEMA_NONE) {
         return SCHEMA_NONE;
       }
-      return typeof $schema === "string"
-        ? $schema.startsWith(".")
-          ? path.resolve(
-              path.dirname(
-                typeof context.getPhysicalFilename === "function"
-                  ? context.getPhysicalFilename()
-                  : getPhysicalFilename(context.filename),
-              ),
-              $schema,
-            )
-          : $schema
-        : null;
+      if (typeof $schema !== "string") {
+        return null;
+      }
+      return $schema.startsWith(".")
+        ? path.resolve(
+            path.dirname(
+              typeof context.getPhysicalFilename === "function"
+                ? context.getPhysicalFilename()
+                : getPhysicalFilename(context.filename),
+            ),
+            $schema,
+          )
+        : $schema;
     }
 
-    /** Validator from $schema */
-    function get$SchemaValidators(context: RuleContext): Validator[] | null {
-      const $schemaPath = findSchemaPath(sourceCode.ast);
-      if (!$schemaPath || $schemaPath === SCHEMA_NONE) return null;
-
+    /** Build the `$schema`-source validators from an absolute schema path. */
+    function schemaValidatorsFromPath($schemaPath: string): Validator[] | null {
+      if ($schemaValidatorsByPath.has($schemaPath)) {
+        return $schemaValidatorsByPath.get($schemaPath)!;
+      }
       const validator = schemaPathToValidator(
         $schemaPath,
         context,
@@ -436,10 +516,32 @@ export default createRule("no-invalid", {
       );
       if (!validator) {
         reportCannotResolvedPath($schemaPath, context);
+        $schemaValidatorsByPath.set($schemaPath, null);
         return null;
       }
+      const result = [validator];
+      $schemaValidatorsByPath.set($schemaPath, result);
+      return result;
+    }
 
-      return [validator];
+    /** Find schema path from program (JSON/TOML only). */
+    function findSchemaPath(node: unknown) {
+      let $schema: string | typeof SCHEMA_NONE | null = null;
+      if (sourceCode.parserServices.isJSON) {
+        $schema = findSchemaPathFromJSON(node as JSONAST.JSONProgram);
+      } else if (sourceCode.parserServices.isTOML) {
+        $schema = findSchemaPathFromTOML(node as TOML.TOMLProgram);
+      }
+      return normalizeSchemaPath($schema);
+    }
+
+    /** Validator from $schema (JSON/TOML). */
+    function get$SchemaValidators(): Validator[] | null {
+      const $schemaPath = findSchemaPath(sourceCode.ast);
+      if (!$schemaPath || $schemaPath === SCHEMA_NONE) {
+        return null;
+      }
+      return schemaValidatorsFromPath($schemaPath);
     }
 
     /** Validator from catalog.json */
@@ -541,41 +643,11 @@ export default createRule("no-invalid", {
 
     /** Create combined validator */
     function createValidator(context: RuleContext, filename: string) {
-      // A `$schema=none` modeline disables schema validation for the file, so
-      // skip every schema source (modeline, options, and catalog).
-      if (findSchemaPath(sourceCode.ast) === SCHEMA_NONE) {
-        return null;
-      }
-
       const mergeSchemas = parseMergeSchemasOption(
         context.options[0]?.mergeSchemas,
       );
-
       const validatorsCtx = createValidatorsContext(context, filename);
-      if (mergeSchemas && mergeSchemas.some((kind) => validatorsCtx[kind])) {
-        const validators: Validator[] = [];
-        for (const kind of mergeSchemas) {
-          const v = validatorsCtx[kind];
-          if (v) validators.push(...v);
-        }
-        return margeValidators(validators);
-      }
-
-      const validators =
-        validatorsCtx.$schema || validatorsCtx.options || validatorsCtx.catalog;
-      if (!validators) {
-        return null;
-      }
-      return margeValidators(validators);
-
-      /** Marge validators */
-      function margeValidators(validators: Validator[]) {
-        return (data: unknown) =>
-          validators.reduce(
-            (errors, validator) => [...errors, ...validator(data)],
-            [] as ValidateError[],
-          );
-      }
+      return combineValidators(validatorsCtx, mergeSchemas);
     }
 
     /** Creates validators context */
@@ -607,7 +679,7 @@ export default createRule("no-invalid", {
           return get(
             $schema,
             (c) => ($schema = c),
-            () => get$SchemaValidators(context),
+            () => get$SchemaValidators(),
           );
         },
         get options() {

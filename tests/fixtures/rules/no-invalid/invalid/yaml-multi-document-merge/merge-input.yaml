@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=./b.json
+a: 1
+b: not-a-number
+---
+a: not-a-number
+b: 2
