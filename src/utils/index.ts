@@ -11,6 +11,7 @@ import * as jsoncESLintParser from "jsonc-eslint-parser";
 import * as yamlESLintParser from "yaml-eslint-parser";
 import * as tomlESLintParser from "toml-eslint-parser";
 import path from "path";
+import { toCompatCreate } from "eslint-json-compat-utils";
 
 /**
  * Define the rule.
@@ -31,7 +32,7 @@ export function createRule(
         ruleName,
       },
     },
-    create(context: Rule.RuleContext): any {
+    create: toCompatCreate((context: Rule.RuleContext): any => {
       const sourceCode = context.sourceCode;
       const filename = context.filename;
       const visitor = rule.create(context as any, {
@@ -131,7 +132,7 @@ export function createRule(
         const result = `${customBlock.name}.${ext}`;
         return `${filename}/${result}?vue&type=custom&blockType=${customBlock.name}${attrQuery}`;
       }
-    },
+    }),
   };
 }
 

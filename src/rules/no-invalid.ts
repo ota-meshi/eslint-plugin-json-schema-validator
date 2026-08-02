@@ -22,7 +22,6 @@ import type { ValidateError, Validator } from "../utils/validator-factory.ts";
 import { compile } from "../utils/validator-factory.ts";
 import type { SchemaObject } from "../utils/types.ts";
 import fs from "fs";
-import { toCompatCreate } from "eslint-json-compat-utils";
 
 const CATALOG_URL = "https://www.schemastore.org/api/json/catalog.json";
 
@@ -168,7 +167,7 @@ export default createRule("no-invalid", {
     messages: {},
     type: "suggestion",
   },
-  create: toCompatCreate((context, { filename }) => {
+  create: (context, { filename }) => {
     const sourceCode = context.sourceCode;
     const cwd = context.cwd;
     const mostSpecificErrorsOnly =
@@ -626,7 +625,7 @@ export default createRule("no-invalid", {
         },
       };
     }
-  }),
+  },
 });
 
 /**
