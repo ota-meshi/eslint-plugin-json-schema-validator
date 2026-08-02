@@ -3,12 +3,14 @@ import { fileURLToPath } from "url";
 import { RuleTester } from "eslint";
 import rule from "../../../src/rules/no-invalid.ts";
 import { loadTestCases } from "../../utils/utils.ts";
+import json from "@eslint/json";
 import * as jsonParser from "jsonc-eslint-parser";
 import * as tomlParser from "toml-eslint-parser";
 // @ts-expect-error -- missing types
 import * as espree from "espree";
 
 const tester = new RuleTester({
+  plugins: { json },
   languageOptions: {
     /* eslint @typescript-eslint/no-require-imports: 0 -- ignore */
     parser: jsonParser,
@@ -48,6 +50,29 @@ tester.run(
         },
       ],
       invalid: [
+        {
+          name: "with @eslint/json",
+          filename: "test.json",
+          code: '{ "foo": "bar" }',
+          language: "json/json",
+          options: [
+            {
+              schemas: [
+                {
+                  fileMatch: ["test.json"],
+                  schema: {
+                    type: "object",
+                    properties: {
+                      foo: { type: "number" },
+                    },
+                  },
+                },
+              ],
+              useSchemastoreCatalog: false,
+            },
+          ],
+          errors: ['"foo" must be number.'],
+        },
         {
           filename: ".eslintrc.json",
           code: '{ "extends": [ 42 ] }',
