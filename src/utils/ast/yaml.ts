@@ -4,7 +4,6 @@ import type { Token } from "../../types";
 import type { GetLoc, GetNodeFromPath, NodeData } from "./common";
 
 type TraverseTarget =
-  | YAML.YAMLProgram
   | YAML.YAMLDocument
   | YAML.YAMLMapping
   | YAML.YAMLSequence
@@ -12,7 +11,6 @@ type TraverseTarget =
   | YAML.YAMLWithMeta;
 
 const TRAVERSE_TARGET_TYPE: Set<string> = new Set([
-  "Program",
   "YAMLDocument",
   "YAMLMapping",
   "YAMLSequence",
@@ -28,19 +26,6 @@ const GET_YAML_NODES: Record<
   TraverseTarget["type"],
   GetNodeFromPath<YAML.YAMLNode>
 > = {
-  Program(node: YAML.YAMLProgram, paths: string[]) {
-    if (node.body.length <= 1) {
-      return { value: node.body[0] };
-    }
-    const path = String(paths.shift());
-    for (let index = 0; index < node.body.length; index++) {
-      if (String(index) !== path) {
-        continue;
-      }
-      return { value: node.body[index] };
-    }
-    throw new Error(`${"Unexpected state: ["}${[path, ...paths].join(", ")}]`);
-  },
   YAMLDocument(node: YAML.YAMLDocument, _paths: string[]) {
     if (node.content) {
       return { value: node.content };
@@ -134,28 +119,24 @@ const GET_YAML_NODES: Record<
 };
 
 /**
- * Get node from path
+ * Get node from path, relative to a single YAML document.
  */
 export function getYAMLNodeFromPath(
-  node: YAML.YAMLProgram,
+  document: YAML.YAMLDocument,
   [...paths]: string[],
 ): NodeData<YAML.YAMLNode> {
   let data: NodeData<YAML.YAMLNode> = {
     key: (sourceCode) => {
-      const doc = node.body[0];
-      if (node.body.length > 1) {
-        return (sourceCode.getFirstToken(doc) || doc).range!;
-      }
-      const dataNode = doc.content;
+      const dataNode = document.content;
       if (dataNode == null) {
-        return (sourceCode.getFirstToken(doc) || doc).range!;
+        return (sourceCode.getFirstToken(document) || document).range!;
       }
       if (dataNode.type === "YAMLMapping" || dataNode.type === "YAMLSequence") {
         return sourceCode.getFirstToken(dataNode).range!;
       }
       return dataNode.range;
     },
-    value: node,
+    value: document,
   };
   while (paths.length && data.value) {
     if (!isTraverseTarget(data.value)) {
