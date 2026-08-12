@@ -14,10 +14,6 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    // "paths": {
-    //     "*": ["typings/*"]
-    // },
     "esModuleInterop": true,
     "outDir": "lib",
     "resolveJsonModule": true,
