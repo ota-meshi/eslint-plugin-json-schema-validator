@@ -1,7 +1,7 @@
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import renderRulesTableContent from "./render-rules";
+import renderRulesTableContent from "./render-rules.ts";
 
 // -----------------------------------------------------------------------------
 const readmeFilePath = path.resolve(

@@ -1,6 +1,6 @@
 import type { AST as TOML } from "toml-eslint-parser";
 import { getStaticTOMLValue } from "toml-eslint-parser";
-import type { GetNodeFromPath, NodeData } from "./common";
+import type { GetNodeFromPath, NodeData } from "./common.ts";
 
 const enum MatchType {
   notMatch,
