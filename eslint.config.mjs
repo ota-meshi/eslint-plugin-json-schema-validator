@@ -131,6 +131,7 @@ export default [
       ],
 
       "@typescript-eslint/no-non-null-assertion": "off",
+      "n/file-extension-in-import": ["error", "always"],
     },
   },
   ...tseslint.config({

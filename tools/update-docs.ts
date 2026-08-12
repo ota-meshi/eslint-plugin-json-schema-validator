@@ -1,9 +1,9 @@
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import { rules } from "../src/utils/rules";
-import type { RuleModule } from "../src/types";
-import { getNewVersion } from "./lib/changesets-util";
+import { rules } from "../src/utils/rules.ts";
+import type { RuleModule } from "../src/types.ts";
+import { getNewVersion } from "./lib/changesets-util.ts";
 
 //eslint-disable-next-line jsdoc/require-jsdoc -- tools
 function formatItems(items: string[]) {

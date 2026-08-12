@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import os from "os";
 // import eslint from "eslint"
-import { rules } from "./lib/load-rules";
+import { rules } from "./lib/load-rules.ts";
 const isWin = os.platform().startsWith("win");
 
 /**

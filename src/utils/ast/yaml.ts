@@ -1,7 +1,7 @@
 import type { AST as YAML } from "yaml-eslint-parser";
 import { getStaticYAMLValue } from "yaml-eslint-parser";
-import type { Token } from "../../types";
-import type { GetLoc, GetNodeFromPath, NodeData } from "./common";
+import type { Token } from "../../types.ts";
+import type { GetLoc, GetNodeFromPath, NodeData } from "./common.ts";
 
 type TraverseTarget =
   | YAML.YAMLProgram

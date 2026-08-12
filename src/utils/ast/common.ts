@@ -1,4 +1,4 @@
-import type { SourceCode } from "../../types";
+import type { SourceCode } from "../../types.ts";
 export type GetLoc = (sourceCode: SourceCode) => [number, number];
 export type NodeData<N> = (
   | { key: GetLoc; value: N | null }

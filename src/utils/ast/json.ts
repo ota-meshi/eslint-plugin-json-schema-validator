@@ -1,5 +1,5 @@
 import type { AST as JSON } from "jsonc-eslint-parser";
-import type { GetNodeFromPath, NodeData } from "./common";
+import type { GetNodeFromPath, NodeData } from "./common.ts";
 
 type TraverseTarget =
   | JSON.JSONProgram

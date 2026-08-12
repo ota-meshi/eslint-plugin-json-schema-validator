@@ -2,7 +2,7 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import os from "os";
-import renderRulesTableContent from "./render-rules";
+import renderRulesTableContent from "./render-rules.ts";
 const isWin = os.platform().startsWith("win");
 
 let insertText = `\n${renderRulesTableContent(

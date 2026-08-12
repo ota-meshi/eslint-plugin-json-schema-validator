@@ -1,7 +1,7 @@
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-import type { RuleModule } from "../../src/types";
+import type { RuleModule } from "../../src/types.ts";
 
 /**
  * Get the all rules
