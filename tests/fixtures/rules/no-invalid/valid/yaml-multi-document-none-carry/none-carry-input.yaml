@@ -1,0 +1,4 @@
+# yaml-language-server: $schema=none
+foo: not-a-number
+---
+foo: also-bad
