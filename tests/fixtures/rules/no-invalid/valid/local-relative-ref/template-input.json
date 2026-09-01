@@ -1,0 +1,9 @@
+{
+    "parameters": {
+        "foo": {
+            "parameters": {
+                "bar": {}
+            }
+        }
+    }
+}

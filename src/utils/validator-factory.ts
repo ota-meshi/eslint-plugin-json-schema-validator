@@ -1,3 +1,6 @@
+import path from "path";
+import { fileURLToPath, pathToFileURL } from "url";
+
 import { draft7 as migrateToDraft7 } from "json-schema-migrate-x";
 
 import type { RuleContext } from "../types.ts";
@@ -128,6 +131,18 @@ function schemaToValidator(
 }
 
 /**
+ * Parse a schema `$id` or filesystem path as a URL.
+ * `new URL(fsPath)` throws TypeError: Invalid URL when the base has no scheme.
+ */
+function toUrl(idOrPath: string, cwd: string): URL {
+  try {
+    return new URL(idOrPath);
+  } catch {
+    return pathToFileURL(path.resolve(cwd, idOrPath));
+  }
+}
+
+/**
  * Resolve Schema Error
  */
 function resolveError(
@@ -151,7 +166,7 @@ function resolveError(
       schemaId = schemaPath;
     } else {
       const ref = error.missingRef;
-      const baseUri = new URL(baseSchema.$id || baseSchemaPath);
+      const baseUri = toUrl(baseSchema.$id || baseSchemaPath, context.cwd);
       baseUri.hash = "";
       const slashIndex = baseUri.pathname.lastIndexOf("/");
       if (slashIndex >= 0) {
@@ -159,7 +174,9 @@ function resolveError(
       }
       const uri = new URL(`${baseUri.toString()}${ref}`);
       uri.hash = "";
-      schemaPath = uri.toString();
+      // loadSchema special-cases http(s)/vscode; filesystem paths must stay paths.
+      schemaPath =
+        uri.protocol === "file:" ? fileURLToPath(uri) : uri.toString();
       schemaId = ref.split("#")[0];
     }
     if (schemaPath) {
