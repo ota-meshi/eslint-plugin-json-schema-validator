@@ -170,6 +170,28 @@ foo: bar
 </i18n>
 ```
 
+### Multiple YAML documents
+
+A YAML file may contain several documents separated by `---` (and optionally `...`).
+Each document is validated **independently** against the schema, as an editor such as
+the YAML Language Server would. A schema that describes a single document therefore
+applies to every document in the file.
+
+Each document may declare its own schema with a modeline comment or a root `$schema`
+property. A directive carries forward to later documents until another directive
+overrides it, and `$schema=none` disables validation for its document (and later
+documents until overridden).
+
+<!-- eslint-skip -->
+
+```yaml
+# yaml-language-server: $schema=./a.schema.json
+name: first
+---
+# yaml-language-server: $schema=./b.schema.json
+value: 42
+```
+
 ## :books: Further reading
 
 - [JSON Schema](https://json-schema.org/)

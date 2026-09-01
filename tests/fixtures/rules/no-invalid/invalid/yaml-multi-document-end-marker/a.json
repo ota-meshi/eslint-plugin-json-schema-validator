@@ -1,0 +1,5 @@
+{
+    "type": "object",
+    "properties": { "aval": { "type": "number" } },
+    "required": ["aval"]
+}

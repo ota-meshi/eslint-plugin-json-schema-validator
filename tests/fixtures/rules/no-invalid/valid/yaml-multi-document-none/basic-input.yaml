@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=./schema.json
+foo: 1
+---
+# yaml-language-server: $schema=none
+foo: not-a-number

@@ -30,7 +30,7 @@ const ROOT = path.resolve(
 
 //eslint-disable-next-line jsdoc/require-jsdoc -- tools
 function pickSince(content: string): string | null | Promise<string> {
-  const fileIntro = /^---\n(?<content>.*\n)+---\n*/u.exec(content);
+  const fileIntro = /^---\n(?<content>(?:.*\n)+?)---\n*/u.exec(content);
   if (fileIntro) {
     const since = /since: "?(?<version>v\d+\.\d+\.\d+)"?/u.exec(
       fileIntro.groups!.content,

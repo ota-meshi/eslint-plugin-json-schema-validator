@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=./a.json
+foo: 1
+---
+# yaml-language-server: $schema=./b.json
+bar: hello
