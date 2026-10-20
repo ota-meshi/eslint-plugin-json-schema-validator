@@ -5,7 +5,7 @@
             "schemas": [
                 {
                     "fileMatch": ["**/*.json"],
-                    "schema": "tests/fixtures/rules/no-invalid/valid/local-relative-ref/schemas/template.schema.json"
+                    "schema": "tests/fixtures/rules/no-invalid/invalid/local-relative-ref/schemas/template.schema.json"
                 }
             ]
         }

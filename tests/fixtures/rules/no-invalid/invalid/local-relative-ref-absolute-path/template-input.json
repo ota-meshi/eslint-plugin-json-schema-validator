@@ -1,0 +1,6 @@
+{
+    "$schema": "../local-relative-ref/schemas/template.schema.json",
+    "parameters": {
+        "foo": 1
+    }
+}
