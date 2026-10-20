@@ -171,7 +171,7 @@ function resolveError(
       const ref = error.missingRef;
       const retrievalUri = toUrl(baseSchemaPath, context.cwd);
       const baseUri = baseSchema.$id
-        ? new URL(baseSchema.$id, retrievalUri)
+        ? new URL(toUrl(baseSchema.$id, context.cwd), retrievalUri)
         : retrievalUri;
       baseUri.hash = "";
       const slashIndex = baseUri.pathname.lastIndexOf("/");
