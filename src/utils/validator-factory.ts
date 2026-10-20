@@ -169,7 +169,10 @@ function resolveError(
       schemaId = schemaPath;
     } else {
       const ref = error.missingRef;
-      const baseUri = toUrl(baseSchema.$id || baseSchemaPath, context.cwd);
+      const retrievalUri = toUrl(baseSchemaPath, context.cwd);
+      const baseUri = baseSchema.$id
+        ? new URL(baseSchema.$id, retrievalUri)
+        : retrievalUri;
       baseUri.hash = "";
       const slashIndex = baseUri.pathname.lastIndexOf("/");
       if (slashIndex >= 0) {
