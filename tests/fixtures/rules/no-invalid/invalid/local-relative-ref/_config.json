@@ -1,0 +1,13 @@
+{
+    "options": [
+        {
+            "useSchemastoreCatalog": false,
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.json"],
+                    "schema": "tests/fixtures/rules/no-invalid/invalid/local-relative-ref/schemas/template.schema.json"
+                }
+            ]
+        }
+    ]
+}
