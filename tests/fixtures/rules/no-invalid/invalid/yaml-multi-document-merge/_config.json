@@ -1,0 +1,18 @@
+{
+    "options": [
+        {
+            "schemas": [
+                {
+                    "fileMatch": ["**/*.yaml"],
+                    "schema": {
+                        "type": "object",
+                        "properties": { "a": { "type": "number" } },
+                        "required": ["a"]
+                    }
+                }
+            ],
+            "useSchemastoreCatalog": false,
+            "mergeSchemas": ["$schema", "options"]
+        }
+    ]
+}
