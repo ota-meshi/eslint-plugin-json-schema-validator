@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.4.0
+
+### Minor Changes
+
+- [#540](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/540) [`456657e`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/456657ee6fe42fe8ec19ee1a9d5e6e20cc140919) Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update dependency minimatch to v11
+
 ## 6.3.2
 
 ### Patch Changes
