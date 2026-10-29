@@ -1,8 +1,4 @@
-import assembleReleasePlan from "@changesets/assemble-release-plan";
-import readChangesets from "@changesets/read";
-import { read } from "@changesets/config";
-import { getPackages } from "@manypkg/get-packages";
-import { readPreState } from "@changesets/pre";
+import { getReleasePlan } from "@changesets/get-release-plan";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -10,19 +6,15 @@ const root = path.resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 /** Get new version string from changesets */
 export async function getNewVersion(): Promise<string> {
-  const packages = await getPackages(root);
-  const preState = await readPreState(root);
-  const config = await read(root, packages);
-  const changesets = await readChangesets(root);
+  const releasePlan = await getReleasePlan(root);
 
-  const releasePlan = assembleReleasePlan(
-    changesets,
-    packages,
-    config,
-    preState,
-  );
-
-  return releasePlan.releases.find(
+  const newVersion = releasePlan.releases.find(
     ({ name }) => name === "eslint-plugin-json-schema-validator",
-  )!.newVersion;
+  )?.newVersion;
+  if (newVersion === undefined) {
+    throw new Error(
+      "No release version found for eslint-plugin-json-schema-validator.",
+    );
+  }
+  return newVersion;
 }
