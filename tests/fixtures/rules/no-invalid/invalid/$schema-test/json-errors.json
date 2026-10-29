@@ -1,6 +1,20 @@
 [
     {
-        "message": "\"compilerOptions\" must be object,null.",
+        "message": "\"compilerOptions\" must be object.",
+        "line": 4,
+        "column": 5,
+        "endLine": 4,
+        "endColumn": 22
+    },
+    {
+        "message": "\"compilerOptions\" must be null.",
+        "line": 4,
+        "column": 5,
+        "endLine": 4,
+        "endColumn": 22
+    },
+    {
+        "message": "\"compilerOptions\" must match a schema in anyOf.",
         "line": 4,
         "column": 5,
         "endLine": 4,

@@ -135,7 +135,7 @@ function schemaToValidator(
  * and parses Windows drive-letter paths (`C:\...`) as a `c:` scheme.
  */
 function toUrl(idOrPath: string, cwd: string): URL {
-  if (path.isAbsolute(idOrPath) || /^[a-z]:[\\/]/iu.test(idOrPath)) {
+  if (path.isAbsolute(idOrPath) || /^[a-z]:[/\\]/iu.test(idOrPath)) {
     return pathToFileURL(path.resolve(cwd, idOrPath));
   }
   try {
