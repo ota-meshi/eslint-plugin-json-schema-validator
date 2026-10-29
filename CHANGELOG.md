@@ -1,5 +1,11 @@
 # eslint-plugin-json-schema-validator
 
+## 6.3.2
+
+### Patch Changes
+
+- [#538](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/pull/538) [`4eaf596`](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/commit/4eaf5967eecd664dcab9ed82cb129209215d5bfb) Thanks [@miikemccabe](https://github.com/miikemccabe)! - fix: resolve local relative `$ref` without `$id`
+
 ## 6.3.1
 
 ### Patch Changes
