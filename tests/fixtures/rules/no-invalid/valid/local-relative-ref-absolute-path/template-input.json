@@ -1,0 +1,6 @@
+{
+    "$schema": "../../invalid/local-relative-ref/schemas/template.schema.json",
+    "parameters": {
+        "foo": {}
+    }
+}

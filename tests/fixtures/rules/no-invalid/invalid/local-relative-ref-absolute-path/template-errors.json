@@ -1,0 +1,9 @@
+[
+    {
+        "message": "\"parameters.foo\" must be object.",
+        "line": 5,
+        "column": 9,
+        "endLine": 5,
+        "endColumn": 14
+    }
+]

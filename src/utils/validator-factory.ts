@@ -13,6 +13,8 @@ import { reduceErrors } from "./reduce-errors.ts";
 import { loadSchema } from "./schema.ts";
 import addFormats from "ajv-formats";
 import v6Schema from "ajv/lib/refs/json-schema-draft-06.json" with { type: "json" };
+import path from "path";
+import { fileURLToPath, pathToFileURL } from "url";
 
 // eslint-disable-next-line func-style -- ignore
 const lazyRegExpEngine: RegExpEngine = (str, flags) => {
@@ -128,6 +130,22 @@ function schemaToValidator(
 }
 
 /**
+ * Parse a schema `$id` or filesystem path as a URL.
+ * `new URL(fsPath)` throws TypeError: Invalid URL when the base has no scheme,
+ * and parses Windows drive-letter paths (`C:\...`) as a `c:` scheme.
+ */
+function toUrl(idOrPath: string, cwd: string): URL {
+  if (path.isAbsolute(idOrPath) || /^[a-z]:[\\/]/iu.test(idOrPath)) {
+    return pathToFileURL(path.resolve(cwd, idOrPath));
+  }
+  try {
+    return new URL(idOrPath);
+  } catch {
+    return pathToFileURL(path.resolve(cwd, idOrPath));
+  }
+}
+
+/**
  * Resolve Schema Error
  */
 function resolveError(
@@ -151,7 +169,10 @@ function resolveError(
       schemaId = schemaPath;
     } else {
       const ref = error.missingRef;
-      const baseUri = new URL(baseSchema.$id || baseSchemaPath);
+      const retrievalUri = toUrl(baseSchemaPath, context.cwd);
+      const baseUri = baseSchema.$id
+        ? new URL(toUrl(baseSchema.$id, context.cwd), retrievalUri)
+        : retrievalUri;
       baseUri.hash = "";
       const slashIndex = baseUri.pathname.lastIndexOf("/");
       if (slashIndex >= 0) {
@@ -159,7 +180,8 @@ function resolveError(
       }
       const uri = new URL(`${baseUri.toString()}${ref}`);
       uri.hash = "";
-      schemaPath = uri.toString();
+      schemaPath =
+        uri.protocol === "file:" ? fileURLToPath(uri) : uri.toString();
       schemaId = ref.split("#")[0];
     }
     if (schemaPath) {
