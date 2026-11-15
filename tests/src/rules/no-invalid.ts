@@ -28,6 +28,64 @@ tester.run(
     {
       valid: [
         {
+          name: "TOML date and time values retain their source strings",
+          filename: "dates.toml",
+          code: [
+            "offset = 1979-05-27T07:32:00.123456-07:00",
+            "local = 1979-05-27T07:32:00.123456",
+            "date = 1979-05-27",
+            "time = 07:32:00.123456",
+            "nested = { values = [1979-05-27, 07:32:00] }",
+            "[[events]]",
+            "at = 1979-05-27T07:32:00Z",
+          ].join("\n"),
+          languageOptions: { parser: tomlParser },
+          options: [
+            {
+              useSchemastoreCatalog: false,
+              schemas: [
+                {
+                  fileMatch: ["dates.toml"],
+                  schema: {
+                    type: "object",
+                    properties: {
+                      offset: {
+                        type: "string",
+                        format: "date-time",
+                        const: "1979-05-27T07:32:00.123456-07:00",
+                      },
+                      local: {
+                        type: "string",
+                        const: "1979-05-27T07:32:00.123456",
+                      },
+                      date: { type: "string", format: "date" },
+                      time: { type: "string", const: "07:32:00.123456" },
+                      nested: {
+                        type: "object",
+                        properties: {
+                          values: {
+                            type: "array",
+                            items: { type: "string" },
+                          },
+                        },
+                      },
+                      events: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            at: { type: "string", format: "date-time" },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           filename: path.join(
             dirname(fileURLToPath(import.meta.url)),
             ".eslintrc.js",
@@ -50,6 +108,32 @@ tester.run(
         },
       ],
       invalid: [
+        ...[
+          "1979-05-27T07:32:00Z",
+          "1979-05-27T07:32:00",
+          "1979-05-27",
+          "07:32:00",
+        ].map((value) => ({
+          name: `TOML datetime ${value} is not an object`,
+          filename: "dates.toml",
+          code: `value = ${value}`,
+          languageOptions: { parser: tomlParser },
+          options: [
+            {
+              useSchemastoreCatalog: false,
+              schemas: [
+                {
+                  fileMatch: ["dates.toml"],
+                  schema: {
+                    type: "object",
+                    properties: { value: { type: "object" } },
+                  },
+                },
+              ],
+            },
+          ],
+          errors: ['"value" must be object.'],
+        })),
         {
           name: "with @eslint/json",
           filename: "test.json",

@@ -12,6 +12,7 @@ import {
   getJSONNodeFromPath,
   getYAMLNodeFromPath,
   getTOMLNodeFromPath,
+  getTOMLValueForSchema,
   analyzeJsAST,
 } from "../utils/ast/index.ts";
 import { loadJson, loadSchema } from "../utils/schema.ts";
@@ -281,7 +282,7 @@ export default createRule("no-invalid", {
           });
         } else if (sourceCode.parserServices.isTOML) {
           const program = node as TOML.TOMLProgram;
-          validateData(getStaticTOMLValue(program), (error) => {
+          validateData(getTOMLValueForSchema(program), (error) => {
             return errorDataToLoc(getTOMLNodeFromPath(program, error.path));
           });
         }

@@ -1,5 +1,5 @@
 import type { AST as TOML } from "toml-eslint-parser";
-import { getStaticTOMLValue } from "toml-eslint-parser";
+import { getStaticTOMLValue, traverseNodes } from "toml-eslint-parser";
 import type { GetNodeFromPath, NodeData } from "./common.ts";
 
 const enum MatchType {
@@ -163,4 +163,34 @@ function getMatchType(paths: string[], keys: (string | number)[]): MatchType {
   return paths.every((path, index) => String(path) === String(keys[index]))
     ? MatchType.subMatch
     : MatchType.notMatch;
+}
+
+/** Gets JSON Schema data while preserving TOML date/time strings and precision. */
+export function getTOMLValueForSchema(program: TOML.TOMLProgram): unknown {
+  const datetimes = new Map<Date, string>();
+  traverseNodes(program, {
+    enterNode(node) {
+      if (node.type === "TOMLValue" && "datetime" in node) {
+        datetimes.set(node.value, node.datetime);
+      }
+    },
+    leaveNode() {
+      // Date values are collected on entry; there is no exit work.
+    },
+  });
+
+  /** Replaces Date instances without losing offsets or sub-millisecond digits. */
+  function normalize(value: unknown): unknown {
+    if (value instanceof Date) return datetimes.get(value);
+    if (Array.isArray(value)) return value.map(normalize);
+    if (value !== null && typeof value === "object") {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, entry]) => [key, normalize(entry)]),
+      );
+    }
+    return value;
+  }
+
+  const value = getStaticTOMLValue(program);
+  return datetimes.size ? normalize(value) : value;
 }
